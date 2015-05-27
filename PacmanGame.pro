@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     tiledmap.cpp \
     tile_node.cpp \
     clickablelabel.cpp \
-    enemy.cpp
+    enemy.cpp \
+    tdgraphicsscene.cpp \
+    pacman.cpp
 
 HEADERS  += mainwindow.h \
     astar.h \
@@ -40,6 +42,8 @@ HEADERS  += mainwindow.h \
     pacmanstruct.h \
     clickablelabel.h \
     Constants.h \
-    enemy.h
+    enemy.h \
+    tdgraphicsscene.h \
+    pacman.h
 
 FORMS    += mainwindow.ui
