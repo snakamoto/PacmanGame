@@ -5,6 +5,8 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT      += network
+QT      += xmlpatterns
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,7 +22,9 @@ SOURCES += main.cpp\
     Path.cpp \
     removeenemystruct.cpp \
     tiledmap.cpp \
-    towerstruct.cpp
+    tile_node.cpp \
+    clickablelabel.cpp \
+    enemy.cpp
 
 HEADERS  += mainwindow.h \
     astar.h \
@@ -32,6 +36,10 @@ HEADERS  += mainwindow.h \
     playersyncstruct.h \
     removeenemystruct.h \
     tiledmap.h \
-    towerstruct.h
+    tile_node.h \
+    pacmanstruct.h \
+    clickablelabel.h \
+    Constants.h \
+    enemy.h
 
 FORMS    += mainwindow.ui

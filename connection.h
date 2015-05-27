@@ -1,10 +1,9 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
-#include "towerstruct.h"
+#include "pacmanstruct.h"
 #include <QTcpSocket>
 #include <QByteArray>
 #include <QObject>
-#include "projectilestruct.h"
 #include "enemystruct.h"
 #include <QList>
 #include "playersyncstruct.h"
@@ -17,15 +16,13 @@ class Connection : public QObject
 public:
     Connection();
     Connection(QTcpSocket *s);
-    void Send(TowerStruct h);
-    void Send(ProjectileStruct p);
+    void Send(PacmanStruct h);
     void Send(EnemyStruct p);
     void Send(PlayerSyncStruct s);
     void Send(RemoveEnemyStruct es);
 signals:
-    void OnNewTowerReceived(TowerStruct t);
+    void OnNewTowerReceived(PlayerSyncStruct t);
     void OnNewEnemyReceived(EnemyStruct e);
-    void OnNewProjectileRecieved(ProjectileStruct p);
     void OnNewPSyncRecieved(PlayerSyncStruct s);
     void OnRemoveEnemyRecieved(RemoveEnemyStruct s);
 private:

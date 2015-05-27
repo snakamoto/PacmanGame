@@ -6,11 +6,8 @@ class PlayerSyncStruct
 public:
     PlayerSyncStruct(){}
 
-    int lives;
-    int p1_kills;
-    int p2_kills;
-    int p1_gold;
-    int p2_gold;
+    int p1_score;
+    int p2_score;
 };
 
 #endif // PLAYERSYNCSTRUCT_H

@@ -1,20 +1,15 @@
-#ifndef TOWER_H
-#define TOWER_H
+#ifndef PACMANSTRUCT_H
+#define PACMANSTRUCT_H
 
-struct TowerStruct
+struct PacmanStruct
 {
 public:
-    TowerStruct(){}
+    PacmanStruct(){}
 
-
-    int type_; //type of tower and upgrade
     int owner_; //owner of the tower
+     int orientation;
     int x; //x position
     int y; //y position
-
-
-
-
 
 };
 

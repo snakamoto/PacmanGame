@@ -14,34 +14,6 @@ Connection::Connection(QTcpSocket *s)
     sock->blockSignals(false);
 }
 
-void Connection::Send(TowerStruct h)
-{
-    sock->waitForConnected();
-
-    int packet_type = PACKETTYPES::NewTower;
-    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
-            + ":" + QString::number(h.owner_) + ":" + QString::number(h.type_)
-            + ":" + QString::number(h.x) +  ":" + QString::number(h.y) + ":@:").toUtf8();
-    sock->write(data);
-    sock->flush();
-
-    qDebug() << data;
-}
-
-void Connection::Send(ProjectileStruct p)
-{
-    sock->waitForConnected();
-    int packet_type = PACKETTYPES::NewProjectile;
-    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
-            + ":" + QString::number(p.damage) + ":" + QString::number(p.end_x)
-            + ":" + QString::number(p.end_y) + ":" + QString::number(p.owner_)
-            + ":" + QString::number(p.start_x) +  ":" + QString::number(p.start_y)
-            + ":" + QString::number(p.type_)+ ":@:").toUtf8();
-    sock->write(data);
-    sock->flush();
-
-    qDebug() << data;
-}
 
 void Connection::Send(EnemyStruct p)
 {
@@ -49,7 +21,7 @@ void Connection::Send(EnemyStruct p)
 
     int packet_type = PACKETTYPES::NewEnemy;
     QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
-            + ":" + QString::number(p.owner_) + ":" + QString::number(p.type_)
+            + ":" + QString::number(p.id) + ":" + QString::number(p.orientation)
             + ":" + QString::number(p.x) +  ":" + QString::number(p.y) + ":@:").toUtf8();
     sock->write(data);
     sock->flush();
@@ -76,9 +48,7 @@ void Connection::Send(PlayerSyncStruct s)
 
     int packet_type = PACKETTYPES::PlayerSync;
     QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
-            + ":" + QString::number(s.lives) + ":" + QString::number(s.p1_kills)
-            + ":" + QString::number(s.p2_kills) + ":" + QString::number(s.p1_gold) + ":"
-            + QString::number(s.p2_gold) + ":@:").toUtf8();
+            + QString::number(s.p1_score) + ":" + QString::number(s.p2_score)+ ":@:").toUtf8();
     sock->write(data);
     sock->flush();
 
@@ -108,22 +78,6 @@ void Connection::on_readyRead()
 
         int packet_type = IntFromQByteArr(elements[1+i]);
 
-        if(packet_type == PACKETTYPES::NewTower)
-        {
-            TowerStruct tower;
-            tower.owner_ = IntFromQByteArr(elements[2+i]);
-            tower.type_ = IntFromQByteArr(elements[3+i]);
-            tower.x = IntFromQByteArr(elements[4+i]);
-            tower.y = IntFromQByteArr(elements[5+i]);
-
-            qDebug() << "New Tower (" + QString::number(tower.owner_) + ","
-                        +QString::number(tower.type_) + ","
-                        + QString::number(tower.x) + ","
-                        + QString::number(tower.y) + ")";
-
-            emit OnNewTowerReceived(tower);
-            i+=6;
-        }
 
         if(packet_type == PACKETTYPES::RemoveEnemy)
         {
@@ -139,13 +93,13 @@ void Connection::on_readyRead()
         if(packet_type == PACKETTYPES::NewEnemy)
         {
             EnemyStruct en;
-            en.owner_ = IntFromQByteArr(elements[2+i]);
-            en.type_ = IntFromQByteArr(elements[3+i]);
+            en.id = IntFromQByteArr(elements[2+i]);
+            en.orientation = IntFromQByteArr(elements[3+i]);
             en.x = FloatFromQByteArr(elements[4+i]);
             en.y = FloatFromQByteArr(elements[5+i]);
 
-            qDebug() << "New Enemy (" + QString::number(en.owner_) + ","
-                        +QString::number(en.type_) + ","
+            qDebug() << "New Enemy (" + QString::number(en.id) + ","
+                        +QString::number(en.orientation) + ","
                         + QString::number(en.x) + ","
                         + QString::number(en.y) + ")";
 
@@ -157,47 +111,16 @@ void Connection::on_readyRead()
         {
             PlayerSyncStruct s;
 
-            s.lives = IntFromQByteArr(elements[2+i]);
-            s.p1_kills = IntFromQByteArr(elements[3+i]);
-            s.p2_kills = IntFromQByteArr(elements[4+i]);
-            s.p1_gold = IntFromQByteArr(elements[5+i]);
-            s.p2_gold = IntFromQByteArr(elements[6+i]);
+            s.p1_score = IntFromQByteArr(elements[2+i]);
+            s.p2_score = IntFromQByteArr(elements[3+i]);
 
-            qDebug() << "Player Sync (" + QString::number(s.lives) + ","
-                        + QString::number(s.p1_kills) + ","
-                        + QString::number(s.p2_kills) + ","
-                        + QString::number(s.p1_gold) + ","
-                        + QString::number(s.p2_gold) + ")";
+            qDebug() << "Player Sync (" + QString::number(s.p1_score) + ","
+                        + QString::number(s.p2_score);
 
             emit OnNewPSyncRecieved(s);
             i+=7;
         }
 
-
-        if(packet_type == PACKETTYPES::NewProjectile)
-        {
-            qDebug() << "New Projectile";
-
-            ProjectileStruct proj;
-            proj.damage = IntFromQByteArr(elements[2+i]);
-            proj.end_x = FloatFromQByteArr(elements[3+i]);
-            proj.end_y = FloatFromQByteArr(elements[4+i]);
-            proj.owner_ = IntFromQByteArr(elements[5+i]);
-            proj.start_x = FloatFromQByteArr(elements[6+i]);
-            proj.start_y = FloatFromQByteArr(elements[7+i]);
-            proj.owner_ = IntFromQByteArr(elements[8+i]);
-
-            qDebug() << "New Projectile (" + QString::number(proj.damage) + ","
-                        + QString::number(proj.end_x) + ","
-                        + QString::number(proj.end_y) + ","
-                        + QString::number(proj.owner_) + ","
-                        + QString::number(proj.start_x) + ","
-                        + QString::number(proj.start_y) + ","
-                        + QString::number(proj.type_) + ")";
-
-            emit OnNewProjectileRecieved(proj);
-            i+=9;
-        }
         i++;
         isData = (elements[i].toInt() == magic_num);
 
