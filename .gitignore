@@ -10,6 +10,7 @@
 *.user
 *.sln.docstates
 *.obj
+*.autosave
 Makefile
 
 # Build results
