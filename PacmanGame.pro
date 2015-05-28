@@ -9,7 +9,7 @@ QT      += network
 QT      += xmlpatterns
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+QMAKE_CXXFLAGS += -std=c++0x
 TARGET = PacmanGame
 TEMPLATE = app
 
