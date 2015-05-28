@@ -92,9 +92,9 @@ void Connection::on_readyRead()
 
         int packet_type = IntFromQByteArr(elements[1+i]);
 
-
         if(packet_type == PACKETTYPES::RemoveEnemy)
         {
+            qDebug () << buffer;
             RemoveEnemyStruct en;
             en.uid = IntFromQByteArr(elements[2+i]);
 #ifdef ASSERT > 2
@@ -106,6 +106,7 @@ void Connection::on_readyRead()
 
         if(packet_type == PACKETTYPES::NewEnemy)
         {
+            qDebug () << buffer;
             EnemyStruct en;
             en.id = IntFromQByteArr(elements[2+i]);
             en.orientation = IntFromQByteArr(elements[3+i]);
@@ -130,7 +131,7 @@ void Connection::on_readyRead()
             pac.x = FloatFromQByteArr(elements[4+i]);
             pac.y = FloatFromQByteArr(elements[5+i]);
 #ifdef ASSERT > 2
-            qDebug() << "New Enemy (" + QString::number(pac.owner_) + ","
+            qDebug() << "Sync Pacman (" + QString::number(pac.owner_) + ","
                         +QString::number(pac.orientation) + ","
                         + QString::number(pac.x) + ","
                         + QString::number(pac.y) + ")";

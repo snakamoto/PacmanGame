@@ -82,7 +82,8 @@ const int Pacman::Get_Orientation()
 const PacmanStruct Pacman::GetPacmanStruct()
 {
     PacmanStruct s;
-    s.orientation = orientation;
+    s.owner_ = this->id;
+    s.orientation = this->orientation;
     s.x = (int)this->sprite->pos().x();
     s.y = (int)this->sprite->pos().y();
     return s;

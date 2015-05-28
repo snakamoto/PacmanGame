@@ -11,7 +11,7 @@
 #include "removeenemystruct.h"
 #include "pacmanstruct.h"
 
-enum PACKETTYPES{NewTower=0, NewProjectile=1, NewEnemy=2, PlayerSync=3, SyncPacman, RemoveEnemy=4};
+enum PACKETTYPES{NewProjectile=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5};
 class Connection : public QObject
 {
     Q_OBJECT
@@ -23,7 +23,6 @@ public:
     void Send(PlayerSyncStruct s);
     void Send(RemoveEnemyStruct es);
 signals:
-    void OnNewTowerReceived(PlayerSyncStruct t);
     void OnNewEnemyReceived(EnemyStruct e);
     void OnNewPSyncRecieved(PlayerSyncStruct s);
     void OnRemoveEnemyRecieved(RemoveEnemyStruct s);

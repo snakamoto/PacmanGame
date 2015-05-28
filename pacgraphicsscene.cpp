@@ -35,7 +35,7 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
 
     remote_pac = new Pacman();
     remote_pac->SetPosition(2 * WIDTH,1*WIDTH);
-    remote_pac->Set_Orientation(2);
+    //remote_pac->Set_Orientation(2);
     pacmen.push_back(remote_pac);
 
 
@@ -163,8 +163,6 @@ void PacGraphicsScene::Update(float elapsed_seconds)
 
     //Used to remove enemies when they have reached their destination
 
-    pacmen[0]->Update(elapsed_seconds);
-
     int x = local_pac->sprite->pos().x() / WIDTH;
     int y = local_pac->sprite->pos().y() / WIDTH;
     int cur_orientation = local_pac->Get_Orientation();
@@ -180,7 +178,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 SendPacmanSync();
             }
         }
-        if(next_orientation == 1)
+        else if(next_orientation == 1)
         {
             if(pathingArr[(y+1)*W+x].type == 0)
             {
@@ -188,7 +186,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 SendPacmanSync();
             }
         }
-        if(next_orientation == 2)
+        else if(next_orientation == 2)
         {
             if(pathingArr[y*W+(x-1)].type == 0)
             {
@@ -196,7 +194,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 SendPacmanSync();
             }
         }
-        if(next_orientation == 3)\
+        else if(next_orientation == 3)
         {
             if(pathingArr[(y-1)*W+x].type == 0)
             {
@@ -213,16 +211,16 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         Pacman *paccy = pacmen[i];
         x = paccy->sprite->pos().x() / WIDTH;
         y = paccy->sprite->pos().y() / WIDTH;
+        int orientation = paccy->Get_Orientation();
 
         paccy->Update(elapsed_seconds);
 
         //Stop the pacman if it tries to ram a wall
-        if(!((int)local_pac->sprite->pos().x() % WIDTH == 0 && (int)local_pac->sprite->pos().y() % WIDTH == 0))
+        if(!((int)paccy->sprite->pos().x() % WIDTH == 0 && (int)paccy->sprite->pos().y() % WIDTH == 0))
         {
             continue;
         }
 
-        int orientation = paccy->Get_Orientation();
         if (orientation == 0 && pathingArr[y*W + x+1].type == 1)
         {
             paccy->Set_Orientation(-1);
@@ -289,11 +287,11 @@ void PacGraphicsScene::SetConnection(Connection *peerConn)
 {
     peerConnection = peerConn;
 
-    connect(peerConnection,SIGNAL(OnNewEnemyReceived(EnemyStruct)), this, SLOT(on_new_enemy_received(EnemyStruct)));
-    connect(peerConnection,SIGNAL(OnNewProjectileRecieved(ProjectileStruct)),this,SLOT(on_new_projectile_recieved(ProjectileStruct)));
-    connect(peerConnection,SIGNAL(OnNewPSyncRecieved(PlayerSyncStruct)), this, SLOT(on_new_psync_recieved(PlayerSyncStruct)));
-    connect(peerConnection,SIGNAL(OnNewTowerReceived(TowerStruct)),this, SLOT(on_new_tower_received(TowerStruct)));
-    connect(peerConnection,SIGNAL(OnRemoveEnemyRecieved(RemoveEnemyStruct)),this,SLOT(on_remove_enemy_recieved(RemoveEnemyStruct)));
+    //connect(peerConnection,SIGNAL(OnNewEnemyReceived(EnemyStruct)), this, SLOT(on_new_enemy_received(EnemyStruct)));
+    //connect(peerConnection,SIGNAL(OnNewProjectileRecieved(ProjectileStruct)),this,SLOT(on_new_projectile_recieved(ProjectileStruct)));
+    //connect(peerConnection,SIGNAL(OnNewPSyncRecieved(PlayerSyncStruct)), this, SLOT(on_new_psync_recieved(PlayerSyncStruct)));
+    //connect(peerConnection,SIGNAL(OnNewTowerReceived(TowerStruct)),this, SLOT(on_new_tower_received(TowerStruct)));
+    //connect(peerConnection,SIGNAL(OnRemoveEnemyRecieved(RemoveEnemyStruct)),this,SLOT(on_remove_enemy_recieved(RemoveEnemyStruct)));
     connect(peerConnection,SIGNAL(OnSyncPacmanReceived(PacmanStruct)),this,SLOT(on_sync_pacman_received(PacmanStruct)));
 }
 
@@ -316,14 +314,16 @@ void PacGraphicsScene::SetPlayerAsClient()
 
 void PacGraphicsScene::on_sync_pacman_received(PacmanStruct pac)
 {
+    qDebug() << "Sync Pacman Received" << pac.owner_ << pac.orientation << pac.x << pac.y;
    for(int i = 0; i < pacmen.size(); i++)
    {
        Pacman *paccy = pacmen[i];
         if(paccy->GetId() == pac.owner_)
         {
-            qDebug() << "Got a pacman" << pac.owner_;
+
             paccy->Set_Orientation(pac.orientation);
             paccy->SetPosition(pac.x,pac.y);
+            paccy->Update(0);
         }
    }
 }
@@ -465,6 +465,11 @@ const bool PacGraphicsScene::IsHost()
 
 void PacGraphicsScene::SendPacmanSync()
 {
+    if(peerConnection)
+        peerConnection->Send(local_pac->GetPacmanStruct());
+    return;
+
+    //Old method
     if(IsHost())
     {
         //Send all if host
