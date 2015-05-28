@@ -40,6 +40,7 @@ void Enemy::UpdatePathing(float seconds)
     {
         stage_pos += speed * seconds;
 
+
     }
     else
     {

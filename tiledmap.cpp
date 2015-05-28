@@ -45,10 +45,10 @@ void TiledMap::LoadCollisionLayer(TileNode **grid, int TILES_X)
 
         if(reader.tokenString() == "StartElement")
         {
-            int xi = reader.attributes().at(0).value().toInt();
-            int yi = reader.attributes().at(1).value().toInt();
-            int wi = reader.attributes().at(2).value().toInt();
-            int hi = reader.attributes().at(3).value().toInt();
+            int xi = reader.attributes().at(1).value().toInt();
+            int yi = reader.attributes().at(2).value().toInt();
+            int wi = reader.attributes().at(3).value().toInt();
+            int hi = reader.attributes().at(4).value().toInt();
             qDebug() << xi << yi << wi << hi;
 
             for(int x = xi; x<xi+wi; x+=32)

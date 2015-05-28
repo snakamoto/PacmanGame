@@ -20,9 +20,13 @@ public:
     void SetPosition(int x, int y);
     void Update(float elapsed_seconds);
 
+    void Set_Orientation(int orient);
+
+    const int Get_Orientation();
+
     const QRectF GetBoundingBox();
 
-    const PacmanStruct GetEnemyStruct();
+    const PacmanStruct GetPacmanStruct();
 
     const int GetScore();
 

@@ -25,8 +25,8 @@ SOURCES += main.cpp\
     tile_node.cpp \
     clickablelabel.cpp \
     enemy.cpp \
-    tdgraphicsscene.cpp \
-    pacman.cpp
+    pacman.cpp \
+    pacgraphicsscene.cpp
 
 HEADERS  += mainwindow.h \
     astar.h \
@@ -43,7 +43,17 @@ HEADERS  += mainwindow.h \
     clickablelabel.h \
     Constants.h \
     enemy.h \
-    tdgraphicsscene.h \
-    pacman.h
+    pacman.h \
+    pacgraphicsscene.h
 
-FORMS    += mainwindow.ui
+FORMS    +=
+
+LIBS += -L$$PWD/lib/ -llibxml2
+LIBS += -L$$PWD/lib/ -llibxml2_a
+LIBS += -L$$PWD/lib/ -llibxml2_a_dll
+
+INCLUDEPATH += $$PWD/include
+DEPENDPATH += $$PWD/include
+
+RESOURCES += \
+    resources.qrc

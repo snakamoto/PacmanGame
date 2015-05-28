@@ -1,7 +1,21 @@
 #include "pacman.h"
+#include "QDebug"
 
 Pacman::Pacman()
 {
+    sprite = new QGraphicsRectItem();
+    sprite->setRect(0,0,WIDTH,WIDTH); //Size of sprite
+    sprite->setTransformOriginPoint(WIDTH/2,WIDTH/2); //To rotate about the origin
+
+     QPixmap pix("images/pacman_open.png");
+
+    pix=pix.scaled(WIDTH,WIDTH); //Scale image to fit BB
+    sprite->setBrush(QBrush(pix));  //Set brush to loaded image
+    //sprite->setPen(QPen(Qt::transparent)); //Remove border from rect
+
+    speed = 100;
+
+    Set_Orientation(0);
 
 }
 
@@ -13,4 +27,63 @@ Pacman::~Pacman()
 const int Pacman::GetScore()
 {
     return food_collected + 10*kills;
+}
+
+void Pacman::Set_Orientation(int orient)
+{
+    this->orientation = orient;
+    //orient 0-right - 1 -top 2-left 3 - bottom
+
+    if(orient >= 0)
+        sprite->setRotation(orient*90);
+
+
+}
+
+
+void Pacman::SetPosition(int x, int y)
+{
+    sprite->setPos(x,y);
+}
+
+void Pacman::Update(float elapsed_seconds)
+{
+
+
+    //orient 0 - left 1 -top 2-right 3 - bottom
+    float x_inc = 0;
+    float y_inc = 0;
+    switch (orientation)
+    {
+        case 0: x_inc += elapsed_seconds * (float)speed; break;
+        case 1: y_inc += elapsed_seconds * (float)speed; break;
+        case 2: x_inc -= elapsed_seconds * (float)speed; break;
+        case 3: y_inc -= elapsed_seconds * (float)speed; break;
+        case -1: y_inc = 0; x_inc = 0; break;
+
+    }
+
+    QPointF pos = sprite->pos();
+    pos.setX(pos.x() + x_inc);
+    pos.setY(pos.y() + y_inc);
+   this->sprite->setPos(pos);
+}
+
+const QRectF Pacman::GetBoundingBox()
+{
+     return sprite->sceneBoundingRect();
+}
+
+const int Pacman::Get_Orientation()
+{
+    return orientation;
+}
+
+const PacmanStruct Pacman::GetPacmanStruct()
+{
+    PacmanStruct s;
+    s.orientation = orientation;
+    s.x = (int)this->sprite->pos().x();
+    s.y = (int)this->sprite->pos().y();
+    return s;
 }
