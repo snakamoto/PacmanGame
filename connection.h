@@ -1,5 +1,6 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
+#define ASSERT 2
 #include "pacmanstruct.h"
 #include <QTcpSocket>
 #include <QByteArray>
@@ -8,8 +9,9 @@
 #include <QList>
 #include "playersyncstruct.h"
 #include "removeenemystruct.h"
+#include "pacmanstruct.h"
 
-enum PACKETTYPES{NewTower=0, NewProjectile=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4};
+enum PACKETTYPES{NewTower=0, NewProjectile=1, NewEnemy=2, PlayerSync=3, SyncPacman, RemoveEnemy=4};
 class Connection : public QObject
 {
     Q_OBJECT
@@ -25,6 +27,7 @@ signals:
     void OnNewEnemyReceived(EnemyStruct e);
     void OnNewPSyncRecieved(PlayerSyncStruct s);
     void OnRemoveEnemyRecieved(RemoveEnemyStruct s);
+    void OnSyncPacmanReceived(PacmanStruct s);
 private:
     QTcpSocket *sock;
     const int IntFromQByteArr(QByteArray a);

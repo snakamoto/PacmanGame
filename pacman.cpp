@@ -87,3 +87,13 @@ const PacmanStruct Pacman::GetPacmanStruct()
     s.y = (int)this->sprite->pos().y();
     return s;
 }
+
+const int Pacman::GetId()
+{
+    return this->id;
+}
+
+void Pacman::SetId(int id_)
+{
+    this->id = id_;
+}

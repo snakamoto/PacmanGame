@@ -30,12 +30,16 @@ public:
 
     const int GetScore();
 
+    const int GetId();
+    void SetId(int id_);
+
     int food_collected;
     int kills;
 
 private:
     int orientation;
     float speed;
+    int id;
 
 };
 

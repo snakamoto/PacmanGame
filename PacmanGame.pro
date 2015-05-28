@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     clickablelabel.cpp \
     enemy.cpp \
     pacman.cpp \
-    pacgraphicsscene.cpp
+    pacgraphicsscene.cpp \
+    mainmenu.cpp
 
 HEADERS  += mainwindow.h \
     astar.h \
@@ -44,13 +45,11 @@ HEADERS  += mainwindow.h \
     Constants.h \
     enemy.h \
     pacman.h \
-    pacgraphicsscene.h
+    pacgraphicsscene.h \
+    mainmenu.h
 
-FORMS    +=
-
-LIBS += -L$$PWD/lib/ -llibxml2
-LIBS += -L$$PWD/lib/ -llibxml2_a
-LIBS += -L$$PWD/lib/ -llibxml2_a_dll
+FORMS    += \
+    mainmenu.ui
 
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include

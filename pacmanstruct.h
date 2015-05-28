@@ -7,7 +7,7 @@ public:
     PacmanStruct(){}
 
     int owner_; //owner of the tower
-     int orientation;
+    int orientation;
     int x; //x position
     int y; //y position
 

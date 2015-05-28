@@ -37,12 +37,9 @@ public:
     void SetPlayerAsClient();
     void LoadMap(QString fileName);
 
+    const bool IsHost();
+
 private:
-
-    //Networking//////////////////////////////////////
-    int localPlayerId;
-    int remotePlayerId;
-
     Connection *peerConnection;
 
 
@@ -55,14 +52,7 @@ private:
 
     int next_orientation;
     Pacman *local_pac;
-
-    //Just some text
-    QGraphicsTextItem *p1_goldText;
-    QGraphicsTextItem *p2_goldText;
-    QGraphicsTextItem *p1_killsText;
-    QGraphicsTextItem *p2_killsText;
-    QGraphicsTextItem *phaseText;
-    QGraphicsTextItem *livesText;
+    Pacman *remote_pac;
 
 
 
@@ -71,16 +61,15 @@ private:
     TileNode t_[TILES_X][TILES_Y];
     TileNode startNode;
     TileNode endNode;
-    void GeneratePath();
+
 
     //This path gets visually displayed for testing purposes
     //It displays the path obtained from startNode to endNode about the obstacles
     std::vector<QGraphicsItem*> testPath;
 
-    void SetGold(int playerId, const int amount = 10);
-    void SetKills(int playerId, const int amount=1);
+
     Enemy* spawn_enemy(int x, int y);
-    void SendPlayerSync();
+
 
     int last_enemy_id;
 
@@ -90,6 +79,9 @@ private:
 
     QGraphicsRectItem *backgroundRect;
 
+    void GeneratePath();
+    void SendPlayerSync();
+    void SendPacmanSync();
 
 
 signals:
@@ -100,6 +92,7 @@ private slots:
     void on_new_enemy_received(EnemyStruct e);
     void on_new_psync_recieved(PlayerSyncStruct s);
     void on_remove_enemy_recieved(RemoveEnemyStruct en);
+    void on_sync_pacman_received(PacmanStruct pac);
 
 };
 

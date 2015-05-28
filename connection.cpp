@@ -15,6 +15,20 @@ Connection::Connection(QTcpSocket *s)
 }
 
 
+void Connection::Send(PacmanStruct p)
+{
+    sock->waitForConnected();
+    //owner,orientation,x,y
+    int packet_type = PACKETTYPES::SyncPacman;
+    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
+            + ":" + QString::number(p.owner_) + ":" + QString::number(p.orientation)
+            + ":" + QString::number(p.x) +  ":" + QString::number(p.y) + ":@:").toUtf8();
+    sock->write(data);
+    sock->flush();
+
+    qDebug() << data;
+}
+
 void Connection::Send(EnemyStruct p)
 {
     sock->waitForConnected();
@@ -83,9 +97,9 @@ void Connection::on_readyRead()
         {
             RemoveEnemyStruct en;
             en.uid = IntFromQByteArr(elements[2+i]);
-
+#ifdef ASSERT > 2
             qDebug() << "Remove Enemy (" + QString::number(en.uid)+  ")";
-
+#endif
             emit OnRemoveEnemyRecieved(en);
             i+=3;
         }
@@ -98,12 +112,30 @@ void Connection::on_readyRead()
             en.x = FloatFromQByteArr(elements[4+i]);
             en.y = FloatFromQByteArr(elements[5+i]);
 
+#ifdef ASSERT > 2
             qDebug() << "New Enemy (" + QString::number(en.id) + ","
                         +QString::number(en.orientation) + ","
                         + QString::number(en.x) + ","
                         + QString::number(en.y) + ")";
-
+#endif
             emit OnNewEnemyReceived(en);
+            i+=6;
+        }
+        //owner,orientation,x,y
+        if(packet_type == PACKETTYPES::SyncPacman)
+        {
+            PacmanStruct pac;
+            pac.owner_ = IntFromQByteArr(elements[2+i]);
+            pac.orientation = IntFromQByteArr(elements[3+i]);
+            pac.x = FloatFromQByteArr(elements[4+i]);
+            pac.y = FloatFromQByteArr(elements[5+i]);
+#ifdef ASSERT > 2
+            qDebug() << "New Enemy (" + QString::number(pac.owner_) + ","
+                        +QString::number(pac.orientation) + ","
+                        + QString::number(pac.x) + ","
+                        + QString::number(pac.y) + ")";
+#endif
+            emit OnSyncPacmanReceived(pac);
             i+=6;
         }
 
@@ -113,10 +145,10 @@ void Connection::on_readyRead()
 
             s.p1_score = IntFromQByteArr(elements[2+i]);
             s.p2_score = IntFromQByteArr(elements[3+i]);
-
+#ifdef ASSERT > 2
             qDebug() << "Player Sync (" + QString::number(s.p1_score) + ","
                         + QString::number(s.p2_score);
-
+#endif
             emit OnNewPSyncRecieved(s);
             i+=7;
         }

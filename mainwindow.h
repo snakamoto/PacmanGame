@@ -8,6 +8,7 @@
 #include <QElapsedTimer>
 #include <QTimer>
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -19,11 +20,13 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0, bool isHost=true, bool isSinglePlayer=true, QString connectTo="");
     ~MainWindow();
 
 private slots:
       void OnUpdateTimer();
+      void onClientConnect(); //client connected to server (we)
+      void onConnected(); // client (we) connected to server
 
 private:
     Ui::MainWindow *ui;

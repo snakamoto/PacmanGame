@@ -33,11 +33,14 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     local_pac->SetPosition(0, WIDTH * 9);
     pacmen.push_back(local_pac);
 
+    remote_pac = new Pacman();
+    remote_pac->SetPosition(2 * WIDTH,1*WIDTH);
+    remote_pac->Set_Orientation(2);
+    pacmen.push_back(remote_pac);
+
 
     for(int i = 0; i < pacmen.size(); i++)
         this->addItem(pacmen[i]->sprite);
-
-
 
 
 }
@@ -166,39 +169,58 @@ void PacGraphicsScene::Update(float elapsed_seconds)
     int y = local_pac->sprite->pos().y() / WIDTH;
     int cur_orientation = local_pac->Get_Orientation();
 
+    //Set the pacman to the queued orientation if possible
     if(((int)local_pac->sprite->pos().x() % WIDTH == 0 && (int)local_pac->sprite->pos().y() % WIDTH == 0) || abs(cur_orientation - next_orientation) == 2)
     {
         if(next_orientation==0)
         {
             if(pathingArr[y*W+(x+1)].type == 0)
+            {
                 local_pac->Set_Orientation(next_orientation);
+                SendPacmanSync();
+            }
         }
         if(next_orientation == 1)
         {
             if(pathingArr[(y+1)*W+x].type == 0)
+            {
                 local_pac->Set_Orientation(next_orientation);
+                SendPacmanSync();
+            }
         }
         if(next_orientation == 2)
         {
             if(pathingArr[y*W+(x-1)].type == 0)
+            {
                 local_pac->Set_Orientation(next_orientation);
+                SendPacmanSync();
+            }
         }
         if(next_orientation == 3)\
         {
             if(pathingArr[(y-1)*W+x].type == 0)
+            {
                 local_pac->Set_Orientation(next_orientation);
+                SendPacmanSync();
+            }
         }
     }
 
+
+    //Update the pacmen
     for(int i = 0; i < pacmen.size(); i++)
     {
+        Pacman *paccy = pacmen[i];
+        x = paccy->sprite->pos().x() / WIDTH;
+        y = paccy->sprite->pos().y() / WIDTH;
+
+        paccy->Update(elapsed_seconds);
+
+        //Stop the pacman if it tries to ram a wall
         if(!((int)local_pac->sprite->pos().x() % WIDTH == 0 && (int)local_pac->sprite->pos().y() % WIDTH == 0))
         {
             continue;
         }
-        Pacman *paccy = pacmen[i];
-        x = paccy->sprite->pos().x() / WIDTH;
-        y = paccy->sprite->pos().y() / WIDTH;
 
         int orientation = paccy->Get_Orientation();
         if (orientation == 0 && pathingArr[y*W + x+1].type == 1)
@@ -221,33 +243,29 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             paccy->Set_Orientation(-1);
              qDebug() << "CAnt go bot";
         }
+        //Loop the pacman
+        //To do: Use looping positions from Tiled
+        if(x == 0)
+        {
+            x = TILES_X - 1;
+            paccy->SetPosition(x*WIDTH,y*WIDTH);
+        }
+        else if(x == TILES_X-1)
+        {
+            x = 1;
+            paccy->SetPosition(x*WIDTH,y*WIDTH);
+        }
+        if(y == 0)
+        {
+            y = TILES_Y - 1;
+            paccy->SetPosition(x*WIDTH,y*WIDTH);
+        }
+        else if(y == TILES_Y - 1)
+        {
+            y = 0;
+            paccy->SetPosition(x*WIDTH,y*WIDTH);
+        }
     }
-
-    //Update enemies
-  //  for(int i =0; i < enemies.size(); i++)
-  //  {
-       // Enemy *e = enemies[i];
-       // e->Update(elapsed_seconds);
-
-
-            //Enemies have reached their destination. Player sucks and should be penalized!!!
-
-            //Delete enemy
-
-            //this->removeItem(e->sprite);
-
-            //find enemy in enemy vector and remove since no longer needed
-          //  auto item = std::find(enemies.begin(), enemies.end(), e);
-          //  enemies.erase(item);
-
-          //  delete e; //Free some valuable memory
-
-          //  SendPlayerSync();
-         //   return;
-
-
-
-  //  }
 
 
     //Update projectiles
@@ -270,34 +288,49 @@ void PacGraphicsScene::mouseMoveEvent(QMouseEvent *event)
 void PacGraphicsScene::SetConnection(Connection *peerConn)
 {
     peerConnection = peerConn;
-    if(!peerConn)
-    {
-        p2_goldText->hide();
-        p2_killsText->hide();
-        return;
-    }
 
     connect(peerConnection,SIGNAL(OnNewEnemyReceived(EnemyStruct)), this, SLOT(on_new_enemy_received(EnemyStruct)));
     connect(peerConnection,SIGNAL(OnNewProjectileRecieved(ProjectileStruct)),this,SLOT(on_new_projectile_recieved(ProjectileStruct)));
     connect(peerConnection,SIGNAL(OnNewPSyncRecieved(PlayerSyncStruct)), this, SLOT(on_new_psync_recieved(PlayerSyncStruct)));
     connect(peerConnection,SIGNAL(OnNewTowerReceived(TowerStruct)),this, SLOT(on_new_tower_received(TowerStruct)));
     connect(peerConnection,SIGNAL(OnRemoveEnemyRecieved(RemoveEnemyStruct)),this,SLOT(on_remove_enemy_recieved(RemoveEnemyStruct)));
+    connect(peerConnection,SIGNAL(OnSyncPacmanReceived(PacmanStruct)),this,SLOT(on_sync_pacman_received(PacmanStruct)));
 }
 
 void PacGraphicsScene::SetPlayerAsHost()
 {
-    localPlayerId = 1;
-    remotePlayerId = 2;
+    local_pac->SetId(1);
+    remote_pac->SetId(2);
+
 }
 
 void PacGraphicsScene::SetPlayerAsClient()
 {
-    localPlayerId = 2;
-    remotePlayerId = 1;
+    Pacman *tmp = local_pac;
+    local_pac = remote_pac;
+    remote_pac = tmp;
+
+    local_pac->SetId(2);
+    remote_pac->SetId(1);
+}
+
+void PacGraphicsScene::on_sync_pacman_received(PacmanStruct pac)
+{
+   for(int i = 0; i < pacmen.size(); i++)
+   {
+       Pacman *paccy = pacmen[i];
+        if(paccy->GetId() == pac.owner_)
+        {
+            qDebug() << "Got a pacman" << pac.owner_;
+            paccy->Set_Orientation(pac.orientation);
+            paccy->SetPosition(pac.x,pac.y);
+        }
+   }
 }
 
 void PacGraphicsScene::on_new_enemy_received(EnemyStruct es)
 {
+    return;
    // spawn_enemy(e.x,e.y);
     last_enemy_id++;
 
@@ -347,7 +380,9 @@ void PacGraphicsScene::on_new_psync_recieved(PlayerSyncStruct s)
 
 void PacGraphicsScene::on_remove_enemy_recieved(RemoveEnemyStruct en)
 {
-    if(localPlayerId==1)
+    return;
+
+    if(local_pac->GetId()==1)
         return;
 
     for(int i = 0; i< enemies.size(); i++)
@@ -369,16 +404,7 @@ void PacGraphicsScene::on_remove_enemy_recieved(RemoveEnemyStruct en)
 
 void PacGraphicsScene::SendPlayerSync()
 {
-    /*
-    PlayerSyncStruct ps;
-    ps.lives = lives;
-    ps.p1_gold = p1_gold;
-    ps.p1_kills = p1_kills;
-    ps.p2_gold = p2_gold;
-    ps.p2_kills = p2_kills;
 
-    if(peerConnection)
-        peerConnection->Send(ps);*/
 }
 
 
@@ -418,6 +444,7 @@ void PacGraphicsScene::LoadMap(QString fileName)
             if(pathingArr[j*W+i].type==1)
             {
                 QGraphicsRectItem *item = new QGraphicsRectItem(i*WIDTH,j*WIDTH,WIDTH,WIDTH);
+
                 this->addItem(item);
             }
 
@@ -429,5 +456,31 @@ void PacGraphicsScene::LoadMap(QString fileName)
 
     //LoadPostMapItems();
 
+}
+
+const bool PacGraphicsScene::IsHost()
+{
+    return local_pac->GetId() == 1;
+}
+
+void PacGraphicsScene::SendPacmanSync()
+{
+    if(IsHost())
+    {
+        //Send all if host
+        for(int i = 0; i < pacmen.size(); i++)
+        {
+            Pacman *pac = pacmen[i];
+            PacmanStruct p = pac->GetPacmanStruct();
+            if(peerConnection)
+                peerConnection->Send(p);
+        }
+    }
+    else
+    {
+        //Only send the local player
+        if(peerConnection)
+            peerConnection->Send(local_pac->GetPacmanStruct());
+    }
 }
 
