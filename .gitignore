@@ -11,6 +11,7 @@
 *.sln.docstates
 *.obj
 *.autosave
+*.exe
 Makefile
 
 # Build results
