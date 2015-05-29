@@ -13,6 +13,8 @@
 *.autosave
 *.exe
 Makefile
+Makefile.Debug
+Makefile.Release
 
 # Build results
 
