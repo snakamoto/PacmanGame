@@ -128,17 +128,10 @@ void PacGraphicsScene::GeneratePath()
 void PacGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
 
-
-
 }
-
-
 
 void PacGraphicsScene::keyPressEvent(QKeyEvent *e)
 {
-
-
-
     if(e->key() == Qt::Key_Left)
     {
         next_orientation = 2;
@@ -147,7 +140,6 @@ void PacGraphicsScene::keyPressEvent(QKeyEvent *e)
     if(e->key() == Qt::Key_Up)
     {
         next_orientation = 3;
-
 
     }
     if(e->key() == Qt::Key_Down)
@@ -189,6 +181,7 @@ Enemy* PacGraphicsScene::spawn_enemy(int x, int y)
 }
 
 int updates = 0;
+
 void PacGraphicsScene::Update(float elapsed_seconds)
 {
 
@@ -339,10 +332,6 @@ void PacGraphicsScene::mouseMoveEvent(QMouseEvent *event)
 {
 
 }
-
-
-
-
 
 void PacGraphicsScene::SetConnection(Connection *peerConn)
 {
@@ -534,9 +523,8 @@ void PacGraphicsScene::LoadMap(QString fileName)
     qDebug () << "Loading map" << fileName + ".tmx";
     TiledMap m(fileName + ".tmx");
     m.LoadCollisionLayer(&pathingArr, W);
-    m.LoadTilesets();
+    tilesets = m.LoadTilesets();
     qDebug() << "Test";
-
 
     for(int i =0; i < TILES_X; i++)
     {

@@ -90,20 +90,27 @@ vector<Tileset> TiledMap::LoadTilesets()
     {
         QString res = results[i];
 
+        if(res.size() < 2)
+            continue;
+
         //qDebug() << results[i];
         QXmlStreamReader reader(results[i]);
         reader.readNextStartElement();
 
         if(reader.tokenString() == "StartElement")
         {
-            int gid = reader.attributes().at(0).value().toInt();
-            tileset.id = gid;
-
-            if(res[0] ==  ' ')//Image
+            if(res.contains("<image"))//Image
             {
-                QString img = reader.attributes().at(0).value();
+                QString img = reader.attributes().at(0).value().toString();
                 int width = reader.attributes().at(2).value().toInt();
                 int height = reader.attributes().at(3).value().toInt();
+                tileset.h = height;
+                tileset.w = width;
+                tileset.src = img;
+                sets.push_back(tileset);
+                qDebug() << tileset.id << img << width << height;
+                tileset = Tileset();
+
 
             }
             else
@@ -114,4 +121,58 @@ vector<Tileset> TiledMap::LoadTilesets()
 
         }
     }
+    return sets;
+}
+
+int* TiledMap::LoadTiles()
+{
+      int* tiles = 0;
+      tiles = new int[TILES_Y];
+
+    /*  for (int y = 0; y < TILES_Y; y++)
+      {
+            tiles[y] = new int[WIDTH];
+            for (int x = 0; x < WIDTH; x++)
+            {
+                tiles[y*W+x] = 0;
+            }
+      }*/
+
+      QFile file(filename);
+      file.open(QIODevice::ReadOnly);
+
+      QXmlQuery query;
+      query.bindVariable("kmlFile", &file);
+
+      query.setQuery("declare variable $kmlFile external; doc($kmlFile)/map/layer");
+
+      QString result;
+
+      query.evaluateTo(&result);
+      file.close();
+
+
+      QList<QString> results = result.split('\n');
+      QString res = results[0];
+      QXmlStreamReader reader(results[1]);
+      reader.readNextStartElement();
+      QString name = reader.attributes().at(0).value().toString();
+      int width = reader.attributes().at(1).value().toInt();
+      int height = reader.attributes().at(2).value().toInt();
+      int x = 0;
+      int y = 0;
+
+
+    /*  file = QFile(filename);
+      file.open(QIODevice::ReadOnly);
+      query = QXmlQuery();
+      query.bindVariable("kmlFile", &file);
+      query.setQuery("declare variable $kmlFile external; doc($kmlFile)/map/layer[@name='Image']/data/tile");
+      result = QString();
+      query.evaluateTo(&result);
+      file.close();
+
+*/
+
+      return tiles;
 }
