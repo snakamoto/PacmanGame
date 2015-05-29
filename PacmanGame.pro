@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     pacgraphicsscene.cpp \
     mainmenu.cpp \
     powerup.cpp \
-    pellet.cpp
+    pellet.cpp \
+    monster.cpp
 
 HEADERS  += mainwindow.h \
     astar.h \
@@ -52,7 +53,9 @@ HEADERS  += mainwindow.h \
     pellet.h \
     pelletstruct.h \
     tileset.h \
-    constants.h
+    constants.h \
+    monstersstruct.h \
+    monster.h
 
 FORMS    += \
     mainmenu.ui

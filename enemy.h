@@ -25,7 +25,6 @@ public:
 
     const bool IsAlive();
 
-
     void UpdatePath(Path p_);
     void UpdatePath(vector<TileNode> node_path);
     void Update(float elapsed_seconds);
@@ -60,13 +59,6 @@ private:
     void UpdatePathing(float seconds);
     //void InitWaves();
 
-    //We only want to change our orientation when it is necessary to do so
-    //Coz QT sucks and is slow
-    int last_orientation;
-    int cur_orientation;
-
-   // Wave *waves;
-   // int noWaves;
 };
 
 #endif // ENEMY_H

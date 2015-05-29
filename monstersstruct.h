@@ -5,7 +5,7 @@
 class monstersstruct
 {
 public:
-    monstersstruct();
+    monstersstruct(){}
 
 
     int owner_; //owner of the tower

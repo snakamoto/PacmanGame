@@ -7,9 +7,11 @@ Pacman::Pacman()
     sprite->setRect(0,0,WIDTH,WIDTH); //Size of sprite
     sprite->setTransformOriginPoint(WIDTH/2,WIDTH/2); //To rotate about the origin
 
+
      QPixmap pix("images/pacman_open.png");
 
     pix=pix.scaled(WIDTH,WIDTH); //Scale image to fit BB
+
     sprite->setBrush(QBrush(pix));  //Set brush to loaded image
     const QColor transparent(0,0,0,0);
 

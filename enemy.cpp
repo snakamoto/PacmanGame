@@ -25,7 +25,7 @@ Enemy::Enemy()
 
 
 void Enemy::UpdatePathing(float seconds)
-{
+{/*
     //Collection of points to move to
     vector<QPointF> points = path.GetPoints();
     //Length of each point
@@ -98,7 +98,7 @@ void Enemy::UpdatePathing(float seconds)
                 sprite->setRotation(90);
         }
     }
-    last_orientation = cur_orientation;
+    last_orientation = cur_orientation;*/
 }
 
 void Enemy::UpdatePath(vector<TileNode> node_path)
@@ -145,7 +145,7 @@ const EnemyStruct Enemy::GetEnemyStruct()
 {
     EnemyStruct s;
     s.id = id;
-    s.orientation = cur_orientation;
+    s.orientation = 0;
     s.x = GetBoundingBox().x();
     s.y = GetBoundingBox().y();
     return s;

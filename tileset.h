@@ -1,6 +1,7 @@
 #ifndef TILESET_H
 #define TILESET_H
 #include <QString>
+#include <QPixmap>
 #include <QColor>
 
 using namespace std;
@@ -16,7 +17,7 @@ public:
     QColor color;
 
     void Load();
-
+    QPixmap pix;
 };
 
 #endif // TILESET_H
