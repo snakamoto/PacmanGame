@@ -52,8 +52,22 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     for(int i = 0; i < pacmen.size(); i++)
         this->addItem(pacmen[i]->sprite);
 
+
+    for(int i = 0; i < 3; i++)
+    {
+        Monster *m = new Monster();
+        m->SetPosition(TILE_WIDTH*(9+i),9*TILE_WIDTH);
+        m->SetId(i);
+    }
+    Monster *t = monstersArray[0];
+    AStar starretjie = AStar(W,H,&pathingArr);
+    TileNode start = TileNode(9,9); TileNode end(11,19);
+    std::vector<TileNode> nodePath = starretjie.Search(start, end);
+    t->UpdatePath(nodePath);
+
     //Powerups
 
+    //Pellet
     int k = 0;
     for(int i = 1; i < TILES_X; i++)
     {
@@ -376,6 +390,17 @@ void PacGraphicsScene::Update(float elapsed_seconds)
 
 
     }
+
+
+
+    //Update the monsters
+    for(int i = 0; i < monstersArray.size(); i++)
+    {
+        Monster *manny = monstersArray[i];
+        manny->Update(elapsed_seconds);
+    }
+
+
 
     //Update projectiles
     QRectF playArea(0, 0, TILES_X*WIDTH, TILES_Y*WIDTH);
