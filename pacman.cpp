@@ -18,6 +18,8 @@ Pacman::Pacman()
 
     speed = 100;
     score = 0;
+    state=2;
+    statetimer=10000;
 
     Set_Orientation(0);
 
@@ -107,9 +109,38 @@ const int Pacman::GetState()
     return state;
 }
 
+
+
 void Pacman::SetState(int s)
 {
+    if (s==0)
+    {
+        speed=100;
+    }
+
+
+
     this->state = s;
+}
+
+const float Pacman::GetSpeed()
+{
+    return speed;
+}
+
+void Pacman::SetSpeed(int s)
+{
+    this->speed = s;
+}
+
+const int Pacman::GetStateTimer()
+{
+    return statetimer;
+}
+
+void Pacman::DecrementStateTimer()
+{
+    this->statetimer -= 1;
 }
 
  void Pacman::IncrementScorePellet(int amount)

@@ -2,6 +2,7 @@
 #define POWERUP_H
 #include "powerupstruct.h"
 #include "QGraphicsRectItem"
+#include "Constants.h"
 
 class PowerUp
 {
@@ -19,6 +20,15 @@ public:
     void SetEaten(bool e);
     void SetId(int i);
     const PowerUpStruct GetPowerUpStruct();
+    const QRectF GetBoundingBox();
+    QGraphicsRectItem *sprite;
+    void SetPosition(int x, int y);
+
+
+
+
+
+
 private:
     int id;
     int x;

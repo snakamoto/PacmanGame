@@ -2,7 +2,9 @@
 
 PowerUp::PowerUp()
 {
-
+    sprite = new QGraphicsRectItem();
+    sprite->setRect(0,0,WIDTH/2,WIDTH/2); //Size of sprite
+    sprite->setTransformOriginPoint(WIDTH/8,WIDTH/8); //To rotate about the origin
 }
 
 PowerUp::~PowerUp()
@@ -13,6 +15,11 @@ PowerUp::~PowerUp()
 const int PowerUp::GetX()
 {
     return x;
+}
+
+const QRectF PowerUp::GetBoundingBox()
+{
+    return sprite->sceneBoundingRect();
 }
 
 const int PowerUp::GetY()
@@ -30,14 +37,23 @@ const int PowerUp::GetEaten()
 void PowerUp::SetX(int x)
 {
     this->x = x;
+    sprite->setPos(x,y);
 }
 void PowerUp::SetY(int y)
 {
     this->y = y;
+    sprite->setPos(x,y);
 }
+
+void PowerUp::SetPosition(int x, int y)
+{
+    sprite->setPos(x+WIDTH/4,y+WIDTH/4);
+}
+
 void PowerUp::SetType(int t)
 {
-    this->type = t;
+    this->type = 60-4*t;
+
 }
 void PowerUp::SetEaten(bool e)
 {
