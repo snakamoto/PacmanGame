@@ -52,6 +52,8 @@ public:
 
     void Update(float elapsed_seconds);
 
+    bool IsPathDone();
+
 private:
 
     int id;

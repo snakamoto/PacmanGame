@@ -25,6 +25,8 @@ Monster::Monster()
 
     Set_Orientation(0);
 
+    speed = 100;
+
 }
 
 
@@ -183,8 +185,8 @@ void Monster::UpdatePathing(float seconds)
         else //Facing right
         {
             cur_orientation = 1;
-            if(last_orientation != cur_orientation)
-                sprite->setRotation(0);
+           // if(last_orientation != cur_orientation)
+           //     sprite->setRotation(0);
         }
     }
     else //Moving most in y dir
@@ -192,14 +194,15 @@ void Monster::UpdatePathing(float seconds)
         if (direction.y() < 0) //Facing bottom
         {
             cur_orientation = 2;
-            if(last_orientation != cur_orientation)
-                sprite->setRotation(270);
+          //  if(last_orientation != cur_orientation)
+           //     sprite->setRotation(270);
         }
         else //Facing top
         {
             cur_orientation = 3;
-            if(last_orientation != cur_orientation)
-                sprite->setRotation(90);
+           // if(last_orientation != cur_orientation)
+            //    sprite->setRotation(90);
+
         }
     }
     last_orientation = cur_orientation;
@@ -220,6 +223,11 @@ void Monster::UpdatePath(Path p)
 void Monster::Update(float elapsed_seconds)
 {
     UpdatePathing(elapsed_seconds);
+}
+
+bool Monster::IsPathDone()
+{
+    return stage_index >= (path.GetLength() - 1);
 }
 
 

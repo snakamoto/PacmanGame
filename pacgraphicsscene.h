@@ -17,6 +17,7 @@
 #include "pellet.h"
 #include "powerup.h"
 #include "monster.h"
+#include "tile_node.h"
 #include "pacman.h"
 
 
@@ -52,7 +53,7 @@ private:
     //Used for updating the entities amongst other things
     std::vector<Pacman*> pacmen;
     std::vector<Enemy*> enemies;
-    std::vector<monster*> monstersArray;
+    std::vector<Monster*> monstersArray;
 
     std::vector<PowerUp*> powerups;
     std::vector<Pellet*> pellets;

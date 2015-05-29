@@ -56,12 +56,15 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     for(int i = 0; i < 3; i++)
     {
         Monster *m = new Monster();
-        m->SetPosition(TILE_WIDTH*(9+i),9*TILE_WIDTH);
+        m->SetPosition(WIDTH*(9+i),9*WIDTH);
         m->SetId(i);
+        this->addItem(m->sprite);
+        monstersArray.push_back(m);
     }
     Monster *t = monstersArray[0];
     AStar starretjie = AStar(W,H,&pathingArr);
-    TileNode start = TileNode(9,9); TileNode end(11,19);
+    TileNode start(9,9, nullptr); TileNode end(11,19, nullptr);
+
     std::vector<TileNode> nodePath = starretjie.Search(start, end);
     t->UpdatePath(nodePath);
 

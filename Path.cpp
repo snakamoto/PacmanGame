@@ -42,6 +42,7 @@ void Path::Build()
         direction.setY(direction.y() / length);
 		directions.push_back(direction);		
 	}
+    length = points.size();
 }
 
 const vector<QPointF> Path::GetPoints()
@@ -55,4 +56,9 @@ const vector<float> Path::GetLengths()
 const vector<QPointF> Path::GetDirections()
 {
 	return directions;
+}
+
+const int Path::GetLength()
+{
+    return length;
 }

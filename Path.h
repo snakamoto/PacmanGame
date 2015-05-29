@@ -16,11 +16,14 @@ public:
     const vector<QPointF> GetPoints();
     const vector<float> GetLengths();
     const vector<QPointF> GetDirections();
+    const int GetLength();
+
 
 private:
     vector<QPointF> points;
     vector<float> lengths;
     vector<QPointF> directions;
+    int length;
 
     //See this function's code to see what this class is really about
     void Build();
