@@ -12,13 +12,14 @@ MainMenu::MainMenu(QWidget *parent) :
 
 MainMenu::~MainMenu()
 {
+    delete window;
     delete ui;
 }
 
 void MainMenu::on_hostButton_clicked()
 {
     // create a playable window
-    MainWindow *window =new MainWindow(this, true, false, "");
+    window =new MainWindow(this, true, false, "");
 
     // let the widget begin at 0,0 with the correct height and width
     window->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
@@ -42,7 +43,7 @@ void MainMenu::on_hostButton_clicked()
 void MainMenu::on_joinButton_clicked()
 {
     // create a playable window
-    MainWindow *window =new MainWindow(this, false, false, ui->joinText->toPlainText());
+    window =new MainWindow(this, false, false, ui->joinText->toPlainText());
 
     // let the widget begin at 0,0 with the correct height and width
     window->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
@@ -65,7 +66,7 @@ void MainMenu::on_joinButton_clicked()
 void MainMenu::on_singleplayerButton_clicked()
 {
     // create a playable window
-    MainWindow *window = new MainWindow(this, false, true, "");
+    window = new MainWindow(this, false, true, "");
 
     // let the widget begin at 0,0 with the correct height and width
     window->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
@@ -83,6 +84,4 @@ void MainMenu::on_singleplayerButton_clicked()
     // set the focus of the current widget
     ui->stackedWidget->setFocus();
     window->setFocus();
-
-
 }
