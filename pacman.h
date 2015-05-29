@@ -38,11 +38,19 @@ public:
     const int GetState();
     void SetState(int s);
 
+    const int GetStateTimer();
+    void DecrementStateTimer();
+    int state;
+
+    const float GetSpeed();
+    void SetSpeed(int s);
+
 private:
     int orientation;
     float speed;
     int id;
-    int state;
+
+    float statetimer;
     int score;
 
 };

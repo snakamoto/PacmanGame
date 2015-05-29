@@ -49,20 +49,13 @@ void Pellet::SetY(int y)
 
 void Pellet::SetPosition(int x, int y)
 {
-
-
     sprite->setPos(x+type/4,y+type/4);
 }
 
 void Pellet::SetType(int t)
 {
     this->type = 60-4*t;
-
-
     sprite->setRect(0,0,WIDTH-type/2,WIDTH-type/2); //Size of sprite
-
-
-
 }
 
 void Pellet::SetEaten(bool e)

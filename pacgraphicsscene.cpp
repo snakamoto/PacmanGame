@@ -61,16 +61,30 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
         {
             if(pathingArr[j*W+i].type != 0)
                 continue;
+            // create pellet or powerup
+            if (qrand()%9!=1)
+            {
             Pellet *pellet = new Pellet();
-
             pellet->SetEaten(false);
             pellet->SetId(k);
-
             pellet->SetType(qrand()%9);
             pellet->SetPosition(i*WIDTH,j*WIDTH);
             pellets.push_back(pellet);
             this->addItem(pellet->sprite);
-            k++;
+
+            }
+            else
+            {
+                PowerUp *powerup = new PowerUp();
+                powerup->SetEaten(false);
+                powerup->SetId(k);
+                powerup->SetType(qrand()%9);
+                powerup->SetPosition(i*WIDTH,j*WIDTH);
+                powerups.push_back(powerup);
+                this->addItem(powerup->sprite);
+            }
+
+             k++;
         }
     }
 
@@ -184,22 +198,45 @@ int updates = 0;
 
 void PacGraphicsScene::Update(float elapsed_seconds)
 {
-
     updates++;
+    // constantly decrease statetimer to zero
+    for(int i = 0; i < pacmen.size(); i++)
+    {
+        Pacman *paccy = pacmen[i];
+        if (paccy->GetStateTimer() > 0)
+        {
+            paccy->DecrementStateTimer();
+        }
+        //reset states
+        else
+        {
+        paccy->SetState(0);
+        }
+        qDebug() <<  paccy->GetStateTimer();
+    }
 
+    // powerups
+    // state 2 speed
+    if (local_pac->GetState()==2)
+    {
+        if (local_pac->GetSpeed() == 100)
+        {
+        local_pac->SetSpeed(200);
+        }
+    }
 
-    //Used to remove enemies when they have reached their destination
+    // used to remove enemies when they have reached their destination
 
     int x = local_pac->sprite->pos().x() / WIDTH;
     int y = local_pac->sprite->pos().y() / WIDTH;
     int cur_orientation = local_pac->Get_Orientation();
 
-    //Set the pacman to the queued orientation if possible
+    // set the pacman to the queued orientation if possible
     if(((int)local_pac->sprite->pos().x() % WIDTH == 0 && (int)local_pac->sprite->pos().y() % WIDTH == 0) || abs(cur_orientation - next_orientation) == 2)
     {
         if(next_orientation==0)
         {
-            if(pathingArr[y*W+(x+1)].type == 0)
+            if(pathingArr[y*W+(x+1)].type == 0 || local_pac->state==1)
             {
                 local_pac->Set_Orientation(next_orientation);
                 SendPacmanSync();
@@ -207,7 +244,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         }
         else if(next_orientation == 1)
         {
-            if(pathingArr[(y+1)*W+x].type == 0)
+            if(pathingArr[(y+1)*W+x].type == 0 || local_pac->state==1)
             {
                 local_pac->Set_Orientation(next_orientation);
                 SendPacmanSync();
@@ -215,7 +252,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         }
         else if(next_orientation == 2)
         {
-            if(pathingArr[y*W+(x-1)].type == 0)
+            if(pathingArr[y*W+(x-1)].type == 0 || local_pac->state==1)
             {
                 local_pac->Set_Orientation(next_orientation);
                 SendPacmanSync();
@@ -223,7 +260,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         }
         else if(next_orientation == 3)
         {
-            if(pathingArr[(y-1)*W+x].type == 0)
+            if(pathingArr[(y-1)*W+x].type == 0 || local_pac->state==1)
             {
                 local_pac->Set_Orientation(next_orientation);
                 SendPacmanSync();
@@ -232,7 +269,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
     }
 
 
-    //Update the pacmen
+    // update the pacmen
     for(int i = 0; i < pacmen.size(); i++)
     {
         Pacman *paccy = pacmen[i];
@@ -316,8 +353,28 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                     local_player_score->setPlainText("Score: " + QString::number(paccy->GetScore()));
                 SendPelletSync(pellet);
             }
-
         }
+
+
+        for(int j = 0; j < powerups.size(); j++)
+        {
+            PowerUp *powerup = powerups[j];
+            if(powerup->GetEaten()==true)
+                continue;
+            if(paccy->GetBoundingBox().intersects(powerup->GetBoundingBox()))
+            {
+                paccy->IncrementScorePellet(1000);
+                powerup->SetEaten(true);
+                this->removeItem(powerup->sprite);
+                qDebug() << paccy->GetScore();
+                if(paccy->GetId() == local_pac->GetId())
+                    local_player_score->setPlainText("Score: " + QString::number(paccy->GetScore()));
+                //Setpowerupsync kort
+            }
+        }
+
+
+
     }
 
     //Update projectiles
