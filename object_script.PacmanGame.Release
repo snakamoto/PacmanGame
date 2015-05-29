@@ -13,6 +13,8 @@ INPUT(
 ./release\pacman.o
 ./release\pacgraphicsscene.o
 ./release\mainmenu.o
+./release\powerup.o
+./release\pellet.o
 ./release\qrc_resources.o
 ./release\moc_mainwindow.o
 ./release\moc_connection.o

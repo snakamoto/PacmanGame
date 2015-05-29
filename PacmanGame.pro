@@ -26,7 +26,9 @@ SOURCES += main.cpp\
     enemy.cpp \
     pacman.cpp \
     pacgraphicsscene.cpp \
-    mainmenu.cpp
+    mainmenu.cpp \
+    powerup.cpp \
+    pellet.cpp
 
 HEADERS  += mainwindow.h \
     astar.h \
@@ -45,7 +47,11 @@ HEADERS  += mainwindow.h \
     enemy.h \
     pacman.h \
     pacgraphicsscene.h \
-    mainmenu.h
+    mainmenu.h \
+    powerup.h \
+    powerupstruct.h \
+    pellet.h \
+    pelletstruct.h
 
 FORMS    += \
     mainmenu.ui

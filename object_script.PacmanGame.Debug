@@ -13,6 +13,8 @@ INPUT(
 ./debug\pacman.o
 ./debug\pacgraphicsscene.o
 ./debug\mainmenu.o
+./debug\powerup.o
+./debug\pellet.o
 ./debug\qrc_resources.o
 ./debug\moc_mainwindow.o
 ./debug\moc_connection.o

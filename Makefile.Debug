@@ -56,7 +56,9 @@ SOURCES       = main.cpp \
 		enemy.cpp \
 		pacman.cpp \
 		pacgraphicsscene.cpp \
-		mainmenu.cpp debug\qrc_resources.cpp \
+		mainmenu.cpp \
+		powerup.cpp \
+		pellet.cpp debug\qrc_resources.cpp \
 		debug\moc_mainwindow.cpp \
 		debug\moc_connection.cpp \
 		debug\moc_clickablelabel.cpp \
@@ -76,6 +78,8 @@ OBJECTS       = debug/main.o \
 		debug/pacman.o \
 		debug/pacgraphicsscene.o \
 		debug/mainmenu.o \
+		debug/powerup.o \
+		debug/pellet.o \
 		debug/qrc_resources.o \
 		debug/moc_mainwindow.o \
 		debug/moc_connection.o \
@@ -100,7 +104,11 @@ DIST          =  mainwindow.h \
 		enemy.h \
 		pacman.h \
 		pacgraphicsscene.h \
-		mainmenu.h main.cpp \
+		mainmenu.h \
+		powerup.h \
+		powerupstruct.h \
+		pellet.h \
+		pelletstruct.h main.cpp \
 		mainwindow.cpp \
 		astar.cpp \
 		connection.cpp \
@@ -113,7 +121,9 @@ DIST          =  mainwindow.h \
 		enemy.cpp \
 		pacman.cpp \
 		pacgraphicsscene.cpp \
-		mainmenu.cpp
+		mainmenu.cpp \
+		powerup.cpp \
+		pellet.cpp
 QMAKE_TARGET  = PacmanGame
 DESTDIR        = debug\ #avoid trailing-slash linebreak
 TARGET         = PacmanGame.exe
@@ -152,7 +162,7 @@ dist:
 	$(ZIP) PacmanGame.zip $(SOURCES) $(DIST) PacmanGame.pro ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\spec_pre.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\qdevice.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\device_config.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\common\shell-win32.conf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\qconfig.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_axbase.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_axbase_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_axcontainer.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_axcontainer_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_axserver.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_axserver_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_bluetooth.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_bluetooth_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_bootstrap_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_clucene_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_concurrent.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_concurrent_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_core.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_core_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_dbus.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_dbus_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_declarative.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_declarative_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_designer.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_designer_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_designercomponents_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_enginio.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_enginio_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_gui.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_gui_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_help.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_help_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_location.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_location_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_multimedia.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_multimedia_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_multimediawidgets.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_multimediawidgets_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_network.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_network_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_nfc.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_nfc_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_opengl.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_opengl_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_openglextensions.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_openglextensions_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_platformsupport_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_positioning.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_positioning_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_printsupport.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_printsupport_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_qml.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_qml_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_qmldevtools_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_qmltest.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_qmltest_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_quick.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_quick_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_quickparticles_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_quickwidgets.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_quickwidgets_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_script.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_script_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_scripttools.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_scripttools_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_sensors.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_sensors_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_serialport.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_serialport_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_sql.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_sql_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_svg.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_svg_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_testlib.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_testlib_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_uitools.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_uitools_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_webchannel.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_webchannel_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_webkit.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_webkit_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_webkitwidgets.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_webkitwidgets_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_websockets.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_websockets_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_webview.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_webview_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_widgets.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_widgets_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_winextras.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_winextras_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_xml.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_xml_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_xmlpatterns.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\modules\qt_lib_xmlpatterns_private.pri ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\qt_functions.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\qt_config.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\win32\qt_config.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\win32-g++\qmake.conf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\spec_post.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\exclusive_builds.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\default_pre.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\win32\default_pre.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\resolve_config.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\exclusive_builds_post.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\default_post.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\build_pass.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\win32\rtti.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\precompile_header.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\warn_on.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\qt.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\resources.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\moc.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\win32\opengl.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\uic.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\win32\windows.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\testcase_targets.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\exceptions.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\yacc.prf ..\..\..\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\lex.prf PacmanGame.pro resources.qrc C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/qtmaind.prl C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Cored.prl C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Widgetsd.prl C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Guid.prl C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5XmlPatternsd.prl C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Networkd.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) debug\main.o debug\mainwindow.o debug\astar.o debug\connection.o debug\highscorefile.o debug\Path.o debug\removeenemystruct.o debug\tiledmap.o debug\tile_node.o debug\clickablelabel.o debug\enemy.o debug\pacman.o debug\pacgraphicsscene.o debug\mainmenu.o debug\qrc_resources.o debug\moc_mainwindow.o debug\moc_connection.o debug\moc_clickablelabel.o debug\moc_pacgraphicsscene.o debug\moc_mainmenu.o
+	-$(DEL_FILE) debug\main.o debug\mainwindow.o debug\astar.o debug\connection.o debug\highscorefile.o debug\Path.o debug\removeenemystruct.o debug\tiledmap.o debug\tile_node.o debug\clickablelabel.o debug\enemy.o debug\pacman.o debug\pacgraphicsscene.o debug\mainmenu.o debug\powerup.o debug\pellet.o debug\qrc_resources.o debug\moc_mainwindow.o debug\moc_connection.o debug\moc_clickablelabel.o debug\moc_pacgraphicsscene.o debug\moc_mainmenu.o
 
 distclean: clean 
 	-$(DEL_FILE) $(DESTDIR_TARGET)
@@ -255,6 +265,7 @@ debug/moc_mainwindow.cpp: ../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtNetwork/
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QList \
 		playersyncstruct.h \
 		removeenemystruct.h \
+		powerupstruct.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qwidget.h \
@@ -405,6 +416,7 @@ debug/moc_connection.cpp: pacmanstruct.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QList \
 		playersyncstruct.h \
 		removeenemystruct.h \
+		powerupstruct.h \
 		connection.h
 	C:\Qt\Qt5.4.1\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.1/5.4/mingw491_32/mkspecs/win32-g++ -IC:/Users/NWUuser/ZeGame -IC:/Users/NWUuser/ZeGame/include -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtXmlPatterns -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore connection.h -o debug\moc_connection.cpp
 
@@ -653,6 +665,7 @@ debug/moc_pacgraphicsscene.cpp: ../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWi
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QList \
 		playersyncstruct.h \
 		removeenemystruct.h \
+		powerupstruct.h \
 		tiledmap.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QString \
 		pacman.h \
@@ -779,6 +792,7 @@ debug/moc_mainmenu.cpp: ../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QM
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QList \
 		playersyncstruct.h \
 		removeenemystruct.h \
+		powerupstruct.h \
 		pacgraphicsscene.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QGraphicsView \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qgraphicsview.h \
@@ -955,6 +969,7 @@ debug/main.o: main.cpp mainmenu.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QList \
 		playersyncstruct.h \
 		removeenemystruct.h \
+		powerupstruct.h \
 		pacgraphicsscene.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QGraphicsView \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qgraphicsview.h \
@@ -1077,6 +1092,7 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QList \
 		playersyncstruct.h \
 		removeenemystruct.h \
+		powerupstruct.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qwidget.h \
@@ -1268,6 +1284,7 @@ debug/connection.o: connection.cpp connection.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QList \
 		playersyncstruct.h \
 		removeenemystruct.h \
+		powerupstruct.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\connection.o connection.cpp
 
@@ -1930,6 +1947,7 @@ debug/pacgraphicsscene.o: pacgraphicsscene.cpp pacgraphicsscene.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QList \
 		playersyncstruct.h \
 		removeenemystruct.h \
+		powerupstruct.h \
 		tiledmap.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QString \
 		pacman.h \
@@ -2057,6 +2075,7 @@ debug/mainmenu.o: mainmenu.cpp mainmenu.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QList \
 		playersyncstruct.h \
 		removeenemystruct.h \
+		powerupstruct.h \
 		pacgraphicsscene.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QGraphicsView \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qgraphicsview.h \
@@ -2133,6 +2152,13 @@ debug/mainmenu.o: mainmenu.cpp mainmenu.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qtextformat.h \
 		../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainmenu.o mainmenu.cpp
+
+debug/powerup.o: powerup.cpp powerup.h \
+		powerupstruct.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\powerup.o powerup.cpp
+
+debug/pellet.o: pellet.cpp pellet.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\pellet.o pellet.cpp
 
 debug/qrc_resources.o: debug/qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\qrc_resources.o debug\qrc_resources.cpp

@@ -22,6 +22,7 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
         }
     }
 
+
     //backgroundRect
     backgroundRect = new QGraphicsRectItem();
     //this->addItem(backgroundRect);

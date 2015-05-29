@@ -43,3 +43,21 @@ void PowerUp::SetEaten(bool e)
 {
     this->eaten = e;
 }
+void PowerUp::SetId(int i)
+{
+    this->id = i;
+}
+const int PowerUp::GetId()
+{
+    return this->id;
+}
+
+const PowerUpStruct PowerUp::GetPowerUpStruct()
+{
+    PowerUpStruct p;
+    p.eaten = this->eaten;
+    p.type = this->type;
+    p.x = this->x;
+    p.y = this->y;
+    return p;
+}

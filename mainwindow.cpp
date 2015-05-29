@@ -53,7 +53,7 @@ void MainWindow::createGame()
    connect(updateTimer,SIGNAL(timeout()),this,SLOT(OnUpdateTimer()));
    updateTimer->start(1);
    elapsedTimer.start();
-   asdasdasd
+
 }
 
 

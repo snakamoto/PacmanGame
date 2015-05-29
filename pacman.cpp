@@ -37,7 +37,6 @@ void Pacman::Set_Orientation(int orient)
     if(orient >= 0)
         sprite->setRotation(orient*90);
 
-
 }
 
 
@@ -48,8 +47,6 @@ void Pacman::SetPosition(int x, int y)
 
 void Pacman::Update(float elapsed_seconds)
 {
-
-
     //orient 0 - left 1 -top 2-right 3 - bottom
     float x_inc = 0;
     float y_inc = 0;
@@ -86,6 +83,7 @@ const PacmanStruct Pacman::GetPacmanStruct()
     s.orientation = this->orientation;
     s.x = (int)this->sprite->pos().x();
     s.y = (int)this->sprite->pos().y();
+    s.state = this->state;
     return s;
 }
 
@@ -97,4 +95,14 @@ const int Pacman::GetId()
 void Pacman::SetId(int id_)
 {
     this->id = id_;
+}
+
+const int Pacman::GetState()
+{
+    return state;
+}
+
+void Pacman::SetState(int s)
+{
+    this->state = s;
 }

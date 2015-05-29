@@ -9,9 +9,10 @@
 #include <QList>
 #include "playersyncstruct.h"
 #include "removeenemystruct.h"
+#include "powerupstruct.h"
 #include "pacmanstruct.h"
 
-enum PACKETTYPES{NewProjectile=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5};
+enum PACKETTYPES{NewProjectile=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5, SyncPowerUp=6};
 class Connection : public QObject
 {
     Q_OBJECT
@@ -22,11 +23,13 @@ public:
     void Send(EnemyStruct p);
     void Send(PlayerSyncStruct s);
     void Send(RemoveEnemyStruct es);
+    void Send(PowerUpStruct p);
 signals:
     void OnNewEnemyReceived(EnemyStruct e);
     void OnNewPSyncRecieved(PlayerSyncStruct s);
     void OnRemoveEnemyRecieved(RemoveEnemyStruct s);
     void OnSyncPacmanReceived(PacmanStruct s);
+    void OnPowerUpReceived(PowerUpStruct p);
 private:
     QTcpSocket *sock;
     const int IntFromQByteArr(QByteArray a);

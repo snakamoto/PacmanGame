@@ -22,6 +22,7 @@ void Connection::Send(PacmanStruct p)
     int packet_type = PACKETTYPES::SyncPacman;
     QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
             + ":" + QString::number(p.owner_) + ":" + QString::number(p.orientation)
+            + ":" + QString::number(p.state)
             + ":" + QString::number(p.x) +  ":" + QString::number(p.y) + ":@:").toUtf8();
     sock->write(data);
     sock->flush();
@@ -63,6 +64,20 @@ void Connection::Send(PlayerSyncStruct s)
     int packet_type = PACKETTYPES::PlayerSync;
     QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
             + QString::number(s.p1_score) + ":" + QString::number(s.p2_score)+ ":@:").toUtf8();
+    sock->write(data);
+    sock->flush();
+
+    qDebug() << data;
+}
+
+void Connection::Send(PowerUpStruct p)
+{
+    sock->waitForConnected();
+
+    int packet_type = PACKETTYPES::NewEnemy;
+    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
+            + ":" + QString::number(p.id) + ":" + QString::number(p.type) + ":" + QString::number(p.type)
+            + ":" + QString::number(p.x) +  ":" + QString::number(p.y) + ":@:").toUtf8();
     sock->write(data);
     sock->flush();
 
@@ -128,16 +143,37 @@ void Connection::on_readyRead()
             PacmanStruct pac;
             pac.owner_ = IntFromQByteArr(elements[2+i]);
             pac.orientation = IntFromQByteArr(elements[3+i]);
-            pac.x = FloatFromQByteArr(elements[4+i]);
-            pac.y = FloatFromQByteArr(elements[5+i]);
+            pac.state = IntFromQByteArr(elements[4+i]);
+            pac.x = FloatFromQByteArr(elements[5+i]);
+            pac.y = FloatFromQByteArr(elements[6+i]);
 #ifdef ASSERT > 2
             qDebug() << "Sync Pacman (" + QString::number(pac.owner_) + ","
-                        +QString::number(pac.orientation) + ","
+                        + QString::number(pac.orientation) + ","
+                        + QString::number(pac.state) + ","
                         + QString::number(pac.x) + ","
                         + QString::number(pac.y) + ")";
 #endif
             emit OnSyncPacmanReceived(pac);
-            i+=6;
+            i+=7;
+        }
+
+        if(packet_type == PACKETTYPES::SyncPowerUp)
+        {
+            PowerUpStruct p;
+            p.id = IntFromQByteArr(elements[2+i]);
+            p.type = IntFromQByteArr(elements[3+i]);
+            p.eaten = IntFromQByteArr(elements[4+i]);
+            p.x = FloatFromQByteArr(elements[5+i]);
+            p.y = FloatFromQByteArr(elements[6+i]);
+#ifdef ASSERT > 2
+            qDebug() << "Sync PowerUp (" + QString::number(p.id) + ","
+                        + QString::number(p.type) + ","
+                        + QString::number(p.eaten) + ","
+                        + QString::number(p.x) + ","
+                        + QString::number(p.y) + ")";
+#endif
+            emit OnPowerUpReceived(p);
+            i+=7;
         }
 
         if(packet_type == PACKETTYPES::PlayerSync)

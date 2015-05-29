@@ -36,10 +36,14 @@ public:
     int food_collected;
     int kills;
 
+    const int GetState();
+    void SetState(int s);
+
 private:
     int orientation;
     float speed;
     int id;
+    int state;
 
 };
 
