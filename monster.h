@@ -54,6 +54,8 @@ public:
 
     bool IsPathDone();
 
+    void Reset();
+
 private:
 
     int id;

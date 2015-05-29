@@ -31,13 +31,13 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     newPath = true;
 
     local_pac = new Pacman();
-    local_pac->SetPosition(0, WIDTH * 9);
+    local_pac->SetPosition(3 * WIDTH, WIDTH * 9);
     local_pac->Set_Orientation(-1);
     local_pac->SetId(1);
     pacmen.push_back(local_pac);
 
     remote_pac = new Pacman();
-    remote_pac->SetPosition(2 * WIDTH,1*WIDTH);
+    remote_pac->SetPosition(3 * WIDTH,1*WIDTH);
     remote_pac->Set_Orientation(-1);
     remote_pac->SetId(2);
     pacmen.push_back(remote_pac);
@@ -55,13 +55,18 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
         this->addItem(m->sprite);
         monstersArray.push_back(m);
     }
-    Monster *t = monstersArray[0];
+    for(int i = 0; i < monstersArray.size(); i++)
+    {
+
+
+    Monster *t = monstersArray[i];
     AStar starretjie = AStar(W,H,&pathingArr);
-    TileNode start(9,9, nullptr); TileNode end(11,19, nullptr);
+    TileNode start(9,9, nullptr); TileNode end(9,9, nullptr);
 
     std::vector<TileNode> nodePath = starretjie.Search(start, end);
     t->UpdatePath(nodePath);
 
+    }
     //Powerups
 
     //Pellet
@@ -211,8 +216,60 @@ Enemy* PacGraphicsScene::spawn_enemy(int x, int y)
 
 int updates = 0;
 
+
+void PacGraphicsScene::ChooseRandomDestination(Monster *t)
+{
+    AStar starretjie = AStar(W,H,&pathingArr);
+    int RandomValuex=qrand()%TILES_X;
+    int RandomValuey=qrand()%TILES_X;
+    while (pathingArr[RandomValuex + RandomValuey].type == 0)
+    {
+        RandomValuex=qrand()%TILES_X;
+        RandomValuey=qrand()%TILES_X;
+    }
+    TileNode start(t->sprite->x()/WIDTH,t->sprite->y()/WIDTH, nullptr);
+    TileNode end(RandomValuex,RandomValuey, nullptr);
+    std::vector<TileNode> nodePath = starretjie.Search(start, end);
+    t->UpdatePath(nodePath);
+}
+
+
+void PacGraphicsScene::ChooseSpecificDestination(Monster *t)
+{
+
+
+}
+
 void PacGraphicsScene::Update(float elapsed_seconds)
 {
+
+
+    for(int i = 0; i < monstersArray.size(); i++)
+    {
+
+    Monster *t = monstersArray[i];
+
+
+    if (t->IsPathDone())
+    {
+        if (i==0)
+        {
+            Pacman *paccy = pacmen[0];
+            AStar starretjie = AStar(W,H,&pathingArr);
+            TileNode start(t->sprite->x()/WIDTH,t->sprite->y()/WIDTH, nullptr);
+            TileNode end(paccy->sprite->x()/WIDTH,paccy->sprite->y()/WIDTH, nullptr);
+            std::vector<TileNode> nodePath = starretjie.Search(start, end);
+            t->UpdatePath(nodePath);
+        }
+        else
+        {
+        ChooseRandomDestination(t);
+        }
+    }
+    }
+
+
+
     updates++;
     // constantly decrease statetimer to zero
     for(int i = 0; i < pacmen.size(); i++)
@@ -227,18 +284,21 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         {
         paccy->SetState(0);
         }
-        qDebug() <<  paccy->GetStateTimer();
-    }
+
 
     // powerups
     // state 2 speed
-    if (local_pac->GetState()==2)
+    if (paccy->GetState()==2)
     {
-        if (local_pac->GetSpeed() == 100)
+        if (paccy->GetSpeed() == 100)
         {
-        local_pac->SetSpeed(200);
+        paccy->SetSpeed(200);
         }
     }
+
+    }
+
+
 
     // used to remove enemies when they have reached their destination
 
@@ -345,17 +405,17 @@ void PacGraphicsScene::Update(float elapsed_seconds)
     }
 
 
-    //Collision
+    // collision detection
     for(int i =0; i< pacmen.size(); i++)
     {
         Pacman *paccy = pacmen[i];
         x = paccy->sprite->pos().x() / WIDTH;
         y = paccy->sprite->pos().y() / WIDTH;
 
-        //Not the most effective way. Rather use quad tree or order elements in 2d array
-        for(int j = 0; j < pellets.size(); j++)
+        // pellet collision detection
+        for(int i = 0; i < pellets.size(); i++)
         {
-            Pellet *pellet = pellets[j];
+            Pellet *pellet = pellets[i];
             if(pellet->GetEaten()==true)
                 continue;
             if(paccy->GetBoundingBox().intersects(pellet->GetBoundingBox()))
@@ -370,7 +430,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             }
         }
 
-
+        // powerup collision detection
         for(int j = 0; j < powerups.size(); j++)
         {
             PowerUp *powerup = powerups[j];
@@ -378,14 +438,90 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 continue;
             if(paccy->GetBoundingBox().intersects(powerup->GetBoundingBox()))
             {
-                paccy->IncrementScorePellet(1000);
+                int myTempValue = qrand()%8;
+
+                if (myTempValue < 5)
+                {
+                    // powerups active for 10 seconds
+                    if (myTempValue==1)
+                    {
+                        paccy->SetState(1);
+                    }
+                    else
+                    if (myTempValue==2)
+                    {
+                        paccy->SetState(2);
+                    }
+                    else
+                    if (myTempValue==3)
+                    {
+
+                        paccy->SetState(3);
+                    }
+                    else
+                    if (myTempValue==4)
+                    {
+                        paccy->SetState(4);
+                    }
+                    paccy->SetStateTimer(10000);
+
+                    qDebug() << "werk2";
+                }
+                else
+                {
+                    // immediate powerups
+                    if (myTempValue==5)
+                    {
+                        paccy->IncrementScorePellet(10000);
+                    }
+                    else
+                    if (myTempValue==6)
+                    {
+                        paccy->IncrementScorePellet(-10000);
+                    }
+                    else
+                    if (myTempValue==7)
+                    {
+                        for(int i = 0; i < monstersArray.size(); i++)
+                        {
+                            Monster *t = monstersArray[i];
+                            t->SetPosition(9*WIDTH,9*WIDTH);
+                            ChooseRandomDestination(t);
+                        }
+                    }
+                }
                 powerup->SetEaten(true);
                 this->removeItem(powerup->sprite);
-                qDebug() << paccy->GetScore();
                 if(paccy->GetId() == local_pac->GetId())
                     local_player_score->setPlainText("Score: " + QString::number(paccy->GetScore()));
                 //Setpowerupsync kort
+           }
+        }
+
+        // monster collision detection
+        for(int i = 0; i < monstersArray.size(); i++)
+        {
+            Monster *t = monstersArray[i];
+
+            if(paccy->GetBoundingBox().intersects(t->GetBoundingBox()))
+            {
+
+            if (    t->GetState() == 3 )
+            {
+                t->SetPosition(9*WIDTH,9*WIDTH);
+                ChooseRandomDestination(t);
             }
+            else if (t->GetState() == 4 )
+            {
+               //Do Nothing
+            }
+            else
+            {
+                //LoseGame
+             }
+            }
+
+
         }
 
 

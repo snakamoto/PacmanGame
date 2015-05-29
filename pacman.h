@@ -45,6 +45,9 @@ public:
     const float GetSpeed();
     void SetSpeed(int s);
 
+    void SetStateTimer(int t);
+
+
 private:
     int orientation;
     float speed;
