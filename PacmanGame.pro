@@ -51,7 +51,8 @@ HEADERS  += mainwindow.h \
     powerup.h \
     powerupstruct.h \
     pellet.h \
-    pelletstruct.h
+    pelletstruct.h \
+    tileset.h
 
 FORMS    += \
     mainmenu.ui

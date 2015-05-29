@@ -65,3 +65,57 @@ void TiledMap::LoadCollisionLayer(TileNode **grid, int TILES_X)
         }
     }
 }
+
+vector<Tileset> TiledMap::LoadTilesets()
+{
+    vector<Tileset> sets;
+
+    QFile file(filename);
+    file.open(QIODevice::ReadOnly);
+
+    QXmlQuery query;
+    query.bindVariable("kmlFile", &file);
+
+    //query.setQuery("declare default element namespace \"http://earth.google.com/kml/2.0\"; declare variable $kmlFile external; doc($kmlFile)/kml/Document/Placemark[last()]/GeometryCollection/LineString/coordinates/text()");
+
+    query.setQuery("declare variable $kmlFile external; doc($kmlFile)/map/objectgroup[@name='Collision']/object");
+
+
+    QString result;
+
+    query.evaluateTo(&result);
+    file.close();
+
+
+
+
+    QList<QString> results = result.split('\n');
+    for(int i = 0; i < results.size(); i++)
+    {
+        //qDebug() << results[i];
+        QXmlStreamReader reader(results[i]);
+        reader.readNextStartElement();
+
+
+        if(reader.tokenString() == "StartElement")
+        {
+            int xi = reader.attributes().at(1).value().toInt();
+            int yi = reader.attributes().at(2).value().toInt();
+            int wi = reader.attributes().at(3).value().toInt();
+            int hi = reader.attributes().at(4).value().toInt();
+            qDebug() << xi << yi << wi << hi;
+
+            for(int x = xi; x<xi+wi; x+=32)
+            {
+                for(int y=yi; y<yi+hi; y+=32)
+                {
+                    int i = x / 32;
+                    int j = y / 32;
+                    //pathingArr[j*TILES_X + i].type = TileNode::WALL;
+                }
+            }
+
+
+        }
+    }
+}
