@@ -53,6 +53,8 @@ void Monster::SetPosition(int x, int y)
 }
 
 
+
+
 const QRectF Monster::GetBoundingBox()
 {
      return sprite->sceneBoundingRect();
@@ -210,6 +212,7 @@ void Monster::UpdatePathing(float seconds)
 
 void Monster::UpdatePath(vector<TileNode> node_path)
 {
+
     Path p = Path(node_path);
     UpdatePath(p);
 }
@@ -228,6 +231,13 @@ void Monster::Update(float elapsed_seconds)
 bool Monster::IsPathDone()
 {
     return stage_index >= (path.GetLength() - 1);
+}
+
+void Monster::Reset()
+{
+    stage_pos = 0;
+    stage_index = 0;
+    path = Path();
 }
 
 
