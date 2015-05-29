@@ -25,6 +25,7 @@ private slots:
 
 private:
     Ui::MainMenu *ui;
+    MainWindow *window;
 };
 
 #endif // MAINMENU_H
