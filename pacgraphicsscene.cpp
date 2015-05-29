@@ -23,6 +23,11 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     }
 
 
+    local_player_score = new QGraphicsTextItem();
+    local_player_score->setPlainText("Score: 0");
+    local_player_score->setPos(0,0);
+    this->addItem(local_player_score);
+
     //backgroundRect
     backgroundRect = new QGraphicsRectItem();
     //this->addItem(backgroundRect);
@@ -32,16 +37,39 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
 
     local_pac = new Pacman();
     local_pac->SetPosition(0, WIDTH * 9);
+    local_pac->Set_Orientation(-1);
+    local_pac->SetId(1);
     pacmen.push_back(local_pac);
 
     remote_pac = new Pacman();
     remote_pac->SetPosition(2 * WIDTH,1*WIDTH);
-    //remote_pac->Set_Orientation(2);
+    remote_pac->Set_Orientation(-1);
+    remote_pac->SetId(2);
     pacmen.push_back(remote_pac);
 
 
     for(int i = 0; i < pacmen.size(); i++)
         this->addItem(pacmen[i]->sprite);
+
+    //Powerups
+
+    int k = 0;
+    for(int i = 1; i < TILES_X; i++)
+    {
+        for(int j =1; j < TILES_Y; j++)
+        {
+            if(pathingArr[j*W+i].type != 0)
+                continue;
+            Pellet *pellet = new Pellet();
+            pellet->SetPosition(i*WIDTH,j*WIDTH);
+            pellet->SetEaten(false);
+            pellet->SetId(k);
+            pellet->SetType(0);
+            pellets.push_back(pellet);
+            this->addItem(pellet->sprite);
+            k++;
+        }
+    }
 
 
 }
@@ -267,6 +295,33 @@ void PacGraphicsScene::Update(float elapsed_seconds)
     }
 
 
+    //Collision
+    for(int i =0; i< pacmen.size(); i++)
+    {
+        Pacman *paccy = pacmen[i];
+        x = paccy->sprite->pos().x() / WIDTH;
+        y = paccy->sprite->pos().y() / WIDTH;
+
+        //Not the most effective way. Rather use quad tree or order elements in 2d array
+        for(int j = 0; j < pellets.size(); j++)
+        {
+            Pellet *pellet = pellets[j];
+            if(pellet->GetEaten()==true)
+                continue;
+            if(paccy->GetBoundingBox().intersects(pellet->GetBoundingBox()))
+            {
+                paccy->IncrementScorePellet(PELLET_SCORE);
+                pellet->SetEaten(true);
+                this->removeItem(pellet->sprite);
+                qDebug() << paccy->GetScore();
+                if(paccy->GetId() == local_pac->GetId())
+                    local_player_score->setPlainText("Score: " + QString::number(paccy->GetScore()));
+                SendPelletSync(pellet);
+            }
+
+        }
+    }
+
     //Update projectiles
     QRectF playArea(0, 0, TILES_X*WIDTH, TILES_Y*WIDTH);
     //Projectiles need to be withing playArea bounds
@@ -294,6 +349,7 @@ void PacGraphicsScene::SetConnection(Connection *peerConn)
     //connect(peerConnection,SIGNAL(OnNewTowerReceived(TowerStruct)),this, SLOT(on_new_tower_received(TowerStruct)));
     //connect(peerConnection,SIGNAL(OnRemoveEnemyRecieved(RemoveEnemyStruct)),this,SLOT(on_remove_enemy_recieved(RemoveEnemyStruct)));
     connect(peerConnection,SIGNAL(OnSyncPacmanReceived(PacmanStruct)),this,SLOT(on_sync_pacman_received(PacmanStruct)));
+    connect(peerConnection, SIGNAL(OnPelletSyncReceived(PelletStruct)), this, SLOT(on_sync_pellet_received(PelletStruct)));
 }
 
 void PacGraphicsScene::SetPlayerAsHost()
@@ -408,6 +464,44 @@ void PacGraphicsScene::SendPlayerSync()
 
 }
 
+void PacGraphicsScene::on_sync_pellet_received(PelletStruct p)
+{
+    qDebug() << "sync_pellet rec";
+
+   /* Pacman *closest_pac = local_pac;
+    float closest_dist = 1000000;
+    for(int i =0; i < pacmen.size(); i++)
+    {
+        Pacman *pac = pacmen[i];
+        float dx = (int)pac->sprite->x() - p.x;
+        float dy = (int)pac->sprite->y() - p.y;
+        float dist = sqrt(dx*dx+dy*dy);
+        if(dist < closest_dist)
+        {
+            closest_dist = dist;
+            closest_pac = pac;
+        }
+    }*/
+    for(int i =0; i < pellets.size(); i++)
+    {
+        Pellet *pe = pellets[i];
+        if(pe->GetX() == p.x && pe->GetY() == p.y)
+        {
+            if(pe->GetEaten() == false && p.eaten == true)
+            {
+                //this->removeItem(pe->sprite);
+                //closest_pac->IncrementScorePellet(PELLET_SCORE);
+            }
+
+
+
+            //pe->SetEaten(p.eaten);
+            //pe->SetPosition(p.x, p.y);
+            pe->SetType(p.type);
+            return;
+        }
+    }
+}
 
 void PacGraphicsScene::LoadMap(QString fileName)
 {
@@ -464,29 +558,42 @@ const bool PacGraphicsScene::IsHost()
     return local_pac->GetId() == 1;
 }
 
-void PacGraphicsScene::SendPacmanSync()
+void PacGraphicsScene::SendPelletSync(Pellet *p)
 {
-    if(peerConnection)
-        peerConnection->Send(local_pac->GetPacmanStruct());
-    return;
-
-    //Old method
+    if(!peerConnection)
+        return;
+    PelletStruct ps = p->GetPelletStruct();
     if(IsHost())
+        peerConnection->Send(ps);
+}
+
+void PacGraphicsScene::SendPacmanSync(bool complete_sync)
+{
+    if(!complete_sync)
     {
-        //Send all if host
-        for(int i = 0; i < pacmen.size(); i++)
-        {
-            Pacman *pac = pacmen[i];
-            PacmanStruct p = pac->GetPacmanStruct();
-            if(peerConnection)
-                peerConnection->Send(p);
-        }
+        if(peerConnection)
+            peerConnection->Send(local_pac->GetPacmanStruct());
     }
     else
     {
-        //Only send the local player
-        if(peerConnection)
-            peerConnection->Send(local_pac->GetPacmanStruct());
+        //Old method
+        if(IsHost())
+        {
+            //Send all if host
+            for(int i = 0; i < pacmen.size(); i++)
+            {
+                Pacman *pac = pacmen[i];
+                PacmanStruct p = pac->GetPacmanStruct();
+                if(peerConnection)
+                    peerConnection->Send(p);
+            }
+        }
+        else
+        {
+            //Only send the local player
+            if(peerConnection)
+                peerConnection->Send(local_pac->GetPacmanStruct());
+        }
     }
 }
 

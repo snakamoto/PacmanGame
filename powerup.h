@@ -1,6 +1,7 @@
 #ifndef POWERUP_H
 #define POWERUP_H
 #include "powerupstruct.h"
+#include "QGraphicsRectItem"
 
 class PowerUp
 {

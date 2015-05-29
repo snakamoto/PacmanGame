@@ -14,6 +14,8 @@
 #include "enemystruct.h"
 #include "removeenemystruct.h"
 #include "tiledmap.h"
+#include "pellet.h"
+#include "powerup.h"
 #include "pacman.h"
 
 
@@ -50,6 +52,9 @@ private:
     std::vector<Pacman*> pacmen;
     std::vector<Enemy*> enemies;
 
+    std::vector<PowerUp*> powerups;
+    std::vector<Pellet*> pellets;
+
     int next_orientation;
     Pacman *local_pac;
     Pacman *remote_pac;
@@ -78,10 +83,12 @@ private:
     std::vector<TileNode> path;
 
     QGraphicsRectItem *backgroundRect;
+    QGraphicsTextItem *local_player_score;
 
     void GeneratePath();
     void SendPlayerSync();
-    void SendPacmanSync();
+    void SendPacmanSync(bool complete_sync = false);
+    void SendPelletSync(Pellet *p);
 
 
 signals:
@@ -93,6 +100,7 @@ private slots:
     void on_new_psync_recieved(PlayerSyncStruct s);
     void on_remove_enemy_recieved(RemoveEnemyStruct en);
     void on_sync_pacman_received(PacmanStruct pac);
+    void on_sync_pellet_received(PelletStruct pac);
 
 };
 

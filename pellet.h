@@ -1,6 +1,8 @@
 #ifndef PELLET_H
 #define PELLET_H
 #include "pelletstruct.h"
+#include "QGraphicsRectItem"
+#include "Constants.h"
 
 class Pellet
 {
@@ -14,10 +16,13 @@ public:
     const int GetId();
     void SetX(int x);
     void SetY(int y);
+    void SetPosition(int x, int y);
     void SetType(int t);
     void SetEaten(bool e);
     void SetId(int i);
     const PelletStruct GetPelletStruct();
+    const QRectF GetBoundingBox();
+    QGraphicsRectItem *sprite;
 
 private:
     int id;

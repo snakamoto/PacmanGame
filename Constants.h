@@ -17,6 +17,8 @@ const int H = TILES_Y;
 const int MAP_WIDTH=TILES_X*WIDTH;
 const int MAP_HEIGHT=TILES_Y*WIDTH;
 
+const int PELLET_SCORE = 1;
+
 
 #endif // CONSTANTS_H
 

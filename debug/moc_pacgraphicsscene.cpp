@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_PacGraphicsScene_t {
-    QByteArrayData data[16];
-    char stringdata[197];
+    QByteArrayData data[18];
+    char stringdata[234];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,7 +44,9 @@ QT_MOC_LITERAL(11, 135, 17), // "RemoveEnemyStruct"
 QT_MOC_LITERAL(12, 153, 2), // "en"
 QT_MOC_LITERAL(13, 156, 23), // "on_sync_pacman_received"
 QT_MOC_LITERAL(14, 180, 12), // "PacmanStruct"
-QT_MOC_LITERAL(15, 193, 3) // "pac"
+QT_MOC_LITERAL(15, 193, 3), // "pac"
+QT_MOC_LITERAL(16, 197, 23), // "on_sync_pellet_received"
+QT_MOC_LITERAL(17, 221, 12) // "PelletStruct"
 
     },
     "PacGraphicsScene\0GameOver\0\0kills\0"
@@ -52,7 +54,7 @@ QT_MOC_LITERAL(15, 193, 3) // "pac"
     "on_new_psync_recieved\0PlayerSyncStruct\0"
     "s\0on_remove_enemy_recieved\0RemoveEnemyStruct\0"
     "en\0on_sync_pacman_received\0PacmanStruct\0"
-    "pac"
+    "pac\0on_sync_pellet_received\0PelletStruct"
 };
 #undef QT_MOC_LITERAL
 
@@ -62,7 +64,7 @@ static const uint qt_meta_data_PacGraphicsScene[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -70,13 +72,14 @@ static const uint qt_meta_data_PacGraphicsScene[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   39,    2, 0x06 /* Public */,
+       1,    1,   44,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    1,   42,    2, 0x08 /* Private */,
-       7,    1,   45,    2, 0x08 /* Private */,
-      10,    1,   48,    2, 0x08 /* Private */,
-      13,    1,   51,    2, 0x08 /* Private */,
+       4,    1,   47,    2, 0x08 /* Private */,
+       7,    1,   50,    2, 0x08 /* Private */,
+      10,    1,   53,    2, 0x08 /* Private */,
+      13,    1,   56,    2, 0x08 /* Private */,
+      16,    1,   59,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -86,6 +89,7 @@ static const uint qt_meta_data_PacGraphicsScene[] = {
     QMetaType::Void, 0x80000000 | 8,    9,
     QMetaType::Void, 0x80000000 | 11,   12,
     QMetaType::Void, 0x80000000 | 14,   15,
+    QMetaType::Void, 0x80000000 | 17,   15,
 
        0        // eod
 };
@@ -100,6 +104,7 @@ void PacGraphicsScene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 2: _t->on_new_psync_recieved((*reinterpret_cast< PlayerSyncStruct(*)>(_a[1]))); break;
         case 3: _t->on_remove_enemy_recieved((*reinterpret_cast< RemoveEnemyStruct(*)>(_a[1]))); break;
         case 4: _t->on_sync_pacman_received((*reinterpret_cast< PacmanStruct(*)>(_a[1]))); break;
+        case 5: _t->on_sync_pellet_received((*reinterpret_cast< PelletStruct(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -139,13 +144,13 @@ int PacGraphicsScene::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 6)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }

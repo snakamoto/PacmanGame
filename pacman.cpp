@@ -11,9 +11,13 @@ Pacman::Pacman()
 
     pix=pix.scaled(WIDTH,WIDTH); //Scale image to fit BB
     sprite->setBrush(QBrush(pix));  //Set brush to loaded image
-    //sprite->setPen(QPen(Qt::transparent)); //Remove border from rect
+    const QColor transparent(0,0,0,0);
+
+    QPen transPen(transparent);
+    sprite->setPen(transPen); //Remove border from rect
 
     speed = 100;
+    score = 0;
 
     Set_Orientation(0);
 
@@ -26,7 +30,7 @@ Pacman::~Pacman()
 
 const int Pacman::GetScore()
 {
-    return food_collected + 10*kills;
+    return score;
 }
 
 void Pacman::Set_Orientation(int orient)
@@ -80,6 +84,7 @@ const PacmanStruct Pacman::GetPacmanStruct()
 {
     PacmanStruct s;
     s.owner_ = this->id;
+    s.score = this->score;
     s.orientation = this->orientation;
     s.x = (int)this->sprite->pos().x();
     s.y = (int)this->sprite->pos().y();
@@ -106,3 +111,8 @@ void Pacman::SetState(int s)
 {
     this->state = s;
 }
+
+ void Pacman::IncrementScorePellet(int amount)
+ {
+    this->score += amount;
+ }

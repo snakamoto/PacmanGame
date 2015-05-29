@@ -9,6 +9,7 @@ public:
     int owner_; //owner of the tower
     int orientation;
     int state;
+    int score;
     int x; //x position
     int y; //y position
 

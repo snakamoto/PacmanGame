@@ -22,7 +22,7 @@ void Connection::Send(PacmanStruct p)
     int packet_type = PACKETTYPES::SyncPacman;
     QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
             + ":" + QString::number(p.owner_) + ":" + QString::number(p.orientation)
-            + ":" + QString::number(p.state)
+            + ":" + QString::number(p.state) + ":" + QString::number(p.score)
             + ":" + QString::number(p.x) +  ":" + QString::number(p.y) + ":@:").toUtf8();
     sock->write(data);
     sock->flush();
@@ -74,9 +74,23 @@ void Connection::Send(PowerUpStruct p)
 {
     sock->waitForConnected();
 
-    int packet_type = PACKETTYPES::NewEnemy;
+    int packet_type = PACKETTYPES::SyncPowerUp;
     QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
-            + ":" + QString::number(p.id) + ":" + QString::number(p.type) + ":" + QString::number(p.type)
+            + ":" + QString::number(p.id) + ":" + QString::number(p.type) + ":" + QString::number(p.eaten)
+            + ":" + QString::number(p.x) +  ":" + QString::number(p.y) + ":@:").toUtf8();
+    sock->write(data);
+    sock->flush();
+
+    qDebug() << data;
+}
+
+void Connection::Send(PelletStruct p)
+{
+    sock->waitForConnected();
+
+    int packet_type = PACKETTYPES::SyncPellet;
+    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
+            + ":" + QString::number(p.id) + ":" + QString::number(p.type) + ":" + QString::number(p.eaten)
             + ":" + QString::number(p.x) +  ":" + QString::number(p.y) + ":@:").toUtf8();
     sock->write(data);
     sock->flush();
@@ -144,17 +158,19 @@ void Connection::on_readyRead()
             pac.owner_ = IntFromQByteArr(elements[2+i]);
             pac.orientation = IntFromQByteArr(elements[3+i]);
             pac.state = IntFromQByteArr(elements[4+i]);
-            pac.x = FloatFromQByteArr(elements[5+i]);
-            pac.y = FloatFromQByteArr(elements[6+i]);
+            pac.score = IntFromQByteArr(elements[5+i]);
+            pac.x = FloatFromQByteArr(elements[6+i]);
+            pac.y = FloatFromQByteArr(elements[7+i]);
 #ifdef ASSERT > 2
             qDebug() << "Sync Pacman (" + QString::number(pac.owner_) + ","
                         + QString::number(pac.orientation) + ","
                         + QString::number(pac.state) + ","
+                        + QString::number(pac.score) + ","
                         + QString::number(pac.x) + ","
                         + QString::number(pac.y) + ")";
 #endif
             emit OnSyncPacmanReceived(pac);
-            i+=7;
+            i+=8;
         }
 
         if(packet_type == PACKETTYPES::SyncPowerUp)
@@ -173,6 +189,25 @@ void Connection::on_readyRead()
                         + QString::number(p.y) + ")";
 #endif
             emit OnPowerUpReceived(p);
+            i+=7;
+        }
+
+        if(packet_type == PACKETTYPES::SyncPellet)
+        {
+            PelletStruct p;
+            p.id = IntFromQByteArr(elements[2+i]);
+            p.type = IntFromQByteArr(elements[3+i]);
+            p.eaten = IntFromQByteArr(elements[4+i]);
+            p.x = FloatFromQByteArr(elements[5+i]);
+            p.y = FloatFromQByteArr(elements[6+i]);
+#ifdef ASSERT > 2
+            qDebug() << "Sync Pellet (" + QString::number(p.id) + ","
+                        + QString::number(p.type) + ","
+                        + QString::number(p.eaten) + ","
+                        + QString::number(p.x) + ","
+                        + QString::number(p.y) + ")";
+#endif
+            emit OnPelletSyncReceived(p);
             i+=7;
         }
 

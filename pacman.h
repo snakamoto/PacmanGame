@@ -9,6 +9,7 @@
 #include "QRectF"
 #include "pacmanstruct.h"
 #include <vector>
+#include <QPen>
 
 class Pacman
 {
@@ -29,12 +30,10 @@ public:
     const PacmanStruct GetPacmanStruct();
 
     const int GetScore();
+    void IncrementScorePellet(int amount);
 
     const int GetId();
     void SetId(int id_);
-
-    int food_collected;
-    int kills;
 
     const int GetState();
     void SetState(int s);
@@ -44,6 +43,7 @@ private:
     float speed;
     int id;
     int state;
+    int score;
 
 };
 

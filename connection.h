@@ -11,8 +11,9 @@
 #include "removeenemystruct.h"
 #include "powerupstruct.h"
 #include "pacmanstruct.h"
+#include "pellet.h"
 
-enum PACKETTYPES{NewProjectile=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5, SyncPowerUp=6};
+enum PACKETTYPES{NewProjectile=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5, SyncPowerUp=6, SyncPellet=7};
 class Connection : public QObject
 {
     Q_OBJECT
@@ -24,12 +25,15 @@ public:
     void Send(PlayerSyncStruct s);
     void Send(RemoveEnemyStruct es);
     void Send(PowerUpStruct p);
+    void Send(PelletStruct p);
 signals:
     void OnNewEnemyReceived(EnemyStruct e);
     void OnNewPSyncRecieved(PlayerSyncStruct s);
     void OnRemoveEnemyRecieved(RemoveEnemyStruct s);
     void OnSyncPacmanReceived(PacmanStruct s);
     void OnPowerUpReceived(PowerUpStruct p);
+    void OnPelletSyncReceived(PelletStruct p);
+
 private:
     QTcpSocket *sock;
     const int IntFromQByteArr(QByteArray a);
