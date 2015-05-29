@@ -52,9 +52,15 @@ private:
     int orientation;
     float speed;
     int id;
+    float pacani,pactime;
+
 
     float statetimer;
     int score;
+    QImage pixright, pixnextframeright,
+           pixleft, pixnextframeleft,
+           pixup, pixnextframeup,
+           pixdown, pixnextframedown;
 
 
 };

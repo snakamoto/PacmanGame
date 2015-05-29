@@ -70,6 +70,11 @@ private:
     float speed;
     int last_orientation;
     int cur_orientation;
+    QImage pixright, pixnextframeright,
+           pixleft, pixnextframeleft,
+           pixup, pixnextframeup,
+           pixdown, pixnextframedown;
+    float pacani,pactime;
 
 
 };

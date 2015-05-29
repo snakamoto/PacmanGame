@@ -1,20 +1,31 @@
 #include "monster.h"
 #include "QDebug"
 
-Monster::Monster()
+Monster::Monster():pacani(0),pactime(10.0)
 {
     sprite = new QGraphicsRectItem();
-    sprite->setRect(0,0,WIDTH,WIDTH); //Size of sprite
-    sprite->setTransformOriginPoint(WIDTH/2,WIDTH/2); //To rotate about the origin
+       sprite->setRect(0,0,WIDTH,WIDTH); //Size of sprite
+       sprite->setTransformOriginPoint(WIDTH/2,WIDTH/2); //To rotate about the origin
 
-     QPixmap pix("images/monster.png");
+        QPixmap pix("images/monster.png");
 
-    pix=pix.scaled(WIDTH,WIDTH); //Scale image to fit BB
-    sprite->setBrush(QBrush(pix));  //Set brush to loaded image
-    const QColor transparent(0,0,0,0);
+       pix=pix.scaled(WIDTH,WIDTH); //Scale image to fit BB
 
+       const QColor transparent(0,0,0,0);
     QPen transPen(transparent);
     sprite->setPen(transPen); //Remove border from rect
+    const int random4 = (qrand()%4)*2;
+    qDebug()<<random4;
+    QImage sheet("images/ChomperSprites.png");
+    pixright = sheet.copy(random4*32, 0, 32, 32);
+    pixnextframeright = sheet.copy((random4+1)*32, 0, 32, 32);
+    pixdown = sheet.copy(random4*32, 32, 32, 32);
+    pixnextframedown = sheet.copy((random4+1)*32, 32, 32, 32);
+    pixleft = sheet.copy(random4*32, 32*2, 32, 32);
+    pixnextframeleft = sheet.copy((random4+1)*32, 32*2, 32, 32);
+    pixup = sheet.copy(random4*32, 32*3, 32, 32);
+    pixnextframeup = sheet.copy((random4+1)*32, 32*3, 32, 32);
+
 
 
     state=2;
@@ -41,8 +52,6 @@ void Monster::Set_Orientation(int orient)
     this->orientation = orient;
     //orient 0-right - 1 -top 2-left 3 - bottom
 
-    if(orient >= 0)
-        sprite->setRotation(orient*90);
 
 }
 
@@ -225,6 +234,30 @@ void Monster::UpdatePath(Path p)
 
 void Monster::Update(float elapsed_seconds)
 {
+    // animation time frame
+       const float animationtime = 40.0;
+       // animation time step
+       pacani+=pactime*elapsed_seconds;
+       // for pause let pactime = 0;
+      if(pacani>animationtime*0.125)
+        sprite->setBrush(QBrush(pixright));  //Set brush to loaded image
+      if(pacani>animationtime*0.25)
+        sprite->setBrush(QBrush(pixnextframeright));  //Set brush to loaded image
+      if(pacani>animationtime*3.0/8.0)
+        sprite->setBrush(QBrush(pixdown));  //Set brush to loaded image
+      if(pacani>animationtime*4.0/8.0)
+        sprite->setBrush(QBrush(pixnextframeleft));  //Set brush to loaded image
+      if(pacani>animationtime*5.0/8.0)
+        sprite->setBrush(QBrush(pixleft));  //Set brush to loaded image
+      if(pacani>animationtime*6.0/8.0)
+        sprite->setBrush(QBrush(pixnextframeleft));  //Set brush to loaded image
+      if(pacani>animationtime*7.0/8.0)
+        sprite->setBrush(QBrush(pixup));  //Set brush to loaded image
+      if(pacani>animationtime)
+        sprite->setBrush(QBrush(pixnextframeup));  //Set brush to loaded image
+      // reset for 100% of cycle
+     if(pacani > animationtime*1.1)
+         pacani = 0;
     UpdatePathing(elapsed_seconds);
 }
 

@@ -1,22 +1,29 @@
 #include "pacman.h"
 #include "QDebug"
 
-Pacman::Pacman()
+Pacman::Pacman(): pactime(25.0)
 {
-    sprite = new QGraphicsRectItem();
-    sprite->setRect(0,0,WIDTH,WIDTH); //Size of sprite
-    sprite->setTransformOriginPoint(WIDTH/2,WIDTH/2); //To rotate about the origin
+        sprite = new QGraphicsRectItem();
+       sprite->setRect(0,0,WIDTH,WIDTH); //Size of sprite
+       sprite->setTransformOriginPoint(WIDTH/2,WIDTH/2); //To rotate about the origin
 
+       QImage sheet("images/ChomperSprites.png");
+       pixright = sheet.copy(11*32, 0, 32, 32);
+       pixnextframeright = sheet.copy(10*32, 0, 32, 32);
+       pixdown = sheet.copy(11*32, 32, 32, 32);
+       pixnextframedown = sheet.copy(10*32, 32, 32, 32);
+       pixleft = sheet.copy(11*32, 32*2, 32, 32);
+       pixnextframeleft = sheet.copy(10*32, 32*2, 32, 32);
+       pixup = sheet.copy(11*32, 32*3, 32, 32);
+       pixnextframeup = sheet.copy(10*32, 32*3, 32, 32);
+      // pix=pix.scaled(WIDTH,WIDTH); //Scale image to fit BB
 
-     QPixmap pix("images/pacman_open.png");
+       sprite->setBrush(QBrush(pixright));  //Set brush to loaded image
+       const QColor transparent(0,0,0,0);
 
-    pix=pix.scaled(WIDTH,WIDTH); //Scale image to fit BB
+       QPen transPen(transparent);
+       sprite->setPen(transPen); //Remove border from rect
 
-    sprite->setBrush(QBrush(pix));  //Set brush to loaded image
-    const QColor transparent(0,0,0,0);
-
-    QPen transPen(transparent);
-    sprite->setPen(transPen); //Remove border from rect
 
     speed = 100;
     score = 0;
@@ -42,9 +49,6 @@ void Pacman::Set_Orientation(int orient)
     this->orientation = orient;
     //orient 0-right - 1 -top 2-left 3 - bottom
 
-    if(orient >= 0)
-        sprite->setRotation(orient*90);
-
 }
 
 
@@ -55,23 +59,61 @@ void Pacman::SetPosition(int x, int y)
 
 void Pacman::Update(float elapsed_seconds)
 {
-    //orient 0 - left 1 -top 2-right 3 - bottom
-    float x_inc = 0;
-    float y_inc = 0;
-    switch (orientation)
-    {
-        case 0: x_inc += elapsed_seconds * (float)speed; break;
-        case 1: y_inc += elapsed_seconds * (float)speed; break;
-        case 2: x_inc -= elapsed_seconds * (float)speed; break;
-        case 3: y_inc -= elapsed_seconds * (float)speed; break;
-        case -1: y_inc = 0; x_inc = 0; break;
+    // animation time frame
+    const float animationtime = 8.0;
+    // animation time step
+    pacani+=pactime*elapsed_seconds;
+    // for pause let pactime = 0;
 
-    }
+    // reset for 100% of cycle
+   if(pacani > animationtime)
+       pacani = 0;
 
-    QPointF pos = sprite->pos();
-    pos.setX(pos.x() + x_inc);
-    pos.setY(pos.y() + y_inc);
-   this->sprite->setPos(pos);
+
+     float x_inc = 0;
+     float y_inc = 0;
+     //orient 0 - left 1 -top 2-right 3 - bottom
+     switch (orientation)
+     {
+         case 0:
+                 x_inc += elapsed_seconds * (float)speed;
+                 // duty cycle of 50%
+                  if(pacani>animationtime/2.0)
+                      sprite->setBrush(QBrush(pixright));  //Set brush to loaded image
+                  else
+                      sprite->setBrush(QBrush(pixnextframeright));  //Set brush to loaded image
+                 break;
+         case 1:
+                 y_inc += elapsed_seconds * (float)speed;
+                 // duty cycle of 50%
+                  if(pacani>animationtime/2.0)
+                      sprite->setBrush(QBrush(pixdown));  //Set brush to loaded image
+                  else
+                      sprite->setBrush(QBrush(pixnextframedown));  //Set brush to loaded image
+                 break;
+         case 2:
+                 x_inc -= elapsed_seconds * (float)speed;
+                 // duty cycle of 50%
+                  if(pacani>animationtime/2.0)
+                      sprite->setBrush(QBrush(pixleft));  //Set brush to loaded image
+                  else
+                      sprite->setBrush(QBrush(pixnextframeleft));  //Set brush to loaded image
+                 break;
+
+         case 3: y_inc -= elapsed_seconds * (float)speed;
+                 // duty cycle of 50%
+                  if(pacani>animationtime/2.0)
+                      sprite->setBrush(QBrush(pixup));  //Set brush to loaded image
+                  else
+                      sprite->setBrush(QBrush(pixnextframeup));  //Set brush to loaded image
+                 break;
+         case -1: y_inc = 0; x_inc = 0; break;
+
+     }
+     QPointF pos = sprite->pos();
+     pos.setX(pos.x() + x_inc);
+     pos.setY(pos.y() + y_inc);
+    this->sprite->setPos(pos);
 }
 
 const QRectF Pacman::GetBoundingBox()
