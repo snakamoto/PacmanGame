@@ -12,6 +12,7 @@
 *.obj
 *.autosave
 *.exe
+*.pro
 Makefile
 Makefile.Debug
 Makefile.Release

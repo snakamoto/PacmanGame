@@ -33,6 +33,7 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     //this->addItem(backgroundRect);
     LoadMap("maps/test_map");
 
+
     newPath = true;
 
     local_pac = new Pacman();
@@ -529,6 +530,7 @@ void PacGraphicsScene::LoadMap(QString fileName)
     qDebug () << "Loading map" << fileName + ".tmx";
     TiledMap m(fileName + ".tmx");
     m.LoadCollisionLayer(&pathingArr, W);
+    m.LoadTilesets();
     qDebug() << "Test";
 
 

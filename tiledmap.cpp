@@ -76,45 +76,41 @@ vector<Tileset> TiledMap::LoadTilesets()
     QXmlQuery query;
     query.bindVariable("kmlFile", &file);
 
-    //query.setQuery("declare default element namespace \"http://earth.google.com/kml/2.0\"; declare variable $kmlFile external; doc($kmlFile)/kml/Document/Placemark[last()]/GeometryCollection/LineString/coordinates/text()");
-
-    query.setQuery("declare variable $kmlFile external; doc($kmlFile)/map/objectgroup[@name='Collision']/object");
-
+    query.setQuery("declare variable $kmlFile external; doc($kmlFile)/map/tileset");
 
     QString result;
 
     query.evaluateTo(&result);
     file.close();
 
-
-
+    Tileset tileset;
 
     QList<QString> results = result.split('\n');
     for(int i = 0; i < results.size(); i++)
     {
+        QString res = results[i];
+
         //qDebug() << results[i];
         QXmlStreamReader reader(results[i]);
         reader.readNextStartElement();
 
-
         if(reader.tokenString() == "StartElement")
         {
-            int xi = reader.attributes().at(1).value().toInt();
-            int yi = reader.attributes().at(2).value().toInt();
-            int wi = reader.attributes().at(3).value().toInt();
-            int hi = reader.attributes().at(4).value().toInt();
-            qDebug() << xi << yi << wi << hi;
+            int gid = reader.attributes().at(0).value().toInt();
+            tileset.id = gid;
 
-            for(int x = xi; x<xi+wi; x+=32)
+            if(res[0] ==  ' ')//Image
             {
-                for(int y=yi; y<yi+hi; y+=32)
-                {
-                    int i = x / 32;
-                    int j = y / 32;
-                    //pathingArr[j*TILES_X + i].type = TileNode::WALL;
-                }
-            }
+                QString img = reader.attributes().at(0).value();
+                int width = reader.attributes().at(2).value().toInt();
+                int height = reader.attributes().at(3).value().toInt();
 
+            }
+            else
+            {
+                int gid = reader.attributes().at(0).value().toInt();
+                tileset.id = gid;
+            }
 
         }
     }
