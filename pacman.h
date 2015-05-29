@@ -56,6 +56,7 @@ private:
     float statetimer;
     int score;
 
+
 };
 
 #endif // PACMAN_H
