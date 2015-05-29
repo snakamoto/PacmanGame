@@ -26,17 +26,12 @@ MainWindow::MainWindow(QWidget *parent, bool isHost, bool isSinglePlayer, QStrin
         peerSocket->connectToHost(QHostAddress(connectTo), 8888);
         connect(peerSocket,SIGNAL(connected()), this, SLOT(onConnected()));
     }
-
-
 }
 
 MainWindow::~MainWindow()
 {
-
-
+   delete ui;
 }
-
-
 
 void MainWindow::createGame()
 {
