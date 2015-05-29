@@ -62,15 +62,19 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
             if(pathingArr[j*W+i].type != 0)
                 continue;
             Pellet *pellet = new Pellet();
-            pellet->SetPosition(i*WIDTH,j*WIDTH);
+
             pellet->SetEaten(false);
             pellet->SetId(k);
-            pellet->SetType(0);
+
+            pellet->SetType(qrand()%9);
+            pellet->SetPosition(i*WIDTH,j*WIDTH);
             pellets.push_back(pellet);
             this->addItem(pellet->sprite);
             k++;
         }
     }
+
+
 
 
 }
@@ -311,7 +315,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 continue;
             if(paccy->GetBoundingBox().intersects(pellet->GetBoundingBox()))
             {
-                paccy->IncrementScorePellet(PELLET_SCORE);
+                paccy->IncrementScorePellet(pellet->GetType());
                 pellet->SetEaten(true);
                 this->removeItem(pellet->sprite);
                 qDebug() << paccy->GetScore();
