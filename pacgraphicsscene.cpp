@@ -581,6 +581,7 @@ void PacGraphicsScene::LoadMap(QString fileName)
     TiledMap m(fileName + ".tmx");
     m.LoadCollisionLayer(&pathingArr, W);
     tilesets = m.LoadTilesets();
+    m.LoadTiles();
     qDebug() << "Test";
 
     for(int i =0; i < TILES_X; i++)

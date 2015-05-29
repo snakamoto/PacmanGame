@@ -127,16 +127,14 @@ vector<Tileset> TiledMap::LoadTilesets()
 int* TiledMap::LoadTiles()
 {
       int* tiles = 0;
-      tiles = new int[TILES_Y];
+      tiles = new int[TILES_Y*TILES_X];
 
-    /*  for (int y = 0; y < TILES_Y; y++)
-      {
-            tiles[y] = new int[WIDTH];
-            for (int x = 0; x < WIDTH; x++)
-            {
-                tiles[y*W+x] = 0;
-            }
-      }*/
+      for(int x = 0; x < TILES_X; x++)
+          for(int y = 0; y< TILES_Y; y++)
+          {
+              tiles[y*W+x] = 0;
+          }
+
 
       QFile file(filename);
       file.open(QIODevice::ReadOnly);
@@ -154,7 +152,7 @@ int* TiledMap::LoadTiles()
 
       QList<QString> results = result.split('\n');
       QString res = results[0];
-      QXmlStreamReader reader(results[1]);
+      QXmlStreamReader reader(res);
       reader.readNextStartElement();
       QString name = reader.attributes().at(0).value().toString();
       int width = reader.attributes().at(1).value().toInt();
@@ -163,16 +161,39 @@ int* TiledMap::LoadTiles()
       int y = 0;
 
 
-    /*  file = QFile(filename);
-      file.open(QIODevice::ReadOnly);
+      QFile file2(filename);
+      file2.open(QIODevice::ReadOnly);
       query = QXmlQuery();
-      query.bindVariable("kmlFile", &file);
+      query.bindVariable("kmlFile", &file2);
       query.setQuery("declare variable $kmlFile external; doc($kmlFile)/map/layer[@name='Image']/data/tile");
       result = QString();
       query.evaluateTo(&result);
-      file.close();
+      file2.close();
 
-*/
+
+      results.clear();
+      results = result.split('\n');
+      for(int i = 0; i < results.size(); i++)
+      {
+
+          QString res = results[i];
+          QXmlStreamReader reader(results[i]);
+          reader.readNextStartElement();
+          if(reader.tokenString() == "StartElement")
+          {
+                  int gid = reader.attributes().at(0).value().toInt();
+                  tiles[y*W+x] = gid;
+          }
+
+          x++;
+          if(x==width)
+          {
+              x=0;
+              y++;
+          }
+      }
+
+
 
       return tiles;
 }

@@ -14,6 +14,9 @@ public:
     int w;
     int h;
     QColor color;
+
+    void Load();
+
 };
 
 #endif // TILESET_H
