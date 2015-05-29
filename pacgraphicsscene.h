@@ -95,6 +95,7 @@ private:
     void SendPlayerSync();
     void SendPacmanSync(bool complete_sync = false);
     void SendPelletSync(Pellet *p);
+    void SendPowerUpSync(PowerUp *p);
 
 
 signals:
@@ -107,7 +108,7 @@ private slots:
     void on_remove_enemy_recieved(RemoveEnemyStruct en);
     void on_sync_pacman_received(PacmanStruct pac);
     void on_sync_pellet_received(PelletStruct pac);
-    void on_sync_powerup_pellet_received(PowerUpStruct pac);
+    void on_sync_powerup_received(PowerUpStruct pac);
 
 };
 

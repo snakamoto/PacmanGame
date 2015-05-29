@@ -427,7 +427,7 @@ void PacGraphicsScene::SetConnection(Connection *peerConn)
     //connect(peerConnection,SIGNAL(OnRemoveEnemyRecieved(RemoveEnemyStruct)),this,SLOT(on_remove_enemy_recieved(RemoveEnemyStruct)));
     connect(peerConnection,SIGNAL(OnSyncPacmanReceived(PacmanStruct)),this,SLOT(on_sync_pacman_received(PacmanStruct)));
     connect(peerConnection, SIGNAL(OnPelletSyncReceived(PelletStruct)), this, SLOT(on_sync_pellet_received(PelletStruct)));
-    connect(peerConnection, SIGNAL(OnPowerUpReceived(PowerUpStruct)), this, SLOT(on)
+    connect(peerConnection, SIGNAL(OnPowerUpReceived(PowerUpStruct)), this, SLOT(on_sync_powerup_received(PowerUpStruct)));
 }
 
 void PacGraphicsScene::SetPlayerAsHost()
@@ -667,7 +667,7 @@ void PacGraphicsScene::SendPowerUpSync(PowerUp *p)
 {
     if(!peerConnection)
         return;
-    PowerUpStruct ps = p->GetPelletStruct();
+    PowerUpStruct ps = p->GetPowerUpStruct();
     if(IsHost())
         peerConnection->Send(ps);
 }
@@ -704,10 +704,6 @@ void PacGraphicsScene::SendPacmanSync(bool complete_sync)
 
 void PacGraphicsScene::on_sync_powerup_received(PowerUpStruct pac)
 {
-    if(!peerConnection)
-        return;
-    PowerUpStruct ps = p->GetPelletStruct();
-    if(IsHost())
-        peerConnection->Send(ps);
+
 }
 

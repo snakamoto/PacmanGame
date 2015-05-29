@@ -24,11 +24,6 @@ public:
     QGraphicsRectItem *sprite;
     void SetPosition(int x, int y);
 
-
-
-
-
-
 private:
     int id;
     int x;
