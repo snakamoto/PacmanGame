@@ -19,20 +19,13 @@ public:
     QGraphicsRectItem *sprite;//Teh image of teh creep
     void SetPosition(int x, int y);
     void Update(float elapsed_seconds);
-
     void Set_Orientation(int orient);
-
     const int Get_Orientation();
-
     const QRectF GetBoundingBox();
-
     const PacmanStruct GetPacmanStruct();
-
     const int GetScore();
-
     const int GetId();
     void SetId(int id_);
-
     int food_collected;
     int kills;
 

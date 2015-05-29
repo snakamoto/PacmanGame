@@ -1,22 +1,23 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-//Some constants used everywhere
+/* Some constants used everywhere */
 
-//Amount of horizontal tiles
+// amount of horizontal tiles
 const int TILES_X = 23;
-//Amount of vertical tiles
+
+// amount of vertical tiles
 const int TILES_Y = 22;
-//Size per tile
+
+// size per tile
 const int WIDTH=32;
 
 const int W = TILES_X;
 const int H = TILES_Y;
 
-//Size of map in pixels
+// size of map in pixels
 const int MAP_WIDTH=TILES_X*WIDTH;
 const int MAP_HEIGHT=TILES_Y*WIDTH;
-
 
 #endif // CONSTANTS_H
 

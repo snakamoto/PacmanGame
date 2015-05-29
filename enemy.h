@@ -22,7 +22,6 @@ public:
 
     //Gettor
     const int GetBounty();
-
     const bool IsAlive();
 
 
@@ -39,7 +38,7 @@ public:
 
 
 private:
-    //Enemy params
+    // enemy params
     int bounty;
     int id;
     bool isAlive;
@@ -48,20 +47,20 @@ private:
 
     QPointF velocity;
     double angle_to_point(double x, double y); //If we want the enemy to face a point
-    //This isn't used afaik so may be deleted
+    // this isn't used afaik so may be deleted
 
-    //Pathing
-    float stage_pos;  //pos between cur and next point in path
-    int stage_index; //Index of current point in path
-    Path path; //path to follow
-    float speed; //movement speed of teh creep
+    // pathing
+    float stage_pos;  // pos between cur and next point in path
+    int stage_index; // index of current point in path
+    Path path; // path to follow
+    float speed; // movement speed of teh creep
 
-    //Called in update
+    // called in update
     void UpdatePathing(float seconds);
     //void InitWaves();
 
-    //We only want to change our orientation when it is necessary to do so
-    //Coz QT sucks and is slow
+    // we only want to change our orientation when it is necessary to do so
+    // coz QT sucks and is slow<----haha
     int last_orientation;
     int cur_orientation;
 

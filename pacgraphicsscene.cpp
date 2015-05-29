@@ -1,9 +1,8 @@
 #include "pacgraphicsscene.h"
-#include "astar.h"
 #include "tiledmap.h"
 
 PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *view) :
-    QGraphicsScene(x,y,w,h,view)
+    QGraphicsScene(x,y,w,h,view), m_updates(0)
 {
    // QPixmap pix("images/test_map.png");
 
@@ -39,7 +38,7 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     pacmen.push_back(remote_pac);
 
 
-    for(int i = 0; i < pacmen.size(); i++)
+    for(int i = 0; i < (int)pacmen.size(); i++)
         this->addItem(pacmen[i]->sprite);
 
 
@@ -47,15 +46,15 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
 
 void PacGraphicsScene::GeneratePath()
 {
-    //Init pathfinding
+    // init pathfinding
     AStar starretjie = AStar(W,H,&pathingArr);
 
-    //find path
+    // find path
     std::vector<TileNode> path = starretjie.Search(startNode,endNode);
     if(path.empty())
         return; //dont continue if the path is blocked
 
-    //We need to clear the previous path that is displayed
+    // we need to clear the previous path that is displayed
     for(int i =0; i < testPath.size(); i++)
     {
         QGraphicsItem *qi = testPath[i];
@@ -63,9 +62,9 @@ void PacGraphicsScene::GeneratePath()
         delete qi;
     }
     testPath.clear();
-    //This path displayed is only for testing purposes and should be removed
+    // this path displayed is only for testing purposes and should be removed
 
-    //Create new path to be displayed
+    // create new path to be displayed
     for(int i =0; i<path.size()-1; i++)
     {
         TileNode point = path[i];
@@ -75,30 +74,34 @@ void PacGraphicsScene::GeneratePath()
         testPath.push_back(r);
         this->addItem(r);
     }
-    //Again should actually be removed
+    // again should actually be removed
 
-    //Update each enemy's path; this occurs when a new obstacle is placed
+    // update each enemy's path; this occurs when a new obstacle is placed
     for(int i =0; i < enemies.size(); i++)
     {
         Enemy *e = enemies[i];
 
-        //Get coordinates in matrix
+        // get coordinates in matrix
         int x = (int)e->sprite->scenePos().x(); x /= WIDTH;
         int y = (int)e->sprite->scenePos().y(); y /= WIDTH;
 
-        std::vector<TileNode> path = starretjie.Search(TileNode(x,y,nullptr),endNode);
-        e->UpdatePath(path); //Update enemy path
+        //  declare TileNode before using it as a pointer
+        TileNode tilenode(x,y,nullptr);
+
+        // get the path
+        std::vector<TileNode> path = starretjie.Search(tilenode,endNode);
+
+        // update enemy path
+        e->UpdatePath(path);
     }
 }
 
-void PacGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
+void PacGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
 
 
 
 }
-
-
 
 void PacGraphicsScene::keyPressEvent(QKeyEvent *e)
 {
@@ -154,13 +157,10 @@ Enemy* PacGraphicsScene::spawn_enemy(int x, int y)
     return e;
 }
 
-int updates = 0;
 void PacGraphicsScene::Update(float elapsed_seconds)
 {
 
-    updates++;
-
-
+    m_updates++;
     //Used to remove enemies when they have reached their destination
 
     pacmen[0]->Update(elapsed_seconds);

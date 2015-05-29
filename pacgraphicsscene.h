@@ -15,7 +15,7 @@
 #include "removeenemystruct.h"
 #include "tiledmap.h"
 #include "pacman.h"
-
+#include "astar.h"
 
 enum GAME_PHASE{ATTACK = 0, BUILD=1};
 
@@ -26,17 +26,14 @@ public:
     explicit PacGraphicsScene(int, int, int, int, QGraphicsView*);
 
     //These events are overriden from the base class
-    void mouseMoveEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *);
     void mousePressEvent(QGraphicsSceneMouseEvent*);
-    void keyPressEvent(QKeyEvent *e);
-
-    void Update(float elapsed_seconds);
-
-    void SetConnection(Connection *peerConn);
+    void keyPressEvent(QKeyEvent *);
+    void Update(float );
+    void SetConnection(Connection *);
     void SetPlayerAsHost();
     void SetPlayerAsClient();
     void LoadMap(QString fileName);
-
     const bool IsHost();
 
 private:
@@ -49,12 +46,9 @@ private:
     //Used for updating the entities amongst other things
     std::vector<Pacman*> pacmen;
     std::vector<Enemy*> enemies;
-
     int next_orientation;
     Pacman *local_pac;
     Pacman *remote_pac;
-
-
 
     //pathfinding
     TileNode *pathingArr; //Matrix which is used to find path
@@ -66,22 +60,20 @@ private:
     //This path gets visually displayed for testing purposes
     //It displays the path obtained from startNode to endNode about the obstacles
     std::vector<QGraphicsItem*> testPath;
-
-
     Enemy* spawn_enemy(int x, int y);
-
-
     int last_enemy_id;
 
     //speedup
     bool newPath;
     std::vector<TileNode> path;
-
     QGraphicsRectItem *backgroundRect;
 
     void GeneratePath();
     void SendPlayerSync();
     void SendPacmanSync();
+
+    // this is used to remove enemy when path is found
+    int m_updates;
 
 
 signals:

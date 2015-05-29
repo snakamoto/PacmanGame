@@ -16,37 +16,37 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    astar.cpp \
-    connection.cpp \
-    highscorefile.cpp \
-    Path.cpp \
-    removeenemystruct.cpp \
-    tiledmap.cpp \
-    tile_node.cpp \
-    clickablelabel.cpp \
-    enemy.cpp \
-    pacman.cpp \
-    pacgraphicsscene.cpp \
-    mainmenu.cpp
+        astar.cpp \
+        connection.cpp \
+        highscorefile.cpp \
+        Path.cpp \
+        removeenemystruct.cpp \
+        tiledmap.cpp \
+        tile_node.cpp \
+        clickablelabel.cpp \
+        enemy.cpp \
+        pacman.cpp \
+        pacgraphicsscene.cpp \
+        mainmenu.cpp
 
 HEADERS  += mainwindow.h \
-    astar.h \
-    connection.h \
-    enemystruct.h \
-    highscore.h \
-    highscorefile.h \
-    Path.h \
-    playersyncstruct.h \
-    removeenemystruct.h \
-    tiledmap.h \
-    tile_node.h \
-    pacmanstruct.h \
-    clickablelabel.h \
-    Constants.h \
-    enemy.h \
-    pacman.h \
-    pacgraphicsscene.h \
-    mainmenu.h
+            astar.h \
+            connection.h \
+            enemystruct.h \
+            highscore.h \
+            highscorefile.h \
+            Path.h \
+            playersyncstruct.h \
+            removeenemystruct.h \
+            tiledmap.h \
+            tile_node.h \
+            pacmanstruct.h \
+            clickablelabel.h \
+            Constants.h \
+            enemy.h \
+            pacman.h \
+            pacgraphicsscene.h \
+            mainmenu.h
 
 FORMS    += \
     mainmenu.ui

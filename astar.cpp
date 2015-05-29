@@ -13,6 +13,7 @@ AStar::AStar(int x_size, int y_size,TileNode **g)
 
 std::vector<TileNode*> AStar::GetNeighbours(TileNode &node)
 {
+    // this is a tiled based approach to path finding max 8 neighbors ideally
     vector<TileNode*> ret = vector<TileNode*>();
 
     TileNode *g;
@@ -24,11 +25,13 @@ std::vector<TileNode*> AStar::GetNeighbours(TileNode &node)
     const int W = grid_nx;
     const int H = grid_ny;
 
+    // let neigbors be only one of 4 positions
     TileNode *right = &g[W * (y) + (x+1)];
     TileNode *left = &g[W * (y) + (x-1)];
     TileNode *top = &g[W * (y-1) + (x)];
     TileNode *bottom = &g[W * (y+1) + (x)];
 
+    // push correct neighbor in vector list
     if(x>0)
         ret.push_back(right);
     if(x<W-1)
@@ -53,7 +56,7 @@ vector<TileNode> AStar::Search(TileNode &start, TileNode &end)
 
     while(openList.size() > 0)
     {
-        int i_lowf = 0; //Index of best f-score
+        int i_lowf = 0; // index of best f-score
         for(int i =0; i < openList.size(); i++)
         {
             if (openList.at(i)->f() < openList.at(i_lowf)->f())
@@ -64,8 +67,8 @@ vector<TileNode> AStar::Search(TileNode &start, TileNode &end)
 
         TileNode *currentNode = openList.at(i_lowf);
 
-        //Is current node the same as the end node
-        //If so then we are done
+        // is current node the same as the end node
+        // if so then we are done
         if(currentNode->x == end.x && currentNode->y==end.y)
         {
             TileNode *curr = currentNode;
@@ -75,7 +78,7 @@ vector<TileNode> AStar::Search(TileNode &start, TileNode &end)
                 curr = curr->parent;
             }
 
-            //To do
+            //TODO:
             //Reverse ret;
 
             reverse(ret.begin(),ret.end());
@@ -94,10 +97,10 @@ vector<TileNode> AStar::Search(TileNode &start, TileNode &end)
         {
             TileNode *neighbor = neighbors.at(i);
 
-            //is neighbor in closedList
+            // is neighbor in closedList
             bool neighbor_in_closedList = AStar::FindGraphNode(closedList, *neighbor);
 
-            //skip already-checked nodes and walls
+            // skip already-checked nodes and walls
             if (neighbor_in_closedList || neighbor->type == TileNode::WALL || neighbor->x ==0 || neighbor->y==0 ||neighbor->x ==grid_nx-1 ||neighbor->y==grid_ny-1)
                 continue;
 

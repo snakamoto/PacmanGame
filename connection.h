@@ -1,17 +1,19 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 #define ASSERT 2
-#include "pacmanstruct.h"
+
 #include <QTcpSocket>
 #include <QByteArray>
 #include <QObject>
-#include "enemystruct.h"
 #include <QList>
+#include "enemystruct.h"
+#include "pacmanstruct.h"
 #include "playersyncstruct.h"
 #include "removeenemystruct.h"
 #include "pacmanstruct.h"
 
 enum PACKETTYPES{NewTower=0, NewProjectile=1, NewEnemy=2, PlayerSync=3, SyncPacman, RemoveEnemy=4};
+
 class Connection : public QObject
 {
     Q_OBJECT
@@ -30,12 +32,11 @@ signals:
     void OnSyncPacmanReceived(PacmanStruct s);
 private:
     QTcpSocket *sock;
-    const int IntFromQByteArr(QByteArray a);
-    const float FloatFromQByteArr(QByteArray a);
+    const int IntFromQByteArr(QByteArray);
+    const float FloatFromQByteArr(QByteArray);
 
 private slots:
     void on_readyRead();
-
     //Packet loader
     //m_number:type;data:@:
     //eg tower
