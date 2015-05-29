@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent, bool isHost, bool isSinglePlayer, QStrin
 MainWindow::~MainWindow()
 {
    delete ui;
+   delete scene;
 }
 
 void MainWindow::createGame()

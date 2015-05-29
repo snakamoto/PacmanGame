@@ -3,13 +3,16 @@
 #include <QString>
 #include <QPixmap>
 #include <QColor>
+#include <QImage>
+#include <QStringRef>
+#include <Constants.h>
 
 using namespace std;
 
-struct Tileset
+class Tileset
 {
 public:
-    Tileset(){}
+    Tileset();
     int id;
     QString src;
     int w;
@@ -17,7 +20,11 @@ public:
     QColor color;
 
     void Load();
-    QPixmap pix;
+    QImage tileset;
+
+    QImage *tiles;
+
+    QImage GetImage(int id);
 };
 
 #endif // TILESET_H

@@ -6,6 +6,9 @@ Pellet::Pellet()
     sprite->setRect(0,0,WIDTH/4,WIDTH/4); //Size of sprite
     sprite->setTransformOriginPoint(WIDTH/8,WIDTH/8); //To rotate about the origin
 
+    const QColor transparent(255,255,0,255);
+    QPen transPen(transparent);
+    sprite->setPen(transPen); //Remove border from rect
 
     //sprite->setPen(QPen(Qt::transparent)); //Remove border from rect
 }
@@ -55,7 +58,7 @@ void Pellet::SetPosition(int x, int y)
 void Pellet::SetType(int t)
 {
     this->type = 60-4*t;
-    sprite->setRect(0,0,WIDTH-type/2,WIDTH-type/2); //Size of sprite
+    sprite->setRect(0,0,WIDTH-type/2 + WIDTH/16,WIDTH-type/2 + WIDTH/16); //Size of sprite
 }
 
 void Pellet::SetEaten(bool e)

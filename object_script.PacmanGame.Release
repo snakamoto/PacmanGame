@@ -16,6 +16,7 @@ INPUT(
 ./release\powerup.o
 ./release\pellet.o
 ./release\monster.o
+./release\tileset.o
 ./release\qrc_resources.o
 ./release\moc_mainwindow.o
 ./release\moc_connection.o

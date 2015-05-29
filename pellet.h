@@ -3,6 +3,7 @@
 #include "pelletstruct.h"
 #include "QGraphicsRectItem"
 #include "constants.h"
+#include <QPen>
 
 class Pellet
 {

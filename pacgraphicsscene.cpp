@@ -609,19 +609,36 @@ void PacGraphicsScene::LoadMap(QString fileName)
     TiledMap m(fileName + ".tmx");
     m.LoadCollisionLayer(&pathingArr, W);
     tilesets = m.LoadTilesets();
-    m.LoadTiles();
+    tile_data = m.LoadTiles();
+    for(int i =0; i < tilesets.size(); i++)
+    {
+        Tileset *set = tilesets[i];
+        set->Load();
+    }
     qDebug() << "Test";
 
-    for(int i =0; i < TILES_X; i++)
+    for(int i =0; i < TILES_X-1; i++)
     {
-        for(int j =0; j<TILES_Y; j++)
+        for(int j =0; j<TILES_Y-1; j++)
         {
             if(pathingArr[j*W+i].type==1)
             {
-                QGraphicsRectItem *item = new QGraphicsRectItem(i*WIDTH,j*WIDTH,WIDTH,WIDTH);
 
-                this->addItem(item);
             }
+
+            QGraphicsRectItem *item = new QGraphicsRectItem(i*WIDTH,j*WIDTH,WIDTH,WIDTH);
+
+            int id = tile_data[j*W+i];
+            Tileset *set = tilesets[0];
+            QPixmap pix = QPixmap::fromImage(set->GetImage(id));
+
+            const QColor transparent(0,0,0,0);
+            QPen transPen(transparent);
+            item->setPen(transPen); //Remove border from rect
+
+            item->setBrush(QBrush(pix));  //Set brush to loaded image
+
+            this->addItem(item);
 
         }
     }

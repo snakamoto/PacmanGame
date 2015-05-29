@@ -20,12 +20,8 @@ public:
     static const int END = 6;
 
     int type;
-
-
     TileNode *parent;
-
     const int f();
-
 };
 
 #endif // TILE_H

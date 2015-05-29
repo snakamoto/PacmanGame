@@ -69,7 +69,8 @@ private:
     TileNode t_[TILES_X][TILES_Y];
     TileNode startNode;
     TileNode endNode;
-    vector<Tileset> tilesets;
+    vector<Tileset*> tilesets;
+    int *tile_data;
 
 
     //This path gets visually displayed for testing purposes

@@ -16,6 +16,7 @@ INPUT(
 ./debug\powerup.o
 ./debug\pellet.o
 ./debug\monster.o
+./debug\tileset.o
 ./debug\qrc_resources.o
 ./debug\moc_mainwindow.o
 ./debug\moc_connection.o

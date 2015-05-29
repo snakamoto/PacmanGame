@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     mainmenu.cpp \
     powerup.cpp \
     pellet.cpp \
-    monster.cpp
+    monster.cpp \
+    tileset.cpp
 
 HEADERS  += mainwindow.h \
     astar.h \

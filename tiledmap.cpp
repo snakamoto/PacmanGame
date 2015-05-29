@@ -66,9 +66,9 @@ void TiledMap::LoadCollisionLayer(TileNode **grid, int TILES_X)
     }
 }
 
-vector<Tileset> TiledMap::LoadTilesets()
+vector<Tileset*> TiledMap::LoadTilesets()
 {
-    vector<Tileset> sets;
+    vector<Tileset*> sets;
 
     QFile file(filename);
     file.open(QIODevice::ReadOnly);
@@ -83,7 +83,7 @@ vector<Tileset> TiledMap::LoadTilesets()
     query.evaluateTo(&result);
     file.close();
 
-    Tileset tileset;
+    Tileset *tileset = new Tileset();
 
     QList<QString> results = result.split('\n');
     for(int i = 0; i < results.size(); i++)
@@ -104,19 +104,19 @@ vector<Tileset> TiledMap::LoadTilesets()
                 QString img = reader.attributes().at(0).value().toString();
                 int width = reader.attributes().at(2).value().toInt();
                 int height = reader.attributes().at(3).value().toInt();
-                tileset.h = height;
-                tileset.w = width;
-                tileset.src = img;
+                tileset->h = height;
+                tileset->w = width;
+                tileset->src = img;
                 sets.push_back(tileset);
-                qDebug() << tileset.id << img << width << height;
-                tileset = Tileset();
+                qDebug() << tileset->id << img << width << height;
+                tileset = new Tileset();
 
 
             }
             else
             {
                 int gid = reader.attributes().at(0).value().toInt();
-                tileset.id = gid;
+                tileset->id = gid;
             }
 
         }

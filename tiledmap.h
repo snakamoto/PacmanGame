@@ -11,11 +11,10 @@ public:
     TiledMap();
     TiledMap(QString fileName);
     void LoadCollisionLayer(TileNode **grid, int TILES_X);
-    vector<Tileset> LoadTilesets();
+    vector<Tileset*> LoadTilesets();
     int* LoadTiles();
 
-    /*QImage sheet("sheet.png");
-QImage sprite = sheet.copy(0, 0, 48, 48);*/
+
 private:
     QString filename;
 };
