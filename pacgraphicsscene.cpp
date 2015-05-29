@@ -22,12 +22,6 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
         }
     }
 
-
-    local_player_score = new QGraphicsTextItem();
-    local_player_score->setPlainText("Score: 0");
-    local_player_score->setPos(0,0);
-    this->addItem(local_player_score);
-
     //backgroundRect
     backgroundRect = new QGraphicsRectItem();
     //this->addItem(backgroundRect);
@@ -105,8 +99,12 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
         }
     }
 
-
-
+    local_player_score = new QGraphicsTextItem();
+    local_player_score->setPlainText("Score: 0");
+    QColor color(255,255,0,255);
+    local_player_score->setDefaultTextColor(color);
+    local_player_score->setPos(0,0);
+    this->addItem(local_player_score);
 
 }
 
@@ -429,6 +427,7 @@ void PacGraphicsScene::SetConnection(Connection *peerConn)
     //connect(peerConnection,SIGNAL(OnRemoveEnemyRecieved(RemoveEnemyStruct)),this,SLOT(on_remove_enemy_recieved(RemoveEnemyStruct)));
     connect(peerConnection,SIGNAL(OnSyncPacmanReceived(PacmanStruct)),this,SLOT(on_sync_pacman_received(PacmanStruct)));
     connect(peerConnection, SIGNAL(OnPelletSyncReceived(PelletStruct)), this, SLOT(on_sync_pellet_received(PelletStruct)));
+    connect(peerConnection, SIGNAL(OnPowerUpReceived(PowerUpStruct)), this, SLOT(on)
 }
 
 void PacGraphicsScene::SetPlayerAsHost()
@@ -664,6 +663,15 @@ void PacGraphicsScene::SendPelletSync(Pellet *p)
         peerConnection->Send(ps);
 }
 
+void PacGraphicsScene::SendPowerUpSync(PowerUp *p)
+{
+    if(!peerConnection)
+        return;
+    PowerUpStruct ps = p->GetPelletStruct();
+    if(IsHost())
+        peerConnection->Send(ps);
+}
+
 void PacGraphicsScene::SendPacmanSync(bool complete_sync)
 {
     if(!complete_sync)
@@ -694,5 +702,12 @@ void PacGraphicsScene::SendPacmanSync(bool complete_sync)
     }
 }
 
-
+void PacGraphicsScene::on_sync_powerup_received(PowerUpStruct pac)
+{
+    if(!peerConnection)
+        return;
+    PowerUpStruct ps = p->GetPelletStruct();
+    if(IsHost())
+        peerConnection->Send(ps);
+}
 

@@ -19,6 +19,7 @@
 #include "monster.h"
 #include "tile_node.h"
 #include "pacman.h"
+#include "powerupstruct.h"
 
 
 enum GAME_PHASE{ATTACK = 0, BUILD=1};
@@ -106,6 +107,7 @@ private slots:
     void on_remove_enemy_recieved(RemoveEnemyStruct en);
     void on_sync_pacman_received(PacmanStruct pac);
     void on_sync_pellet_received(PelletStruct pac);
+    void on_sync_powerup_pellet_received(PowerUpStruct pac);
 
 };
 
