@@ -43,6 +43,11 @@ public:
 
     const bool IsHost();
 
+    void ChooseRandomDestination(Monster *t);
+    void ChooseSpecificDestination(Monster *t);
+
+
+
 private:
     Connection *peerConnection;
 
