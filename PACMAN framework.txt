@@ -1,0 +1,33 @@
+-Pathfinding
+	-Monster 1 Random
+	-Monster 2 Semi Random
+	-Monster 3 Semi Random
+	-Monster Precise
+
+
+-Powersups
+	-Beweeg deur mure
+	-Monster eet
+	-Speed increase
+	-Respawn all monsters
+	-Ignore	player
+	-Freeze	PacMan
+	-Invisible
+	-Muur Breuk
+	-Eat monsters
+
+-Pallets
+	-High Score
+
+-Multiplayer
+
+-Main Menu
+
+
+
+
+
+
+
+
+
