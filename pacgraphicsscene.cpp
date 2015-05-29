@@ -85,8 +85,8 @@ void PacGraphicsScene::GeneratePath()
         //Get coordinates in matrix
         int x = (int)e->sprite->scenePos().x(); x /= WIDTH;
         int y = (int)e->sprite->scenePos().y(); y /= WIDTH;
-
-        std::vector<TileNode> path = starretjie.Search(TileNode(x,y,nullptr),endNode);
+        TileNode node(x,y,nullptr);
+        std::vector<TileNode> path = starretjie.Search(node,endNode);
         e->UpdatePath(path); //Update enemy path
     }
 }
