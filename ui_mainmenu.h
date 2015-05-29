@@ -17,6 +17,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -27,13 +28,16 @@ class Ui_MainMenu
 {
 public:
     QWidget *centralwidget;
-    QWidget *widget;
+    QStackedWidget *stackedWidget;
+    QWidget *page;
+    QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout;
     QPushButton *singleplayerButton;
     QPushButton *joinButton;
     QPushButton *hostButton;
     QTextEdit *joinText;
+    QWidget *play_page;
 
     void setupUi(QMainWindow *MainMenu)
     {
@@ -42,25 +46,31 @@ public:
         MainMenu->resize(800, 600);
         centralwidget = new QWidget(MainMenu);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
-        widget = new QWidget(centralwidget);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(280, 150, 321, 221));
-        horizontalLayout = new QHBoxLayout(widget);
+        stackedWidget = new QStackedWidget(centralwidget);
+        stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
+        stackedWidget->setGeometry(QRect(0, 0, 801, 601));
+        stackedWidget->setFocusPolicy(Qt::StrongFocus);
+        page = new QWidget();
+        page->setObjectName(QStringLiteral("page"));
+        layoutWidget = new QWidget(page);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(240, 180, 321, 221));
+        horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        singleplayerButton = new QPushButton(widget);
+        singleplayerButton = new QPushButton(layoutWidget);
         singleplayerButton->setObjectName(QStringLiteral("singleplayerButton"));
 
         verticalLayout->addWidget(singleplayerButton);
 
-        joinButton = new QPushButton(widget);
+        joinButton = new QPushButton(layoutWidget);
         joinButton->setObjectName(QStringLiteral("joinButton"));
 
         verticalLayout->addWidget(joinButton);
 
-        hostButton = new QPushButton(widget);
+        hostButton = new QPushButton(layoutWidget);
         hostButton->setObjectName(QStringLiteral("hostButton"));
 
         verticalLayout->addWidget(hostButton);
@@ -68,15 +78,22 @@ public:
 
         horizontalLayout->addLayout(verticalLayout);
 
-        joinText = new QTextEdit(widget);
+        joinText = new QTextEdit(layoutWidget);
         joinText->setObjectName(QStringLiteral("joinText"));
         joinText->setMaximumSize(QSize(111, 30));
 
         horizontalLayout->addWidget(joinText);
 
+        stackedWidget->addWidget(page);
+        play_page = new QWidget();
+        play_page->setObjectName(QStringLiteral("play_page"));
+        stackedWidget->addWidget(play_page);
         MainMenu->setCentralWidget(centralwidget);
 
         retranslateUi(MainMenu);
+
+        stackedWidget->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(MainMenu);
     } // setupUi

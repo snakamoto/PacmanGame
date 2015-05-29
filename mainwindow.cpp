@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent, bool isHost, bool isSinglePlayer, QString connectTo) :
-    QMainWindow(parent)
+    QWidget(parent)
 {
     if (isSinglePlayer)
     {

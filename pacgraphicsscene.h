@@ -6,7 +6,7 @@
 #include "QGraphicsSceneMouseEvent"
 #include "QGraphicsTextItem"
 #include "tile_node.h"
-#include "Constants.h"
+#include "constants.h"
 #include "QKeyEvent"
 #include "enemy.h"
 #include "connection.h"

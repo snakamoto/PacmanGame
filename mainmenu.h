@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <mainwindow.h>
-
+#include "constants.h"
 namespace Ui {
 class MainMenu;
 }
