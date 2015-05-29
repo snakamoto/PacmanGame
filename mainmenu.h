@@ -23,6 +23,8 @@ private slots:
 
     void on_singleplayerButton_clicked();
 
+    void on_quitButton_clicked();
+
 private:
     Ui::MainMenu *ui;
     MainWindow *window;

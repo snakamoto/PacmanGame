@@ -8,11 +8,13 @@ MainMenu::MainMenu(QWidget *parent) :
     ui->setupUi(this);
     // update the parent widget
     this->setGeometry(this->x()+32,this->y()+32,MAP_WIDTH, MAP_HEIGHT);
+    //update stacked widget
+    ui->stackedWidget->setGeometry(0,0,MAP_WIDTH, MAP_HEIGHT);
 }
 
 MainMenu::~MainMenu()
 {
-    delete window;
+    //window->deleteLater();
     delete ui;
 }
 
@@ -33,11 +35,6 @@ void MainMenu::on_hostButton_clicked()
 
     // show the current widget
     window->show();
-
-    // set the focus of the current widget
-    ui->stackedWidget->setFocus();
-    window->setFocus();
-
 }
 
 void MainMenu::on_joinButton_clicked()
@@ -57,10 +54,6 @@ void MainMenu::on_joinButton_clicked()
 
     // show the current widget
     window->show();
-
-    // set the focus of the current widget
-    ui->stackedWidget->setFocus();
-    window->setFocus();
 }
 
 void MainMenu::on_singleplayerButton_clicked()
@@ -73,7 +66,7 @@ void MainMenu::on_singleplayerButton_clicked()
     ui->stackedWidget->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
 
     // add the current widget to the index 1
-    ui->stackedWidget->insertWidget(1,window);
+    ui->stackedWidget->insertWidget(1, window);
 
     // set index 1 of the stacked widgets to the single player
     ui->stackedWidget->setCurrentIndex(1);
@@ -81,7 +74,9 @@ void MainMenu::on_singleplayerButton_clicked()
     // show the current widget
     window->show();
 
-    // set the focus of the current widget
-    ui->stackedWidget->setFocus();
-    window->setFocus();
+}
+
+void MainMenu::on_quitButton_clicked()
+{
+    close();
 }
