@@ -43,7 +43,6 @@ HEADERS  += mainwindow.h \
     tile_node.h \
     pacmanstruct.h \
     clickablelabel.h \
-    Constants.h \
     enemy.h \
     pacman.h \
     pacgraphicsscene.h \
@@ -52,7 +51,8 @@ HEADERS  += mainwindow.h \
     powerupstruct.h \
     pellet.h \
     pelletstruct.h \
-    tileset.h
+    tileset.h \
+    constants.h
 
 FORMS    += \
     mainmenu.ui

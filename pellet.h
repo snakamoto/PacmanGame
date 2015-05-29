@@ -2,7 +2,7 @@
 #define PELLET_H
 #include "pelletstruct.h"
 #include "QGraphicsRectItem"
-#include "Constants.h"
+#include "constants.h"
 
 class Pellet
 {

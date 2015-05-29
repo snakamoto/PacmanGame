@@ -2,7 +2,7 @@
 #define PACMAN_H
 
 #include "QGraphicsRectItem"
-#include "Constants.h"
+#include "constants.h"
 #include "QPointF"
 #include "Path.h"
 #include "QBrush"

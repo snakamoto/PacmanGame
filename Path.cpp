@@ -1,6 +1,6 @@
 #include "Path.h"
 #include <cmath>
-#include "Constants.h"
+#include "constants.h"
 
 Path::Path(vector<TileNode> nodes)
 {

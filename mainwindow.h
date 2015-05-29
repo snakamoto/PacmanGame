@@ -13,9 +13,7 @@ namespace Ui {
 class MainWindow;
 }
 
-
-
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
     Q_OBJECT
 
@@ -31,17 +29,13 @@ private slots:
 private:
     Ui::MainWindow *ui;
     void createGame();
-
     QTcpServer *server;
-
     QTcpSocket *peerSocket;
     Connection *peerConnection;
     QTimer *updateTimer; //Hack to update
     QElapsedTimer elapsedTimer;
-
     QGraphicsView *view;
     PacGraphicsScene *scene; //Our scene
-
 };
 
 #endif // MAINWINDOW_H
