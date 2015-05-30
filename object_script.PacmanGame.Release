@@ -9,7 +9,6 @@ INPUT(
 ./release\tiledmap.o
 ./release\tile_node.o
 ./release\clickablelabel.o
-./release\enemy.o
 ./release\pacman.o
 ./release\pacgraphicsscene.o
 ./release\mainmenu.o

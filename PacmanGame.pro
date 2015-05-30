@@ -23,7 +23,6 @@ SOURCES += main.cpp\
     tiledmap.cpp \
     tile_node.cpp \
     clickablelabel.cpp \
-    enemy.cpp \
     pacman.cpp \
     pacgraphicsscene.cpp \
     mainmenu.cpp \
@@ -35,7 +34,6 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     astar.h \
     connection.h \
-    enemystruct.h \
     highscore.h \
     highscorefile.h \
     Path.h \
@@ -45,7 +43,6 @@ HEADERS  += mainwindow.h \
     tile_node.h \
     pacmanstruct.h \
     clickablelabel.h \
-    enemy.h \
     pacman.h \
     pacgraphicsscene.h \
     mainmenu.h \

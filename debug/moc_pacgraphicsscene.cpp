@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_PacGraphicsScene_t {
-    QByteArrayData data[14];
-    char stringdata[193];
+    QByteArrayData data[17];
+    char stringdata[228];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,7 +42,10 @@ QT_MOC_LITERAL(9, 111, 24), // "on_sync_powerup_received"
 QT_MOC_LITERAL(10, 136, 13), // "PowerUpStruct"
 QT_MOC_LITERAL(11, 150, 24), // "on_sync_monster_received"
 QT_MOC_LITERAL(12, 175, 13), // "MonsterStruct"
-QT_MOC_LITERAL(13, 189, 3) // "mon"
+QT_MOC_LITERAL(13, 189, 3), // "mon"
+QT_MOC_LITERAL(14, 193, 21), // "on_sync_path_received"
+QT_MOC_LITERAL(15, 215, 10), // "PathStruct"
+QT_MOC_LITERAL(16, 226, 1) // "p"
 
     },
     "PacGraphicsScene\0GameOver\0\0score\0"
@@ -50,7 +53,8 @@ QT_MOC_LITERAL(13, 189, 3) // "mon"
     "pac\0on_sync_pellet_received\0PelletStruct\0"
     "on_sync_powerup_received\0PowerUpStruct\0"
     "on_sync_monster_received\0MonsterStruct\0"
-    "mon"
+    "mon\0on_sync_path_received\0PathStruct\0"
+    "p"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,7 +64,7 @@ static const uint qt_meta_data_PacGraphicsScene[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -68,13 +72,14 @@ static const uint qt_meta_data_PacGraphicsScene[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   39,    2, 0x06 /* Public */,
+       1,    1,   44,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    1,   42,    2, 0x08 /* Private */,
-       7,    1,   45,    2, 0x08 /* Private */,
-       9,    1,   48,    2, 0x08 /* Private */,
-      11,    1,   51,    2, 0x08 /* Private */,
+       4,    1,   47,    2, 0x08 /* Private */,
+       7,    1,   50,    2, 0x08 /* Private */,
+       9,    1,   53,    2, 0x08 /* Private */,
+      11,    1,   56,    2, 0x08 /* Private */,
+      14,    1,   59,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -84,6 +89,7 @@ static const uint qt_meta_data_PacGraphicsScene[] = {
     QMetaType::Void, 0x80000000 | 8,    6,
     QMetaType::Void, 0x80000000 | 10,    6,
     QMetaType::Void, 0x80000000 | 12,   13,
+    QMetaType::Void, 0x80000000 | 15,   16,
 
        0        // eod
 };
@@ -98,6 +104,7 @@ void PacGraphicsScene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 2: _t->on_sync_pellet_received((*reinterpret_cast< PelletStruct(*)>(_a[1]))); break;
         case 3: _t->on_sync_powerup_received((*reinterpret_cast< PowerUpStruct(*)>(_a[1]))); break;
         case 4: _t->on_sync_monster_received((*reinterpret_cast< MonsterStruct(*)>(_a[1]))); break;
+        case 5: _t->on_sync_path_received((*reinterpret_cast< PathStruct(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -137,13 +144,13 @@ int PacGraphicsScene::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 6)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }

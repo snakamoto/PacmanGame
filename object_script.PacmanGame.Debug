@@ -9,7 +9,6 @@ INPUT(
 ./debug\tiledmap.o
 ./debug\tile_node.o
 ./debug\clickablelabel.o
-./debug\enemy.o
 ./debug\pacman.o
 ./debug\pacgraphicsscene.o
 ./debug\mainmenu.o

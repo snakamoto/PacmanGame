@@ -196,6 +196,18 @@ void PacGraphicsScene::ChooseRandomDestination(Monster *t)
     }
     TileNode start(t->sprite->x()/WIDTH,t->sprite->y()/WIDTH, nullptr);
     TileNode end(RandomValuex,RandomValuey, nullptr);
+
+    if(IsHost() && IsConnected())
+    {
+        PathStruct p;
+        p.start_x = t->sprite->x()/WIDTH;
+        p.start_y = t->sprite->y()/WIDTH;
+        p.end_x = RandomValuex;
+        p.end_y = RandomValuey;
+        p.mon_id = t->GetId();
+        peerConnection->Send(p);
+    }
+
     std::vector<TileNode> nodePath = starretjie.Search(start, end);
     int x = t->sprite->pos().x();
     int y = t->sprite->pos().y();
@@ -245,6 +257,18 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 AStar starretjie = AStar(W,H,&pathingArr);
                 TileNode start(t->sprite->x()/WIDTH,t->sprite->y()/WIDTH, nullptr);
                 TileNode end(paccy->sprite->x()/WIDTH,paccy->sprite->y()/WIDTH, nullptr);
+
+                if(IsHost() && IsConnected())
+                {
+                    PathStruct p;
+                    p.start_x = t->sprite->x()/WIDTH;
+                    p.start_y = t->sprite->y()/WIDTH;
+                    p.end_x = paccy->sprite->x()/WIDTH;
+                    p.end_y = paccy->sprite->y()/WIDTH;
+                    p.mon_id = t->GetId();
+                    peerConnection->Send(p);
+                }
+
                 std::vector<TileNode> nodePath = starretjie.Search(start, end);
                 int x = t->sprite->pos().x();
                 int y = t->sprite->pos().y();
@@ -254,7 +278,8 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             }
             else
             {
-                ChooseRandomDestination(t);
+                if(IsHost())
+                    ChooseRandomDestination(t);
             }
             SendMonsterSync(t);
         }
@@ -554,6 +579,7 @@ void PacGraphicsScene::SetConnection(Connection *peerConn)
     connect(peerConnection, SIGNAL(OnPelletSyncReceived(PelletStruct)), this, SLOT(on_sync_pellet_received(PelletStruct)));
     connect(peerConnection, SIGNAL(OnPowerUpReceived(PowerUpStruct)), this, SLOT(on_sync_powerup_received(PowerUpStruct)));
     connect(peerConnection, SIGNAL(OnMonsterSyncReceived(MonsterStruct)), this, SLOT(on_sync_monster_received(MonsterStruct)));
+    connect(peerConnection, SIGNAL(OnPathSyncReceived(PathStruct)), this, SLOT(on_sync_path_received(PathStruct)));
 }
 
 void PacGraphicsScene::SetPlayerAsHost()
@@ -798,6 +824,7 @@ void PacGraphicsScene::on_sync_monster_received(MonsterStruct m)
 
 void PacGraphicsScene::on_sync_path_received(PathStruct p)
 {
+    qDebug() << "SYNC PATH" << p.start_x << p.start_y << p.end_y << p.end_x << p.mon_id;
     for(int i = 0; i < monstersArray.size(); i++)
     {
         Monster *manny = monstersArray[i];
@@ -805,6 +832,7 @@ void PacGraphicsScene::on_sync_path_received(PathStruct p)
         {
             TileNode start(p.start_x,p.start_y, nullptr);
             TileNode end(p.end_x,p.end_y, nullptr);
+            AStar starretjie = AStar(W,H,&pathingArr);
             std::vector<TileNode> nodePath = starretjie.Search(start, end);
             int x = manny->sprite->pos().x();
             int y = manny->sprite->pos().y();

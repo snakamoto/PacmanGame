@@ -5,7 +5,7 @@
 #include <QTcpSocket>
 #include <QByteArray>
 #include <QObject>
-#include "enemystruct.h"
+
 #include <QList>
 #include "playersyncstruct.h"
 #include "removeenemystruct.h"
@@ -15,7 +15,7 @@
 #include "monstersstruct.h"
 #include "pathstruct.h";
 
-enum PACKETTYPES{PathSync=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5, SyncPowerUp=6, SyncPellet=7, SyncMonster=8};
+enum PACKETTYPES{SyncPath=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5, SyncPowerUp=6, SyncPellet=7, SyncMonster=8};
 class Connection : public QObject
 {
     Q_OBJECT
@@ -23,18 +23,12 @@ public:
     Connection();
     Connection(QTcpSocket *s);
     void Send(PacmanStruct h);
-    void Send(EnemyStruct p);
-    void Send(PlayerSyncStruct s);
-    void Send(RemoveEnemyStruct es);
     void Send(PowerUpStruct p);
     void Send(PelletStruct p);
     void Send(MonsterStruct m);
     void Send(PathStruct path);
     bool IsConnected();
 signals:
-    void OnNewEnemyReceived(EnemyStruct e);
-    void OnNewPSyncRecieved(PlayerSyncStruct s);
-    void OnRemoveEnemyRecieved(RemoveEnemyStruct s);
     void OnSyncPacmanReceived(PacmanStruct s);
     void OnPowerUpReceived(PowerUpStruct p);
     void OnPelletSyncReceived(PelletStruct p);

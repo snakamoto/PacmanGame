@@ -8,10 +8,8 @@
 #include "tile_node.h"
 #include "constants.h"
 #include "QKeyEvent"
-#include "enemy.h"
 #include "connection.h"
 #include "playersyncstruct.h"
-#include "enemystruct.h"
 #include "removeenemystruct.h"
 #include "tiledmap.h"
 #include "pellet.h"
@@ -60,7 +58,6 @@ private:
     //These vectors keep track of the alive entities.
     //Used for updating the entities amongst other things
     std::vector<Pacman*> pacmen;
-    std::vector<Enemy*> enemies;
     std::vector<Monster*> monstersArray;
 
     std::vector<PowerUp*> powerups;
@@ -94,6 +91,7 @@ private:
     void SendPelletSync(Pellet *p);
     void SendPowerUpSync(PowerUp *p);
     void SendMonsterSync(Monster *m);
+
 
 signals:
     void GameOver(int score);

@@ -54,45 +54,6 @@ void Connection::Send(PacmanStruct p)
     qDebug() << data;
 }
 
-void Connection::Send(EnemyStruct p)
-{
-    sock->waitForConnected();
-
-    int packet_type = PACKETTYPES::NewEnemy;
-    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
-            + ":" + QString::number(p.id) + ":" + QString::number(p.orientation)
-            + ":" + QString::number(p.x) +  ":" + QString::number(p.y) + ":@:").toUtf8();
-    sock->write(data);
-    sock->flush();
-
-    qDebug() << data;
-}
-
-void Connection::Send(RemoveEnemyStruct es)
-{
-    sock->waitForConnected();
-
-    int packet_type = PACKETTYPES::RemoveEnemy;
-    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
-            + ":" + QString::number(es.uid) + ":@:").toUtf8();
-    sock->write(data);
-    sock->flush();
-
-    qDebug() << data;
-}
-
-void Connection::Send(PlayerSyncStruct s)
-{
-    sock->waitForConnected();
-
-    int packet_type = PACKETTYPES::PlayerSync;
-    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
-            + QString::number(s.p1_score) + ":" + QString::number(s.p2_score)+ ":@:").toUtf8();
-    sock->write(data);
-    sock->flush();
-
-    qDebug() << data;
-}
 
 void Connection::Send(PathStruct p)
 {
@@ -100,14 +61,14 @@ void Connection::Send(PathStruct p)
 
     int packet_type = PACKETTYPES::SyncPath;
     QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
-            + QString::number(p.start_x) + ":" + QString::number(p.start_y)+
-            + QString::number(p.end_x) + ":" + QString::number(p.end_y)+
+            + QString::number(p.start_x) + ":" + QString::number(p.start_y) + ":"
+            + QString::number(p.end_x) + ":" + QString::number(p.end_y) + ":"
             + QString::number(p.mon_id) +
                        ":@:").toUtf8();
     sock->write(data);
     sock->flush();
 
-    qDebug() << data;
+    //qDebug() << data;
 }
 
 void Connection::Send(PowerUpStruct p)
@@ -121,7 +82,7 @@ void Connection::Send(PowerUpStruct p)
     sock->write(data);
     sock->flush();
 
-    qDebug() << data;
+    //qDebug() << data;
 }
 
 void Connection::Send(PelletStruct p)
@@ -135,7 +96,7 @@ void Connection::Send(PelletStruct p)
     sock->write(data);
     sock->flush();
 
-    qDebug() << data;
+    //qDebug() << data;
 }
 
 void Connection::on_readyRead()
@@ -160,18 +121,6 @@ void Connection::on_readyRead()
         }
 
         int packet_type = IntFromQByteArr(elements[1+i]);
-
-        if(packet_type == PACKETTYPES::RemoveEnemy)
-        {
-            qDebug () << buffer;
-            RemoveEnemyStruct en;
-            en.uid = IntFromQByteArr(elements[2+i]);
-#ifdef ASSERT > 2
-            qDebug() << "Remove Enemy (" + QString::number(en.uid)+  ")";
-#endif
-            emit OnRemoveEnemyRecieved(en);
-            i+=3;
-        }
 
         //owner,orientation,x,y
         if(packet_type == PACKETTYPES::SyncPacman)
@@ -251,7 +200,7 @@ void Connection::on_readyRead()
                         + QString::number(p.end_x) + ","
                         + QString::number(p.end_y) + ")";
 #endif
-            emit OnPowerUpReceived(p);
+            emit OnPathSyncReceived(p);
             i+=7;
         }
 
@@ -275,19 +224,6 @@ void Connection::on_readyRead()
             i+=7;
         }
 
-        if(packet_type == PACKETTYPES::PlayerSync)
-        {
-            PlayerSyncStruct s;
-
-            s.p1_score = IntFromQByteArr(elements[2+i]);
-            s.p2_score = IntFromQByteArr(elements[3+i]);
-#ifdef ASSERT > 2
-            qDebug() << "Player Sync (" + QString::number(s.p1_score) + ","
-                        + QString::number(s.p2_score);
-#endif
-            emit OnNewPSyncRecieved(s);
-            i+=7;
-        }
 
         i++;
         isData = (elements[i].toInt() == magic_num);
