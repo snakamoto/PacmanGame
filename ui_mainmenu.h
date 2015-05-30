@@ -14,8 +14,12 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QScrollBar>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
@@ -33,7 +37,14 @@ public:
     QPushButton *singleplayerButton;
     QPushButton *hostButton;
     QPushButton *joinButton;
+    QLabel *label;
+    QLabel *label_2;
     QWidget *play_page;
+    QWidget *gameover_page;
+    QLabel *label_gameover;
+    QScrollBar *horizontalScrollBar;
+    QProgressBar *progressBar;
+    QSlider *horizontalSlider;
 
     void setupUi(QMainWindow *MainMenu)
     {
@@ -248,11 +259,46 @@ public:
 "        padding-left: 3px;\n"
 "        color: black;\n"
 "}"));
+        label = new QLabel(page);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(271, 51, 361, 24));
+        QFont font;
+        font.setFamily(QStringLiteral("Arial"));
+        font.setPointSize(16);
+        font.setBold(true);
+        font.setItalic(false);
+        font.setWeight(75);
+        label->setFont(font);
+        label->setFrameShape(QFrame::NoFrame);
+        label->setFrameShadow(QFrame::Raised);
+        label_2 = new QLabel(page);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setGeometry(QRect(271, 81, 361, 24));
+        label_2->setFont(font);
         stackedWidget->addWidget(page);
         play_page = new QWidget();
         play_page->setObjectName(QStringLiteral("play_page"));
         play_page->setFocusPolicy(Qt::StrongFocus);
         stackedWidget->addWidget(play_page);
+        gameover_page = new QWidget();
+        gameover_page->setObjectName(QStringLiteral("gameover_page"));
+        label_gameover = new QLabel(gameover_page);
+        label_gameover->setObjectName(QStringLiteral("label_gameover"));
+        label_gameover->setGeometry(QRect(370, 60, 121, 31));
+        label_gameover->setFont(font);
+        horizontalScrollBar = new QScrollBar(gameover_page);
+        horizontalScrollBar->setObjectName(QStringLiteral("horizontalScrollBar"));
+        horizontalScrollBar->setGeometry(QRect(140, 210, 160, 16));
+        horizontalScrollBar->setOrientation(Qt::Horizontal);
+        progressBar = new QProgressBar(gameover_page);
+        progressBar->setObjectName(QStringLiteral("progressBar"));
+        progressBar->setGeometry(QRect(190, 290, 118, 23));
+        progressBar->setValue(24);
+        horizontalSlider = new QSlider(gameover_page);
+        horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
+        horizontalSlider->setGeometry(QRect(290, 150, 160, 19));
+        horizontalSlider->setOrientation(Qt::Horizontal);
+        stackedWidget->addWidget(gameover_page);
         MainMenu->setCentralWidget(centralwidget);
 
         retranslateUi(MainMenu);
@@ -275,6 +321,9 @@ public:
         singleplayerButton->setText(QApplication::translate("MainMenu", "Play", 0));
         hostButton->setText(QApplication::translate("MainMenu", "Host", 0));
         joinButton->setText(QApplication::translate("MainMenu", "Join", 0));
+        label->setText(QApplication::translate("MainMenu", "Game Over", 0));
+        label_2->setText(QApplication::translate("MainMenu", "Score", 0));
+        label_gameover->setText(QApplication::translate("MainMenu", "Game Over", 0));
     } // retranslateUi
 
 };

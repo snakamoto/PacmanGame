@@ -20,7 +20,8 @@ class MainWindow : public QWidget
 public:
     explicit MainWindow(QWidget *parent = 0, bool isHost=true, bool isSinglePlayer=true, QString connectTo="");
     ~MainWindow();
-
+    PacGraphicsScene *scene;
+    void CreateNewScene();
 private slots:
       void OnUpdateTimer();
       void onClientConnect(); //client connected to server (we)
@@ -35,7 +36,7 @@ private:
     QTimer *updateTimer; //Hack to update
     QElapsedTimer elapsedTimer;
     QGraphicsView *view;
-    PacGraphicsScene *scene; //Our scene
+    //Our scene
 };
 
 #endif // MAINWINDOW_H
