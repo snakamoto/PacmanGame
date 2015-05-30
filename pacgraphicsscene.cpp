@@ -519,6 +519,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             }
             else
             {
+                emit GameOver(local_pac->GetScore());
                 //LoseGame
              }
             }
