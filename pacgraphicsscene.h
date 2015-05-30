@@ -95,7 +95,6 @@ private:
     void SendPowerUpSync(PowerUp *p);
     void SendMonsterSync(Monster *m);
 
-
 signals:
     void GameOver(int score);
 
@@ -105,6 +104,7 @@ private slots:
     void on_sync_pellet_received(PelletStruct pac);
     void on_sync_powerup_received(PowerUpStruct pac);
     void on_sync_monster_received(MonsterStruct mon);
+    void on_sync_path_received(PathStruct p);
 
 };
 

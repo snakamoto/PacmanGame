@@ -795,3 +795,24 @@ void PacGraphicsScene::on_sync_monster_received(MonsterStruct m)
         }
     }
 }
+
+void PacGraphicsScene::on_sync_path_received(PathStruct p)
+{
+    for(int i = 0; i < monstersArray.size(); i++)
+    {
+        Monster *manny = monstersArray[i];
+        if(manny->GetId() == p.mon_id)
+        {
+            TileNode start(p.start_x,p.start_y, nullptr);
+            TileNode end(p.end_x,p.end_y, nullptr);
+            std::vector<TileNode> nodePath = starretjie.Search(start, end);
+            int x = manny->sprite->pos().x();
+            int y = manny->sprite->pos().y();
+            TileNode enemyPos = TileNode(x / WIDTH, y / WIDTH, nullptr);
+            nodePath.insert(nodePath.begin(), enemyPos);
+            manny->UpdatePath(nodePath);
+
+            return;
+        }
+    }
+}

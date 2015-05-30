@@ -56,7 +56,8 @@ HEADERS  += mainwindow.h \
     tileset.h \
     constants.h \
     monstersstruct.h \
-    monster.h
+    monster.h \
+    pathstruct.h
 
 FORMS    += \
     mainmenu.ui

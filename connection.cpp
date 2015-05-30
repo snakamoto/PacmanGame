@@ -94,6 +94,22 @@ void Connection::Send(PlayerSyncStruct s)
     qDebug() << data;
 }
 
+void Connection::Send(PathStruct p)
+{
+    sock->waitForConnected();
+
+    int packet_type = PACKETTYPES::SyncPath;
+    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
+            + QString::number(p.start_x) + ":" + QString::number(p.start_y)+
+            + QString::number(p.end_x) + ":" + QString::number(p.end_y)+
+            + QString::number(p.mon_id) +
+                       ":@:").toUtf8();
+    sock->write(data);
+    sock->flush();
+
+    qDebug() << data;
+}
+
 void Connection::Send(PowerUpStruct p)
 {
     sock->waitForConnected();
@@ -218,6 +234,27 @@ void Connection::on_readyRead()
             emit OnPowerUpReceived(p);
             i+=7;
         }
+
+
+        if(packet_type == PACKETTYPES::SyncPath)
+        {
+            PathStruct p;
+            p.start_x = IntFromQByteArr(elements[2+i]);
+            p.start_y = IntFromQByteArr(elements[3+i]);
+            p.end_x = IntFromQByteArr(elements[4+i]);
+            p.end_y = FloatFromQByteArr(elements[5+i]);
+            p.mon_id = FloatFromQByteArr(elements[6+i]);
+#ifdef ASSERT > 2
+            qDebug() << "Sync PowerUp (" + QString::number(p.start_x) + ","
+                        + QString::number(p.start_y) + ","
+                        + QString::number(p.end_x) + ","
+                        + QString::number(p.end_x) + ","
+                        + QString::number(p.end_y) + ")";
+#endif
+            emit OnPowerUpReceived(p);
+            i+=7;
+        }
+
 
         if(packet_type == PACKETTYPES::SyncPellet)
         {

@@ -115,7 +115,8 @@ DIST          =  mainwindow.h \
 		tileset.h \
 		constants.h \
 		monstersstruct.h \
-		monster.h main.cpp \
+		monster.h \
+		pathstruct.h main.cpp \
 		mainwindow.cpp \
 		astar.cpp \
 		connection.cpp \
@@ -302,6 +303,8 @@ debug/moc_mainwindow.cpp: ../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtNetwo
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/QPen \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qpen.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qbrush.h \
+		monstersstruct.h \
+		pathstruct.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qwidget.h \
@@ -351,7 +354,6 @@ debug/moc_mainwindow.cpp: ../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtNetwo
 		Constants.h \
 		powerup.h \
 		monster.h \
-		monstersstruct.h \
 		pacman.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QElapsedTimer \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qelapsedtimer.h \
@@ -465,6 +467,8 @@ debug/moc_connection.cpp: pacmanstruct.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/QPen \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qpen.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qbrush.h \
+		monstersstruct.h \
+		pathstruct.h \
 		connection.h
 	C:\Qt\Qt5.4.1\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.1/5.4/mingw491_32/mkspecs/win32-g++ -IC:/Users/NWUuser/Desktop/PacmanGame -IC:/Users/NWUuser/Desktop/PacmanGame/include -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtXmlPatterns -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore connection.h -o debug\moc_connection.cpp
 
@@ -717,6 +721,8 @@ debug/moc_pacgraphicsscene.cpp: ../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/Q
 		pellet.h \
 		pelletstruct.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/QPen \
+		monstersstruct.h \
+		pathstruct.h \
 		tiledmap.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QString \
 		tileset.h \
@@ -727,7 +733,6 @@ debug/moc_pacgraphicsscene.cpp: ../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/Q
 		Constants.h \
 		powerup.h \
 		monster.h \
-		monstersstruct.h \
 		pacman.h \
 		pacgraphicsscene.h
 	C:\Qt\Qt5.4.1\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.1/5.4/mingw491_32/mkspecs/win32-g++ -IC:/Users/NWUuser/Desktop/PacmanGame -IC:/Users/NWUuser/Desktop/PacmanGame/include -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtXmlPatterns -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore pacgraphicsscene.h -o debug\moc_pacgraphicsscene.cpp
@@ -860,6 +865,8 @@ debug/moc_mainmenu.cpp: ../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets
 		constants.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/QPen \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qpen.h \
+		monstersstruct.h \
+		pathstruct.h \
 		pacgraphicsscene.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QGraphicsView \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qgraphicsview.h \
@@ -890,7 +897,6 @@ debug/moc_mainmenu.cpp: ../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets
 		Constants.h \
 		powerup.h \
 		monster.h \
-		monstersstruct.h \
 		pacman.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QElapsedTimer \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qelapsedtimer.h \
@@ -1049,6 +1055,8 @@ debug/main.o: main.cpp mainmenu.h \
 		constants.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/QPen \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qpen.h \
+		monstersstruct.h \
+		pathstruct.h \
 		pacgraphicsscene.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QGraphicsView \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qgraphicsview.h \
@@ -1079,7 +1087,6 @@ debug/main.o: main.cpp mainmenu.h \
 		Constants.h \
 		powerup.h \
 		monster.h \
-		monstersstruct.h \
 		pacman.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QElapsedTimer \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qelapsedtimer.h \
@@ -1204,6 +1211,8 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/QPen \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qpen.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qbrush.h \
+		monstersstruct.h \
+		pathstruct.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qwidget.h \
@@ -1253,7 +1262,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		Constants.h \
 		powerup.h \
 		monster.h \
-		monstersstruct.h \
 		pacman.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QElapsedTimer \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qelapsedtimer.h \
@@ -1408,6 +1416,8 @@ debug/connection.o: connection.cpp connection.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/QPen \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qpen.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qbrush.h \
+		monstersstruct.h \
+		pathstruct.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\connection.o connection.cpp
 
@@ -2101,6 +2111,8 @@ debug/pacgraphicsscene.o: pacgraphicsscene.cpp pacgraphicsscene.h \
 		pellet.h \
 		pelletstruct.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/QPen \
+		monstersstruct.h \
+		pathstruct.h \
 		tiledmap.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QString \
 		tileset.h \
@@ -2111,7 +2123,6 @@ debug/pacgraphicsscene.o: pacgraphicsscene.cpp pacgraphicsscene.h \
 		Constants.h \
 		powerup.h \
 		monster.h \
-		monstersstruct.h \
 		pacman.h \
 		astar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\pacgraphicsscene.o pacgraphicsscene.cpp
@@ -2245,6 +2256,8 @@ debug/mainmenu.o: mainmenu.cpp mainmenu.h \
 		constants.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/QPen \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qpen.h \
+		monstersstruct.h \
+		pathstruct.h \
 		pacgraphicsscene.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QGraphicsView \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qgraphicsview.h \
@@ -2275,7 +2288,6 @@ debug/mainmenu.o: mainmenu.cpp mainmenu.h \
 		Constants.h \
 		powerup.h \
 		monster.h \
-		monstersstruct.h \
 		pacman.h \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QElapsedTimer \
 		../../../../Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qelapsedtimer.h \
