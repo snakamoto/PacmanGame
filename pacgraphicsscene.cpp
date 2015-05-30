@@ -278,7 +278,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             }
             else
             {
-                if(IsHost())
+
                     ChooseRandomDestination(t);
             }
             SendMonsterSync(t);

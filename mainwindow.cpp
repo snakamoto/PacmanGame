@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent, bool isHost, bool isSinglePlayer, QStrin
         qDebug() << "Starting server on any device port:8888";
 
         connect(server,SIGNAL(newConnection()),this, SLOT(onClientConnect()));
+
     }
     else
     {
@@ -33,7 +34,7 @@ MainWindow::~MainWindow()
    delete ui;
    delete scene;
    delete view;
-   delete updateTimer;
+   //delete updateTimer;
 }
 
 void MainWindow::createGame()

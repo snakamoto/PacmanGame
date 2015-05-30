@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     connection.cpp \
     highscorefile.cpp \
     Path.cpp \
-    removeenemystruct.cpp \
     tiledmap.cpp \
     tile_node.cpp \
     clickablelabel.cpp \

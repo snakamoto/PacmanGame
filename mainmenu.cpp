@@ -53,6 +53,7 @@ void MainMenu::on_joinButton_clicked()
     // connect Gameover
     connect(window->scene, SIGNAL(GameOver(int)),this, SLOT(OnGameOver(int)));
 
+
     // let the widget begin at 0,0 with the correct height and width
     window->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
     ui->stackedWidget->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
