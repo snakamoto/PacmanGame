@@ -32,6 +32,8 @@ MainWindow::~MainWindow()
 {
    delete ui;
    delete scene;
+   delete view;
+   delete updateTimer;
 }
 
 void MainWindow::createGame()
@@ -80,11 +82,16 @@ void MainWindow::onClientConnect()
 
 void MainWindow::onConnected()
 {
-
     qDebug() << "Local connection connecting to server";
     peerConnection = new Connection(peerSocket);
     qDebug() << "Connected to server";
     createGame();
     scene->SetConnection(peerConnection);
     scene->SetPlayerAsClient();
+}
+
+void MainWindow::CreateNewScene()
+{
+    scene->deleteLater();
+    createGame();
 }
