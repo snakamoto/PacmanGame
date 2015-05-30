@@ -26,6 +26,7 @@ public:
     void Send(RemoveEnemyStruct es);
     void Send(PowerUpStruct p);
     void Send(PelletStruct p);
+    bool IsConnected();
 signals:
     void OnNewEnemyReceived(EnemyStruct e);
     void OnNewPSyncRecieved(PlayerSyncStruct s);
@@ -38,6 +39,7 @@ private:
     QTcpSocket *sock;
     const int IntFromQByteArr(QByteArray a);
     const float FloatFromQByteArr(QByteArray a);
+    bool connected;
 
 private slots:
     void on_readyRead();

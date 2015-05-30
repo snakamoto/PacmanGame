@@ -9,9 +9,19 @@ Connection::Connection()
 
 Connection::Connection(QTcpSocket *s)
 {
-    this->sock = s;
-    connect(sock, SIGNAL(readyRead()), this, SLOT(on_readyRead()));
-    sock->blockSignals(false);
+    connected = false;
+    if(s)
+    {
+        this->sock = s;
+        connect(sock, SIGNAL(readyRead()), this, SLOT(on_readyRead()));
+        sock->blockSignals(false);
+        connected = true;
+    }
+}
+
+bool Connection::IsConnected()
+{
+    return connected;
 }
 
 

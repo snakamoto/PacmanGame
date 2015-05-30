@@ -7,13 +7,11 @@ Monster::Monster():pacani(0),pactime(10.0)
        sprite->setRect(0,0,WIDTH,WIDTH); //Size of sprite
        sprite->setTransformOriginPoint(WIDTH/2,WIDTH/2); //To rotate about the origin
 
-        QPixmap pix("images/monster.png");
 
-       pix=pix.scaled(WIDTH,WIDTH); //Scale image to fit BB
-
-       const QColor transparent(0,0,0,0);
+    const QColor transparent(0,0,0,0);
     QPen transPen(transparent);
     sprite->setPen(transPen); //Remove border from rect
+
     const int random4 = (qrand()%4)*2;
     qDebug()<<random4;
     QImage sheet("images/ChomperSprites.png");
@@ -26,6 +24,7 @@ Monster::Monster():pacani(0),pactime(10.0)
     pixup = sheet.copy(random4*32, 32*3, 32, 32);
     pixnextframeup = sheet.copy((random4+1)*32, 32*3, 32, 32);
 
+    sprite->setBrush(QBrush(pixright));  //Set brush to loaded image
 
 
     state=2;
@@ -190,14 +189,12 @@ void Monster::UpdatePathing(float seconds)
         {
             //set rotation is an expensive call so we only call it when there has been a change from the previous call
             cur_orientation = 0;
-            if(last_orientation != cur_orientation)
-                sprite->setRotation(180);
+
         }
         else //Facing right
         {
             cur_orientation = 1;
-           // if(last_orientation != cur_orientation)
-           //     sprite->setRotation(0);
+
         }
     }
     else //Moving most in y dir
@@ -205,14 +202,12 @@ void Monster::UpdatePathing(float seconds)
         if (direction.y() < 0) //Facing bottom
         {
             cur_orientation = 2;
-          //  if(last_orientation != cur_orientation)
-           //     sprite->setRotation(270);
+
         }
         else //Facing top
         {
             cur_orientation = 3;
-           // if(last_orientation != cur_orientation)
-            //    sprite->setRotation(90);
+
 
         }
     }

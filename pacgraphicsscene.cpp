@@ -5,6 +5,7 @@
 PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *view) :
     QGraphicsScene(x,y,w,h,view)
 {
+    peerConnection = nullptr;
    // QPixmap pix("images/test_map.png");
 
     //this->addRect(0,0,TILES_X*WIDTH,TILES_Y*WIDTH,QPen(),QBrush(pix));
@@ -23,8 +24,7 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     }
 
     //backgroundRect
-    backgroundRect = new QGraphicsRectItem();
-    //this->addItem(backgroundRect);
+
     LoadMap("maps/test_map");
 
 
@@ -57,14 +57,16 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     }
     for(int i = 0; i < monstersArray.size(); i++)
     {
+        Monster *t = monstersArray[i];
+        AStar starretjie = AStar(W,H,&pathingArr);
+        TileNode start(9,9, nullptr); TileNode end(9,9, nullptr);
 
-
-    Monster *t = monstersArray[i];
-    AStar starretjie = AStar(W,H,&pathingArr);
-    TileNode start(9,9, nullptr); TileNode end(9,9, nullptr);
-
-    std::vector<TileNode> nodePath = starretjie.Search(start, end);
-    t->UpdatePath(nodePath);
+        std::vector<TileNode> nodePath = starretjie.Search(start, end);
+        int x = t->sprite->pos().x();
+        int y = t->sprite->pos().y();
+        TileNode enemyPos = TileNode(x / WIDTH, y / WIDTH, nullptr);
+        nodePath.insert(nodePath.begin(), enemyPos);
+        t->UpdatePath(nodePath);
 
     }
     //Powerups
@@ -113,51 +115,31 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
 
 }
 
-void PacGraphicsScene::GeneratePath()
+PacGraphicsScene::~PacGraphicsScene()
 {
-    //Init pathfinding
-    AStar starretjie = AStar(W,H,&pathingArr);
-
-    //find path
-    std::vector<TileNode> path = starretjie.Search(startNode,endNode);
-    if(path.empty())
-        return; //dont continue if the path is blocked
-
-    //We need to clear the previous path that is displayed
-    for(int i =0; i < testPath.size(); i++)
+    qDebug() << "Destructing";
+    for(int i = 0; i < pacmen.size(); i++)
     {
-        QGraphicsItem *qi = testPath[i];
-        this->removeItem(qi);
-        delete qi;
+        delete pacmen[i];
     }
-    testPath.clear();
-    //This path displayed is only for testing purposes and should be removed
-
-    //Create new path to be displayed
-    for(int i =0; i<path.size()-1; i++)
+    for(int i = 0; i < pellets.size(); i++)
     {
-        TileNode point = path[i];
-
-        QGraphicsRectItem *r = new QGraphicsRectItem(point.x*WIDTH,point.y*WIDTH,WIDTH,WIDTH);
-        r->setBrush(QColor(255,255,0,10));
-        testPath.push_back(r);
-        this->addItem(r);
+        delete pellets[i];
     }
-    //Again should actually be removed
-
-    //Update each enemy's path; this occurs when a new obstacle is placed
-    for(int i =0; i < enemies.size(); i++)
+    for(int i = 0; i < powerups.size(); i++)
     {
-        Enemy *e = enemies[i];
-
-        //Get coordinates in matrix
-        int x = (int)e->sprite->scenePos().x(); x /= WIDTH;
-        int y = (int)e->sprite->scenePos().y(); y /= WIDTH;
-        TileNode node(x,y,nullptr);
-        std::vector<TileNode> path = starretjie.Search(node,endNode);
-        e->UpdatePath(path); //Update enemy path
+        delete powerups[i];
     }
+    for(int i = 0; i < monstersArray.size(); i++)
+    {
+        delete monstersArray[i];
+    }
+    pacmen.clear(); powerups.clear(); monstersArray.clear(); pellets.clear();
+    delete pathingArr;
+    delete peerConnection;
+
 }
+
 
 void PacGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
@@ -188,34 +170,7 @@ void PacGraphicsScene::keyPressEvent(QKeyEvent *e)
     }
 }
 
-Enemy* PacGraphicsScene::spawn_enemy(int x, int y)
-{
-    last_enemy_id++;
-
-    //Create new enemy
-    Enemy *e = new Enemy();
-    e->SetUniqueID(last_enemy_id);
-    e->SetPosition(x,y);
-    this->addItem(e->sprite);
-
-    //and give it a path to follow
-    AStar starretjie = AStar(W,H,&pathingArr);
-
-    if(newPath)
-        path = starretjie.Search(startNode,endNode);
-    e->UpdatePath(path);
-
-    enemies.push_back(e);
-
-    newPath = false;
-
-    if(peerConnection)
-        peerConnection->Send(e->GetEnemyStruct());
-    return e;
-}
-
 int updates = 0;
-
 
 void PacGraphicsScene::ChooseRandomDestination(Monster *t)
 {
@@ -244,6 +199,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
 {
 
 
+
     for(int i = 0; i < monstersArray.size(); i++)
     {
 
@@ -259,6 +215,10 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             TileNode start(t->sprite->x()/WIDTH,t->sprite->y()/WIDTH, nullptr);
             TileNode end(paccy->sprite->x()/WIDTH,paccy->sprite->y()/WIDTH, nullptr);
             std::vector<TileNode> nodePath = starretjie.Search(start, end);
+            int x = t->sprite->pos().x();
+            int y = t->sprite->pos().y();
+            TileNode enemyPos = TileNode(x / WIDTH, y / WIDTH, nullptr);
+            nodePath.insert(nodePath.begin(), enemyPos);
             t->UpdatePath(nodePath);
         }
         else
@@ -267,6 +227,8 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         }
     }
     }
+
+
 
 
 
@@ -286,25 +248,24 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         }
 
 
-    // powerups
-    // state 2 speed
-    if (paccy->GetState()==2)
-    {
-        if (paccy->GetSpeed() == 100)
+        // powerups
+        // state 2 speed
+        if (paccy->GetState()==2)
         {
-        paccy->SetSpeed(200);
+            if (paccy->GetSpeed() == 100)
+            {
+            paccy->SetSpeed(200);
+            }
         }
-    }
 
     }
-
-
 
     // used to remove enemies when they have reached their destination
 
     int x = local_pac->sprite->pos().x() / WIDTH;
     int y = local_pac->sprite->pos().y() / WIDTH;
     int cur_orientation = local_pac->Get_Orientation();
+
 
     // set the pacman to the queued orientation if possible
     if(((int)local_pac->sprite->pos().x() % WIDTH == 0 && (int)local_pac->sprite->pos().y() % WIDTH == 0) || abs(cur_orientation - next_orientation) == 2)
@@ -314,8 +275,10 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             if(pathingArr[y*W+(x+1)].type == 0 || local_pac->state==1)
             {
                 local_pac->Set_Orientation(next_orientation);
+
                 SendPacmanSync();
             }
+
         }
         else if(next_orientation == 1)
         {
@@ -330,7 +293,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             if(pathingArr[y*W+(x-1)].type == 0 || local_pac->state==1)
             {
                 local_pac->Set_Orientation(next_orientation);
-                SendPacmanSync();
+              SendPacmanSync();
             }
         }
         else if(next_orientation == 3)
@@ -342,6 +305,8 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             }
         }
     }
+
+
 
 
     // update the pacmen
@@ -412,6 +377,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         x = paccy->sprite->pos().x() / WIDTH;
         y = paccy->sprite->pos().y() / WIDTH;
 
+
         // pellet collision detection
         for(int i = 0; i < pellets.size(); i++)
         {
@@ -429,6 +395,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 SendPelletSync(pellet);
             }
         }
+
 
         // powerup collision detection
         for(int j = 0; j < powerups.size(); j++)
@@ -494,6 +461,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 this->removeItem(powerup->sprite);
                 if(paccy->GetId() == local_pac->GetId())
                     local_player_score->setPlainText("Score: " + QString::number(paccy->GetScore()));
+                SendPowerUpSync(powerup);
                 //Setpowerupsync kort
            }
         }
@@ -501,17 +469,17 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         // monster collision detection
         for(int i = 0; i < monstersArray.size(); i++)
         {
-            Monster *t = monstersArray[i];
+            Monster *manny = monstersArray[i];
 
-            if(paccy->GetBoundingBox().intersects(t->GetBoundingBox()))
+            if(paccy->GetBoundingBox().intersects(manny->GetBoundingBox()))
             {
 
-            if (    t->GetState() == 3 )
+            if (    manny->GetState() == 3 )
             {
-                t->SetPosition(9*WIDTH,9*WIDTH);
-                ChooseRandomDestination(t);
+                manny->SetPosition(9*WIDTH,9*WIDTH);
+                ChooseRandomDestination(manny);
             }
-            else if (t->GetState() == 4 )
+            else if (manny->GetState() == 4 )
             {
                //Do Nothing
             }
@@ -520,21 +488,13 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 //LoseGame
              }
             }
+            manny->Update(elapsed_seconds);
 
 
         }
 
 
 
-    }
-
-
-
-    //Update the monsters
-    for(int i = 0; i < monstersArray.size(); i++)
-    {
-        Monster *manny = monstersArray[i];
-        manny->Update(elapsed_seconds);
     }
 
 
@@ -626,26 +586,7 @@ void PacGraphicsScene::on_new_enemy_received(EnemyStruct es)
 
 void PacGraphicsScene::on_new_psync_recieved(PlayerSyncStruct s)
 {
-    /*
-    if(localPlayerId == 2)
-    {
-        lives = s.lives;
-        p1_gold = s.p1_gold;
-        p2_gold = s.p2_gold;
-        p1_kills = s.p1_kills;
-        p2_kills = s.p2_kills;
-    }
-    if(localPlayerId == 1)
-    {
-       p2_gold = s.p2_gold;
-       p2_kills = s.p2_kills;
-    }
 
-
-    p1_goldText->setPlainText("Player 1 Gold: " + QString::number(p1_gold));
-    p2_goldText->setPlainText("Player 2 Gold: " + QString::number(p2_gold));
-    p1_killsText->setPlainText("Player 1 Kills: " + QString::number(p1_kills));
-    p2_killsText->setPlainText("Player 2 Kills: " + QString::number(p2_kills));*/
 
 }
 
@@ -730,15 +671,6 @@ void PacGraphicsScene::LoadMap(QString fileName)
         }
     }
 
-    //Set background image
-
-    backgroundRect->setRect(0,0,TILES_X*WIDTH,TILES_Y*WIDTH);
-    backgroundRect->setPen(QPen());
-
-
-    QPixmap pix(fileName+".png");
-    backgroundRect->setBrush(QBrush(pix));
-    //this->addRect(0,0,TILES_X*WIDTH,TILES_Y*WIDTH,QPen(),QBrush(pix));
 
     qDebug () << "Loading map" << fileName + ".tmx";
     TiledMap m(fileName + ".tmx");
@@ -790,9 +722,18 @@ const bool PacGraphicsScene::IsHost()
     return local_pac->GetId() == 1;
 }
 
-void PacGraphicsScene::SendPelletSync(Pellet *p)
+const bool PacGraphicsScene::IsConnected()
 {
     if(!peerConnection)
+        return false;
+    if(peerConnection == NULL || peerConnection == nullptr)
+        return false;
+    return peerConnection->IsConnected();
+}
+
+void PacGraphicsScene::SendPelletSync(Pellet *p)
+{
+    if(!IsConnected())
         return;
     PelletStruct ps = p->GetPelletStruct();
     if(IsHost())
@@ -801,7 +742,7 @@ void PacGraphicsScene::SendPelletSync(Pellet *p)
 
 void PacGraphicsScene::SendPowerUpSync(PowerUp *p)
 {
-    if(!peerConnection)
+    if(!IsConnected())
         return;
     PowerUpStruct ps = p->GetPowerUpStruct();
     if(IsHost())
@@ -810,6 +751,8 @@ void PacGraphicsScene::SendPowerUpSync(PowerUp *p)
 
 void PacGraphicsScene::SendPacmanSync(bool complete_sync)
 {
+    if(!IsConnected())
+        return;
     if(!complete_sync)
     {
         if(peerConnection)
@@ -838,8 +781,42 @@ void PacGraphicsScene::SendPacmanSync(bool complete_sync)
     }
 }
 
-void PacGraphicsScene::on_sync_powerup_received(PowerUpStruct pac)
+void PacGraphicsScene::on_sync_powerup_received(PowerUpStruct p)
 {
+    qDebug() << "sync_powerup rec";
 
+   /* Pacman *closest_pac = local_pac;
+    float closest_dist = 1000000;
+    for(int i =0; i < pacmen.size(); i++)
+    {
+        Pacman *pac = pacmen[i];
+        float dx = (int)pac->sprite->x() - p.x;
+        float dy = (int)pac->sprite->y() - p.y;
+        float dist = sqrt(dx*dx+dy*dy);
+        if(dist < closest_dist)
+        {
+            closest_dist = dist;
+            closest_pac = pac;
+        }
+    }*/
+    for(int i =0; i < pellets.size(); i++)
+    {
+        Pellet *pe = pellets[i];
+        if(pe->GetX() == p.x && pe->GetY() == p.y)
+        {
+            if(pe->GetEaten() == false && p.eaten == true)
+            {
+                //this->removeItem(pe->sprite);
+                //closest_pac->IncrementScorePellet(PELLET_SCORE);
+            }
+
+
+
+            //pe->SetEaten(p.eaten);
+            //pe->SetPosition(p.x, p.y);
+            pe->SetType(p.type);
+            return;
+        }
+    }
 }
 

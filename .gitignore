@@ -14,9 +14,8 @@
 *.exe
 *.pro
 Makefile
-Makefile.Debug
-Makefile.Release
-
+Makefile.*
+debug/*
 # Build results
 
 [Dd]ebug/

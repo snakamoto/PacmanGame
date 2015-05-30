@@ -5,6 +5,11 @@ PowerUp::PowerUp()
     sprite = new QGraphicsRectItem();
     sprite->setRect(0,0,WIDTH/2,WIDTH/2); //Size of sprite
     sprite->setTransformOriginPoint(WIDTH/8,WIDTH/8); //To rotate about the origin
+
+    const QColor transparent(255,0,0,255);
+    QPen transPen(transparent);
+    sprite->setPen(transPen); //Remove border from rect
+
 }
 
 PowerUp::~PowerUp()

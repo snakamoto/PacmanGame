@@ -32,7 +32,7 @@ static const qt_meta_stringdata_PacGraphicsScene_t qt_meta_stringdata_PacGraphic
 QT_MOC_LITERAL(0, 0, 16), // "PacGraphicsScene"
 QT_MOC_LITERAL(1, 17, 8), // "GameOver"
 QT_MOC_LITERAL(2, 26, 0), // ""
-QT_MOC_LITERAL(3, 27, 5), // "kills"
+QT_MOC_LITERAL(3, 27, 5), // "score"
 QT_MOC_LITERAL(4, 33, 21), // "on_new_enemy_received"
 QT_MOC_LITERAL(5, 55, 11), // "EnemyStruct"
 QT_MOC_LITERAL(6, 67, 1), // "e"
@@ -51,7 +51,7 @@ QT_MOC_LITERAL(18, 234, 24), // "on_sync_powerup_received"
 QT_MOC_LITERAL(19, 259, 13) // "PowerUpStruct"
 
     },
-    "PacGraphicsScene\0GameOver\0\0kills\0"
+    "PacGraphicsScene\0GameOver\0\0score\0"
     "on_new_enemy_received\0EnemyStruct\0e\0"
     "on_new_psync_recieved\0PlayerSyncStruct\0"
     "s\0on_remove_enemy_recieved\0RemoveEnemyStruct\0"

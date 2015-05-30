@@ -29,6 +29,7 @@ class PacGraphicsScene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit PacGraphicsScene(int, int, int, int, QGraphicsView*);
+     ~PacGraphicsScene();
 
     //These events are overriden from the base class
     void mouseMoveEvent(QMouseEvent *event);
@@ -43,6 +44,7 @@ public:
     void LoadMap(QString fileName);
 
     const bool IsHost();
+    const bool IsConnected();
 
     void ChooseRandomDestination(Monster *t);
     void ChooseSpecificDestination(Monster *t);
@@ -79,24 +81,14 @@ private:
     int *tile_data;
 
 
-    //This path gets visually displayed for testing purposes
-    //It displays the path obtained from startNode to endNode about the obstacles
-    std::vector<QGraphicsItem*> testPath;
-
-
-    Enemy* spawn_enemy(int x, int y);
-
-
     int last_enemy_id;
 
     //speedup
     bool newPath;
     std::vector<TileNode> path;
 
-    QGraphicsRectItem *backgroundRect;
     QGraphicsTextItem *local_player_score;
 
-    void GeneratePath();
     void SendPlayerSync();
     void SendPacmanSync(bool complete_sync = false);
     void SendPelletSync(Pellet *p);
@@ -104,7 +96,8 @@ private:
 
 
 signals:
-    void GameOver(int kills);
+    void GameOver(int score);
+
 
 private slots:
     //Networking

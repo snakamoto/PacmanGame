@@ -3,6 +3,7 @@
 #include "powerupstruct.h"
 #include "QGraphicsRectItem"
 #include "Constants.h"
+#include "QPen"
 
 class PowerUp
 {

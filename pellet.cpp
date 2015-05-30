@@ -57,7 +57,7 @@ void Pellet::SetPosition(int x, int y)
 
 void Pellet::SetType(int t)
 {
-    this->type = 60-4*t;
+    this->type = (60-4*(t/2));
     sprite->setRect(0,0,WIDTH-type/2 + WIDTH/16,WIDTH-type/2 + WIDTH/16); //Size of sprite
 }
 
