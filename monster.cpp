@@ -73,15 +73,16 @@ const int Monster::Get_Orientation()
     return orientation;
 }
 
-const monstersstruct Monster::GetPacmanStruct()
+const MonsterStruct Monster::GetMonsterStruct()
 {
-    monstersstruct s;
-    s.owner_ = this->id;
-    s.score = this->score;
+    MonsterStruct s;
+    s.id = this->id;
+    s.state = this->state;
+    s.state_timer = this->statetimer;
     s.orientation = this->orientation;
     s.x = (int)this->sprite->pos().x();
     s.y = (int)this->sprite->pos().y();
-    s.state = this->state;
+
     return s;
 }
 
@@ -267,5 +268,11 @@ void Monster::Reset()
     stage_index = 0;
     path = Path();
 }
+
+void Monster::SetStateTimer(int st)
+{
+    this->statetimer = st;
+}
+
 
 

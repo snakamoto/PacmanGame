@@ -12,8 +12,9 @@
 #include "powerupstruct.h"
 #include "pacmanstruct.h"
 #include "pellet.h"
+#include "monstersstruct.h"
 
-enum PACKETTYPES{NewProjectile=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5, SyncPowerUp=6, SyncPellet=7};
+enum PACKETTYPES{NewProjectile=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5, SyncPowerUp=6, SyncPellet=7, SyncMonster=8};
 class Connection : public QObject
 {
     Q_OBJECT
@@ -26,6 +27,7 @@ public:
     void Send(RemoveEnemyStruct es);
     void Send(PowerUpStruct p);
     void Send(PelletStruct p);
+    void Send(MonsterStruct m);
     bool IsConnected();
 signals:
     void OnNewEnemyReceived(EnemyStruct e);
@@ -34,6 +36,7 @@ signals:
     void OnSyncPacmanReceived(PacmanStruct s);
     void OnPowerUpReceived(PowerUpStruct p);
     void OnPelletSyncReceived(PelletStruct p);
+    void OnMonsterSyncReceived(MonsterStruct m);
 
 private:
     QTcpSocket *sock;

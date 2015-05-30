@@ -54,6 +54,7 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
         m->SetId(i);
         this->addItem(m->sprite);
         monstersArray.push_back(m);
+
     }
     for(int i = 0; i < monstersArray.size(); i++)
     {
@@ -67,6 +68,7 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
         TileNode enemyPos = TileNode(x / WIDTH, y / WIDTH, nullptr);
         nodePath.insert(nodePath.begin(), enemyPos);
         t->UpdatePath(nodePath);
+        SendMonsterSync(t);
 
     }
     //Powerups
@@ -87,8 +89,13 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
             pellet->SetId(k);
             pellet->SetType(qrand()%9);
             pellet->SetPosition(i*WIDTH,j*WIDTH);
-            pellets.push_back(pellet);
-            this->addItem(pellet->sprite);
+            SendPelletSync(pellet);
+            if(IsHost() || !IsConnected())
+            {
+                pellets.push_back(pellet);
+                this->addItem(pellet->sprite);
+                SendPelletSync(pellet);
+            }
 
             }
             else
@@ -98,8 +105,13 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
                 powerup->SetId(k);
                 powerup->SetType(qrand()%9);
                 powerup->SetPosition(i*WIDTH,j*WIDTH);
-                powerups.push_back(powerup);
-                this->addItem(powerup->sprite);
+                powerup->SetType(qrand()%8);
+                if(IsHost() || !IsConnected())
+                {
+                    powerups.push_back(powerup);
+                    this->addItem(powerup->sprite);
+                    SendPowerUpSync(powerup);
+                }
             }
 
              k++;
@@ -185,6 +197,10 @@ void PacGraphicsScene::ChooseRandomDestination(Monster *t)
     TileNode start(t->sprite->x()/WIDTH,t->sprite->y()/WIDTH, nullptr);
     TileNode end(RandomValuex,RandomValuey, nullptr);
     std::vector<TileNode> nodePath = starretjie.Search(start, end);
+    int x = t->sprite->pos().x();
+    int y = t->sprite->pos().y();
+    TileNode enemyPos = TileNode(x / WIDTH, y / WIDTH, nullptr);
+    nodePath.insert(nodePath.begin(), enemyPos);
     t->UpdatePath(nodePath);
 }
 
@@ -204,28 +220,44 @@ void PacGraphicsScene::Update(float elapsed_seconds)
     {
 
     Monster *t = monstersArray[i];
-
-
-    if (t->IsPathDone())
-    {
-        if (i==0)
+        if (t->IsPathDone())
         {
-            Pacman *paccy = pacmen[0];
-            AStar starretjie = AStar(W,H,&pathingArr);
-            TileNode start(t->sprite->x()/WIDTH,t->sprite->y()/WIDTH, nullptr);
-            TileNode end(paccy->sprite->x()/WIDTH,paccy->sprite->y()/WIDTH, nullptr);
-            std::vector<TileNode> nodePath = starretjie.Search(start, end);
-            int x = t->sprite->pos().x();
-            int y = t->sprite->pos().y();
-            TileNode enemyPos = TileNode(x / WIDTH, y / WIDTH, nullptr);
-            nodePath.insert(nodePath.begin(), enemyPos);
-            t->UpdatePath(nodePath);
+            if (i==0)
+            {
+                Pacman *paccy;
+                //Closest pacman
+                int pac_id = 0;
+                float closest_dist = 1000;
+                for(int j = 0; j < pacmen.size(); j++)
+                {
+                    Pacman *pac = pacmen[j];
+                    float dx = pac->sprite->x() - t->sprite->x();
+                    float dy = pac->sprite->y() - t->sprite->y();
+                    float dist = sqrtf(dx*dx +dy*dy);
+                    if(dist < closest_dist)
+                    {
+                        closest_dist = dist;
+                        pac_id = j;
+                    }
+                }
+                paccy = pacmen[pac_id];
+
+                AStar starretjie = AStar(W,H,&pathingArr);
+                TileNode start(t->sprite->x()/WIDTH,t->sprite->y()/WIDTH, nullptr);
+                TileNode end(paccy->sprite->x()/WIDTH,paccy->sprite->y()/WIDTH, nullptr);
+                std::vector<TileNode> nodePath = starretjie.Search(start, end);
+                int x = t->sprite->pos().x();
+                int y = t->sprite->pos().y();
+                TileNode enemyPos = TileNode(x / WIDTH, y / WIDTH, nullptr);
+                nodePath.insert(nodePath.begin(), enemyPos);
+                t->UpdatePath(nodePath);
+            }
+            else
+            {
+                ChooseRandomDestination(t);
+            }
+            SendMonsterSync(t);
         }
-        else
-        {
-        ChooseRandomDestination(t);
-        }
-    }
     }
 
 
@@ -392,7 +424,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 qDebug() << paccy->GetScore();
                 if(paccy->GetId() == local_pac->GetId())
                     local_player_score->setPlainText("Score: " + QString::number(paccy->GetScore()));
-                SendPelletSync(pellet);
+                //SendPelletSync(pellet);
             }
         }
 
@@ -405,7 +437,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 continue;
             if(paccy->GetBoundingBox().intersects(powerup->GetBoundingBox()))
             {
-                int myTempValue = qrand()%8;
+                int myTempValue = powerup->GetType();
 
                 if (myTempValue < 5)
                 {
@@ -457,11 +489,12 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                         }
                     }
                 }
+                SendPacmanSync();
                 powerup->SetEaten(true);
                 this->removeItem(powerup->sprite);
                 if(paccy->GetId() == local_pac->GetId())
                     local_player_score->setPlainText("Score: " + QString::number(paccy->GetScore()));
-                SendPowerUpSync(powerup);
+                //SendPowerUpSync(powerup);
                 //Setpowerupsync kort
            }
         }
@@ -474,10 +507,11 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             if(paccy->GetBoundingBox().intersects(manny->GetBoundingBox()))
             {
 
-            if (    manny->GetState() == 3 )
+            if ( manny->GetState() == 3 )
             {
                 manny->SetPosition(9*WIDTH,9*WIDTH);
                 ChooseRandomDestination(manny);
+                SendMonsterSync(manny);
             }
             else if (manny->GetState() == 4 )
             {
@@ -516,14 +550,10 @@ void PacGraphicsScene::SetConnection(Connection *peerConn)
 {
     peerConnection = peerConn;
 
-    //connect(peerConnection,SIGNAL(OnNewEnemyReceived(EnemyStruct)), this, SLOT(on_new_enemy_received(EnemyStruct)));
-    //connect(peerConnection,SIGNAL(OnNewProjectileRecieved(ProjectileStruct)),this,SLOT(on_new_projectile_recieved(ProjectileStruct)));
-    //connect(peerConnection,SIGNAL(OnNewPSyncRecieved(PlayerSyncStruct)), this, SLOT(on_new_psync_recieved(PlayerSyncStruct)));
-    //connect(peerConnection,SIGNAL(OnNewTowerReceived(TowerStruct)),this, SLOT(on_new_tower_received(TowerStruct)));
-    //connect(peerConnection,SIGNAL(OnRemoveEnemyRecieved(RemoveEnemyStruct)),this,SLOT(on_remove_enemy_recieved(RemoveEnemyStruct)));
     connect(peerConnection,SIGNAL(OnSyncPacmanReceived(PacmanStruct)),this,SLOT(on_sync_pacman_received(PacmanStruct)));
     connect(peerConnection, SIGNAL(OnPelletSyncReceived(PelletStruct)), this, SLOT(on_sync_pellet_received(PelletStruct)));
     connect(peerConnection, SIGNAL(OnPowerUpReceived(PowerUpStruct)), this, SLOT(on_sync_powerup_received(PowerUpStruct)));
+    connect(peerConnection, SIGNAL(OnMonsterSyncReceived(MonsterStruct)), this, SLOT(on_sync_monster_received(MonsterStruct)));
 }
 
 void PacGraphicsScene::SetPlayerAsHost()
@@ -559,104 +589,6 @@ void PacGraphicsScene::on_sync_pacman_received(PacmanStruct pac)
    }
 }
 
-void PacGraphicsScene::on_new_enemy_received(EnemyStruct es)
-{
-    return;
-   // spawn_enemy(e.x,e.y);
-    last_enemy_id++;
-
-    Enemy *e = new Enemy();
-    e->SetUniqueID(last_enemy_id);
-    e->SetPosition(es.x,es.y);
-    this->addItem(e->sprite);
-
-    //and give it a path to follow
-    AStar starretjie = AStar(W,H,&pathingArr);
-
-    if(newPath)
-        path = starretjie.Search(startNode,endNode);
-    e->UpdatePath(path);
-
-    enemies.push_back(e);
-
-    newPath = false;
-
-}
-
-
-void PacGraphicsScene::on_new_psync_recieved(PlayerSyncStruct s)
-{
-
-
-}
-
-void PacGraphicsScene::on_remove_enemy_recieved(RemoveEnemyStruct en)
-{
-    return;
-
-    if(local_pac->GetId()==1)
-        return;
-
-    for(int i = 0; i< enemies.size(); i++)
-    {
-        Enemy *e = enemies[i];
-        if(e->GetUniqueID() == en.uid)
-        {
-            this->removeItem(e->sprite);
-            //We no longer need to track the enemy within our vector
-           // auto item = std::find(enemies.begin(), enemies.end(), en);
-           // enemies.erase(item);
-            enemies.erase(enemies.begin() + i);
-
-            delete e;
-            return;
-        }
-    }
-}
-
-void PacGraphicsScene::SendPlayerSync()
-{
-
-}
-
-void PacGraphicsScene::on_sync_pellet_received(PelletStruct p)
-{
-    qDebug() << "sync_pellet rec";
-
-   /* Pacman *closest_pac = local_pac;
-    float closest_dist = 1000000;
-    for(int i =0; i < pacmen.size(); i++)
-    {
-        Pacman *pac = pacmen[i];
-        float dx = (int)pac->sprite->x() - p.x;
-        float dy = (int)pac->sprite->y() - p.y;
-        float dist = sqrt(dx*dx+dy*dy);
-        if(dist < closest_dist)
-        {
-            closest_dist = dist;
-            closest_pac = pac;
-        }
-    }*/
-    for(int i =0; i < pellets.size(); i++)
-    {
-        Pellet *pe = pellets[i];
-        if(pe->GetX() == p.x && pe->GetY() == p.y)
-        {
-            if(pe->GetEaten() == false && p.eaten == true)
-            {
-                //this->removeItem(pe->sprite);
-                //closest_pac->IncrementScorePellet(PELLET_SCORE);
-            }
-
-
-
-            //pe->SetEaten(p.eaten);
-            //pe->SetPosition(p.x, p.y);
-            pe->SetType(p.type);
-            return;
-        }
-    }
-}
 
 void PacGraphicsScene::LoadMap(QString fileName)
 {
@@ -781,42 +713,85 @@ void PacGraphicsScene::SendPacmanSync(bool complete_sync)
     }
 }
 
+void PacGraphicsScene::SendMonsterSync(Monster *m)
+{
+    if(!IsConnected())
+        return;
+    MonsterStruct ms = m->GetMonsterStruct();
+
+    if(IsHost())
+        peerConnection->Send(ms);
+}
+
+void PacGraphicsScene::on_sync_pellet_received(PelletStruct p)
+{
+    qDebug() << "sync_powerup rec";
+
+    bool isFound = false;
+
+    for(int i =0; i < pellets.size(); i++)
+    {
+        Pellet *pe = pellets[i];
+        if(pe->GetId() == p.id)
+        {
+            isFound = true;
+            break;
+        }
+    }
+
+    if(!isFound)
+    {
+        Pellet *pel = new Pellet();
+        pel->SetEaten(p.eaten);
+        pel->SetId(p.id);
+        pel->SetType(p.type);
+        pel->SetPosition(p.x, p.y);
+        pellets.push_back(pel);
+        this->addItem(pel->sprite);
+    }
+}
+
+
 void PacGraphicsScene::on_sync_powerup_received(PowerUpStruct p)
 {
     qDebug() << "sync_powerup rec";
 
-   /* Pacman *closest_pac = local_pac;
-    float closest_dist = 1000000;
-    for(int i =0; i < pacmen.size(); i++)
+    bool isFound = false;
+
+    for(int i =0; i < powerups.size(); i++)
     {
-        Pacman *pac = pacmen[i];
-        float dx = (int)pac->sprite->x() - p.x;
-        float dy = (int)pac->sprite->y() - p.y;
-        float dist = sqrt(dx*dx+dy*dy);
-        if(dist < closest_dist)
+        PowerUp *pe = powerups[i];
+        if(pe->GetId() == p.id)
         {
-            closest_dist = dist;
-            closest_pac = pac;
+            isFound = true;
+            break;
         }
-    }*/
-    for(int i =0; i < pellets.size(); i++)
+    }
+
+    if(!isFound)
     {
-        Pellet *pe = pellets[i];
-        if(pe->GetX() == p.x && pe->GetY() == p.y)
-        {
-            if(pe->GetEaten() == false && p.eaten == true)
-            {
-                //this->removeItem(pe->sprite);
-                //closest_pac->IncrementScorePellet(PELLET_SCORE);
-            }
-
-
-
-            //pe->SetEaten(p.eaten);
-            //pe->SetPosition(p.x, p.y);
-            pe->SetType(p.type);
-            return;
-        }
+        PowerUp *pow = new PowerUp();
+        pow->SetEaten(p.eaten);
+        pow->SetId(p.id);
+        pow->SetType(p.type);
+        pow->SetPosition(p.x, p.y);
+        powerups.push_back(pow);
+        this->addItem(pow->sprite);
     }
 }
 
+void PacGraphicsScene::on_sync_monster_received(MonsterStruct m)
+{
+    for(int i = 0; i < monstersArray.size(); i++)
+    {
+        Monster *manny = monstersArray[i];
+        if(m.id == manny->GetId())
+        {
+            manny->SetPosition(m.x, m.y);
+            manny->Set_Orientation(m.orientation);
+            manny->SetState(m.state);
+            manny->SetStateTimer(m.state_timer);
+            break;
+        }
+    }
+}

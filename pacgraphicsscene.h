@@ -93,6 +93,7 @@ private:
     void SendPacmanSync(bool complete_sync = false);
     void SendPelletSync(Pellet *p);
     void SendPowerUpSync(PowerUp *p);
+    void SendMonsterSync(Monster *m);
 
 
 signals:
@@ -100,13 +101,10 @@ signals:
 
 
 private slots:
-    //Networking
-    void on_new_enemy_received(EnemyStruct e);
-    void on_new_psync_recieved(PlayerSyncStruct s);
-    void on_remove_enemy_recieved(RemoveEnemyStruct en);
     void on_sync_pacman_received(PacmanStruct pac);
     void on_sync_pellet_received(PelletStruct pac);
     void on_sync_powerup_received(PowerUpStruct pac);
+    void on_sync_monster_received(MonsterStruct mon);
 
 };
 

@@ -24,6 +24,20 @@ bool Connection::IsConnected()
     return connected;
 }
 
+void Connection::Send(MonsterStruct p)
+{
+    sock->waitForConnected();
+    //owner,orientation,x,y
+    int packet_type = PACKETTYPES::SyncMonster;
+    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
+            + ":" + QString::number(p.id) + ":" + QString::number(p.orientation)
+            + ":" + QString::number(p.state) + ":" + QString::number(p.state_timer)
+            + ":" + QString::number(p.x) +  ":" + QString::number(p.y) + ":@:").toUtf8();
+    sock->write(data);
+    sock->flush();
+
+    qDebug() << data;
+}
 
 void Connection::Send(PacmanStruct p)
 {
@@ -143,24 +157,6 @@ void Connection::on_readyRead()
             i+=3;
         }
 
-        if(packet_type == PACKETTYPES::NewEnemy)
-        {
-            qDebug () << buffer;
-            EnemyStruct en;
-            en.id = IntFromQByteArr(elements[2+i]);
-            en.orientation = IntFromQByteArr(elements[3+i]);
-            en.x = FloatFromQByteArr(elements[4+i]);
-            en.y = FloatFromQByteArr(elements[5+i]);
-
-#ifdef ASSERT > 2
-            qDebug() << "New Enemy (" + QString::number(en.id) + ","
-                        +QString::number(en.orientation) + ","
-                        + QString::number(en.x) + ","
-                        + QString::number(en.y) + ")";
-#endif
-            emit OnNewEnemyReceived(en);
-            i+=6;
-        }
         //owner,orientation,x,y
         if(packet_type == PACKETTYPES::SyncPacman)
         {
@@ -180,6 +176,27 @@ void Connection::on_readyRead()
                         + QString::number(pac.y) + ")";
 #endif
             emit OnSyncPacmanReceived(pac);
+            i+=8;
+        }
+
+        if(packet_type == PACKETTYPES::SyncMonster)
+        {
+            MonsterStruct mon;
+            mon.id = IntFromQByteArr(elements[2+i]);
+            mon.orientation = IntFromQByteArr(elements[3+i]);
+            mon.state = IntFromQByteArr(elements[4+i]);
+            mon.state_timer = IntFromQByteArr(elements[5+i]);
+            mon.x = FloatFromQByteArr(elements[6+i]);
+            mon.y = FloatFromQByteArr(elements[7+i]);
+#ifdef ASSERT > 2
+            qDebug() << "Sync Pacman (" + QString::number(mon.id) + ","
+                        + QString::number(mon.orientation) + ","
+                        + QString::number(mon.state) + ","
+                        + QString::number(mon.state_timer) + ","
+                        + QString::number(mon.x) + ","
+                        + QString::number(mon.y) + ")";
+#endif
+            emit OnMonsterSyncReceived(mon);
             i+=8;
         }
 

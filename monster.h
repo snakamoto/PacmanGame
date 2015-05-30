@@ -26,7 +26,7 @@ public:
 
     const QRectF GetBoundingBox();
 
-    const monstersstruct GetPacmanStruct();
+    const MonsterStruct GetMonsterStruct();
 
     const int GetScore();
     void IncrementScorePellet(int amount);
@@ -40,6 +40,7 @@ public:
     const int GetStateTimer();
     void DecrementStateTimer();
     int state;
+    void SetStateTimer(int st);
 
     const float GetSpeed();
     void SetSpeed(int s);

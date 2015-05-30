@@ -2,16 +2,15 @@
 #define MONSTERSSTRUCT_H
 
 
-class monstersstruct
+class MonsterStruct
 {
 public:
-    monstersstruct(){}
+    MonsterStruct(){}
 
-
-    int owner_; //owner of the tower
+    int id;
     int orientation;
     int state;
-    int score;
+    int state_timer;
     int x; //x position
     int y; //y position
 

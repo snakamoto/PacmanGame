@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Connection_t {
-    QByteArrayData data[18];
-    char stringdata[238];
+    QByteArrayData data[21];
+    char stringdata[276];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -46,7 +46,10 @@ QT_MOC_LITERAL(13, 175, 13), // "PowerUpStruct"
 QT_MOC_LITERAL(14, 189, 1), // "p"
 QT_MOC_LITERAL(15, 191, 20), // "OnPelletSyncReceived"
 QT_MOC_LITERAL(16, 212, 12), // "PelletStruct"
-QT_MOC_LITERAL(17, 225, 12) // "on_readyRead"
+QT_MOC_LITERAL(17, 225, 21), // "OnMonsterSyncReceived"
+QT_MOC_LITERAL(18, 247, 13), // "MonsterStruct"
+QT_MOC_LITERAL(19, 261, 1), // "m"
+QT_MOC_LITERAL(20, 263, 12) // "on_readyRead"
 
     },
     "Connection\0OnNewEnemyReceived\0\0"
@@ -55,7 +58,8 @@ QT_MOC_LITERAL(17, 225, 12) // "on_readyRead"
     "RemoveEnemyStruct\0OnSyncPacmanReceived\0"
     "PacmanStruct\0OnPowerUpReceived\0"
     "PowerUpStruct\0p\0OnPelletSyncReceived\0"
-    "PelletStruct\0on_readyRead"
+    "PelletStruct\0OnMonsterSyncReceived\0"
+    "MonsterStruct\0m\0on_readyRead"
 };
 #undef QT_MOC_LITERAL
 
@@ -65,23 +69,24 @@ static const uint qt_meta_data_Connection[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       6,       // signalCount
+       7,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   49,    2, 0x06 /* Public */,
-       5,    1,   52,    2, 0x06 /* Public */,
-       8,    1,   55,    2, 0x06 /* Public */,
-      10,    1,   58,    2, 0x06 /* Public */,
-      12,    1,   61,    2, 0x06 /* Public */,
-      15,    1,   64,    2, 0x06 /* Public */,
+       1,    1,   54,    2, 0x06 /* Public */,
+       5,    1,   57,    2, 0x06 /* Public */,
+       8,    1,   60,    2, 0x06 /* Public */,
+      10,    1,   63,    2, 0x06 /* Public */,
+      12,    1,   66,    2, 0x06 /* Public */,
+      15,    1,   69,    2, 0x06 /* Public */,
+      17,    1,   72,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      17,    0,   67,    2, 0x08 /* Private */,
+      20,    0,   75,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
@@ -90,6 +95,7 @@ static const uint qt_meta_data_Connection[] = {
     QMetaType::Void, 0x80000000 | 11,    7,
     QMetaType::Void, 0x80000000 | 13,   14,
     QMetaType::Void, 0x80000000 | 16,   14,
+    QMetaType::Void, 0x80000000 | 18,   19,
 
  // slots: parameters
     QMetaType::Void,
@@ -108,7 +114,8 @@ void Connection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 3: _t->OnSyncPacmanReceived((*reinterpret_cast< PacmanStruct(*)>(_a[1]))); break;
         case 4: _t->OnPowerUpReceived((*reinterpret_cast< PowerUpStruct(*)>(_a[1]))); break;
         case 5: _t->OnPelletSyncReceived((*reinterpret_cast< PelletStruct(*)>(_a[1]))); break;
-        case 6: _t->on_readyRead(); break;
+        case 6: _t->OnMonsterSyncReceived((*reinterpret_cast< MonsterStruct(*)>(_a[1]))); break;
+        case 7: _t->on_readyRead(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -150,6 +157,12 @@ void Connection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
                 *result = 5;
             }
         }
+        {
+            typedef void (Connection::*_t)(MonsterStruct );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Connection::OnMonsterSyncReceived)) {
+                *result = 6;
+            }
+        }
     }
 }
 
@@ -178,13 +191,13 @@ int Connection::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }
@@ -229,5 +242,12 @@ void Connection::OnPelletSyncReceived(PelletStruct _t1)
 {
     void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);
+}
+
+// SIGNAL 6
+void Connection::OnMonsterSyncReceived(MonsterStruct _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
 }
 QT_END_MOC_NAMESPACE
