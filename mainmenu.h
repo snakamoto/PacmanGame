@@ -25,6 +25,8 @@ private slots:
 
     void on_quitButton_clicked();
 
+    void OnGameOver(int score);
+
 private:
     Ui::MainMenu *ui;
     MainWindow *window;
