@@ -27,7 +27,6 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
 
     LoadMap("maps/test_map");
 
-
     newPath = true;
 
     local_pac = new Pacman();
@@ -35,52 +34,15 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     local_pac->Set_Orientation(-1);
     local_pac->SetId(1);
     pacmen.push_back(local_pac);
+    this->addItem(local_pac->sprite);
 
-    if(IsConnected())
-    {
-        remote_pac = new Pacman();
-        remote_pac->SetPosition(3 * WIDTH,1*WIDTH);
-        remote_pac->Set_Orientation(-1);
-        remote_pac->SetId(2);
-        pacmen.push_back(remote_pac);
-    }
-
-
-    for(int i = 0; i < pacmen.size(); i++)
-        this->addItem(pacmen[i]->sprite);
-
-
-    for(int i = 0; i < 3; i++)
-    {
-        Monster *m = new Monster();
-        m->SetPosition(WIDTH*(9+i),9*WIDTH);
-        m->SetId(i);
-        this->addItem(m->sprite);
-        monstersArray.push_back(m);
-
-    }
-    for(int i = 0; i < monstersArray.size(); i++)
-    {
-        Monster *t = monstersArray[i];
-        AStar starretjie = AStar(W,H,&pathingArr);
-        TileNode start(9,9, nullptr); TileNode end(9,9, nullptr);
-
-        std::vector<TileNode> nodePath = starretjie.Search(start, end);
-        int x = t->sprite->pos().x();
-        int y = t->sprite->pos().y();
-        TileNode enemyPos = TileNode(x / WIDTH, y / WIDTH, nullptr);
-        nodePath.insert(nodePath.begin(), enemyPos);
-        t->UpdatePath(nodePath);
-        SendMonsterSync(t);
-
-    }
     //Powerups
 
     //Pellet
     int k = 0;
-    for(int i = 1; i < TILES_X; i++)
+    for(int i = 1; i < TILES_X-3; i++)
     {
-        for(int j =1; j < TILES_Y; j++)
+        for(int j =1; j < TILES_Y-2; j++)
         {
             if(pathingArr[j*W+i].type != 0)
                 continue;
@@ -108,7 +70,7 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
                 powerup->SetId(k);
                 powerup->SetType(qrand()%9);
                 powerup->SetPosition(i*WIDTH,j*WIDTH);
-                powerup->SetType(qrand()%8);
+                powerup->SetType2(qrand()%8);
                 if(IsHost() || !IsConnected())
                 {
                     powerups.push_back(powerup);
@@ -121,13 +83,43 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
         }
     }
 
+    for(int i = 0; i < 3; i++)
+    {
+        Monster *m = new Monster();
+        m->SetPosition(WIDTH*(9+i),9*WIDTH);
+        m->SetId(i);
+        this->addItem(m->sprite);
+        monstersArray.push_back(m);
+
+    }
+
+    for(int i = 0; i < monstersArray.size(); i++)
+    {
+        Monster *t = monstersArray[i];
+        AStar starretjie = AStar(W,H,&pathingArr);
+        TileNode start(9,9, nullptr); TileNode end(9,9, nullptr);
+
+        std::vector<TileNode> nodePath = starretjie.Search(start, end);
+        int x = t->sprite->pos().x();
+        int y = t->sprite->pos().y();
+        TileNode enemyPos = TileNode(x / WIDTH, y / WIDTH, nullptr);
+        nodePath.insert(nodePath.begin(), enemyPos);
+        t->UpdatePath(nodePath);
+        SendMonsterSync(t);
+    }
+
     local_player_score = new QGraphicsTextItem();
     local_player_score->setPlainText("Score: 0");
-    QColor color(255,255,0,255);
+    QColor color(255,0,0,255);
     local_player_score->setDefaultTextColor(color);
     local_player_score->setPos(0,0);
     this->addItem(local_player_score);
 
+    local_player_powerup= new QGraphicsTextItem();
+    local_player_powerup->setPlainText("Powerup: None");
+    local_player_powerup->setDefaultTextColor(color);
+    local_player_powerup->setPos(0,16);
+    this->addItem(local_player_powerup);
 }
 
 PacGraphicsScene::~PacGraphicsScene()
@@ -229,13 +221,9 @@ void PacGraphicsScene::ChooseSpecificDestination(Monster *t)
 
 void PacGraphicsScene::Update(float elapsed_seconds)
 {
-
-
-
     for(int i = 0; i < monstersArray.size(); i++)
     {
-
-    Monster *t = monstersArray[i];
+        Monster *t = monstersArray[i];
         if (t->IsPathDone())
         {
             if (i==0)
@@ -467,32 +455,41 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 continue;
             if(paccy->GetBoundingBox().intersects(powerup->GetBoundingBox()))
             {
-                int myTempValue = powerup->GetType();
+                int myTempValue = powerup->GetType2();
+
+
 
                 if (myTempValue < 5)
                 {
                     // powerups active for 10 seconds
                     if (myTempValue==1)
                     {
-                        paccy->SetState(1);
+                        paccy->SetState(2);
+                        local_player_powerup->setPlainText("Powerup: Speed" );
                     }
                     else
                     if (myTempValue==2)
                     {
                         paccy->SetState(2);
+                        local_player_powerup->setPlainText("Powerup: Speed" );
                     }
                     else
                     if (myTempValue==3)
                     {
 
                         paccy->SetState(3);
+                        local_player_powerup->setPlainText("Powerup: Kill Monsters" );
+
+
                     }
                     else
                     if (myTempValue==4)
                     {
                         paccy->SetState(4);
+                        local_player_powerup->setPlainText("Powerup: Invulnerability" );
                     }
                     paccy->SetStateTimer(10000);
+
 
                     qDebug() << "werk2";
                 }
@@ -502,11 +499,13 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                     if (myTempValue==5)
                     {
                         paccy->IncrementScorePellet(10000);
+                        local_player_powerup->setPlainText("Powerup: +10000" );
                     }
                     else
                     if (myTempValue==6)
                     {
-                        paccy->IncrementScorePellet(-10000);
+                        paccy->IncrementScorePellet(100000);
+                        local_player_powerup->setPlainText("Powerup: +100000" );
                     }
                     else
                     if (myTempValue==7)
@@ -517,6 +516,10 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                             t->SetPosition(9*WIDTH,9*WIDTH);
                             ChooseRandomDestination(t);
                         }
+
+                        paccy->IncrementScorePellet(1000000);
+                        local_player_powerup->setPlainText("Powerup: +100000" );
+                        local_player_powerup->setPlainText("Powerup: Monsters Killed" );
                     }
                 }
                 SendPacmanSync();
@@ -538,19 +541,23 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             if(paccy->GetBoundingBox().intersects(manny->GetBoundingBox()))
             {
 
-            if ( manny->GetState() == 3 )
+            if ( paccy->GetState() == 3 )
             {
                 manny->SetPosition(9*WIDTH,9*WIDTH);
                 ChooseRandomDestination(manny);
                 SendMonsterSync(manny);
+
+                paccy->IncrementScorePellet(100000);
+                local_player_powerup->setPlainText("Powerup: +100000" );
             }
-            else if (manny->GetState() == 4 )
+            else if (paccy->GetState() == 4 )
             {
                //Do Nothing
             }
             else
             {
                 emit GameOver(local_pac->GetScore());
+                gameOver = true;
                 //LoseGame
              }
             }
@@ -563,7 +570,11 @@ void PacGraphicsScene::Update(float elapsed_seconds)
 
     }
 
-
+    if(pellets.size() == 0)
+    {
+        emit GameOver(local_pac->GetScore());
+        gameOver = true;
+    }
 
     //Update projectiles
     QRectF playArea(0, 0, TILES_X*WIDTH, TILES_Y*WIDTH);
@@ -593,6 +604,13 @@ void PacGraphicsScene::SetConnection(Connection *peerConn)
 
 void PacGraphicsScene::SetPlayerAsHost()
 {
+    remote_pac = new Pacman();
+    remote_pac->SetPosition(3 * WIDTH,1*WIDTH);
+    remote_pac->Set_Orientation(-1);
+    remote_pac->SetId(2);
+    pacmen.push_back(remote_pac);
+    this->addItem(remote_pac->sprite);
+
     local_pac->SetId(1);
     remote_pac->SetId(2);
 
@@ -600,6 +618,13 @@ void PacGraphicsScene::SetPlayerAsHost()
 
 void PacGraphicsScene::SetPlayerAsClient()
 {
+    remote_pac = new Pacman();
+    remote_pac->SetPosition(3 * WIDTH,1*WIDTH);
+    remote_pac->Set_Orientation(-1);
+    remote_pac->SetId(2);
+    pacmen.push_back(remote_pac);
+    this->addItem(remote_pac->sprite);
+
     Pacman *tmp = local_pac;
     local_pac = remote_pac;
     remote_pac = tmp;

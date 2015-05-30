@@ -14,7 +14,6 @@ TileNode::TileNode(int px, int py, TileNode *parentNode)
     g=h=0;
 }
 
-
 const int TileNode::f()
 {
    return g+h;

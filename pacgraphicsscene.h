@@ -58,15 +58,15 @@ private:
     //Used for updating the entities amongst other things
     std::vector<Pacman*> pacmen;
     std::vector<Monster*> monstersArray;
-
     std::vector<PowerUp*> powerups;
     std::vector<Pellet*> pellets;
 
+    // the next direction the local pacman should go
     int next_orientation;
+
+    // my pacman and your pacman
     Pacman *local_pac;
     Pacman *remote_pac;
-
-
 
     //pathfinding
     TileNode *pathingArr; //Matrix which is used to find path
@@ -79,11 +79,14 @@ private:
 
     int last_enemy_id;
 
+    bool gameOver = false;
+
     //speedup
     bool newPath;
     std::vector<TileNode> path;
 
     QGraphicsTextItem *local_player_score;
+    QGraphicsTextItem *local_player_powerup;
 
     void SendPlayerSync();
     void SendPacmanSync(bool complete_sync = false);
@@ -98,6 +101,7 @@ signals:
 
 
 private slots:
+    // trigger when data arrives from network connection
     void on_sync_pacman_received(PacmanStruct pac);
     void on_sync_pellet_received(PelletStruct pac);
     void on_sync_powerup_received(PowerUpStruct pac);

@@ -39,8 +39,6 @@ Monster::Monster():pacani(0),pactime(10.0)
 
 }
 
-
-
 const int Monster::GetScore()
 {
     return score;
@@ -54,14 +52,10 @@ void Monster::Set_Orientation(int orient)
 
 }
 
-
 void Monster::SetPosition(int x, int y)
 {
     sprite->setPos(x,y);
 }
-
-
-
 
 const QRectF Monster::GetBoundingBox()
 {
@@ -101,17 +95,12 @@ const int Monster::GetState()
     return state;
 }
 
-
-
 void Monster::SetState(int s)
 {
     if (s==0)
     {
         speed=100;
     }
-
-
-
     this->state = s;
 }
 

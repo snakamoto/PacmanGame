@@ -13,6 +13,18 @@ MainMenu::MainMenu(QWidget *parent) :
     ui->label->hide();
     ui->label_2->hide();
 
+    hFile = new HighScoreFile("highscores.txt");
+
+    // write high scores
+    ui->plainTextEdit->clear();
+    std::vector<Highscore> scores =  hFile->GetScores();
+    for(int i = 0; i < scores.size(); i++)
+    {
+        Highscore sc = scores[i];
+        ui->plainTextEdit->appendPlainText(QString::fromStdString(sc.user)+"\t"+ QString::number(sc.score));
+    }
+
+
 }
 //connect(peerConnection, SIGNAL(OnPowerUpReceived(PowerUpStruct)), this, SLOT(on_sync_powerup_received(PowerUpStruct)));
 
@@ -26,10 +38,10 @@ MainMenu::~MainMenu()
 void MainMenu::on_hostButton_clicked()
 {
     // create a playable window
-    window =new MainWindow(this, true, false, "");
+    window = new MainWindow(this, true, false, "");
 
     // connect Gameover
-    connect(window->scene, SIGNAL(GameOver(int)),this, SLOT(OnGameOver(int)));
+    connect(window, SIGNAL(ConnectedGame()), this, SLOT(OnGameConnected()));
 
     // let the widget begin at 0,0 with the correct height and width
     window->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
@@ -50,9 +62,7 @@ void MainMenu::on_joinButton_clicked()
     // create a playable window
     window =new MainWindow(this, false, false, ui->joinText->toPlainText());
 
-    // connect Gameover
-    connect(window->scene, SIGNAL(GameOver(int)),this, SLOT(OnGameOver(int)));
-
+    connect(window, SIGNAL(ConnectedGame()), this, SLOT(OnGameConnected()));
 
     // let the widget begin at 0,0 with the correct height and width
     window->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
@@ -66,6 +76,15 @@ void MainMenu::on_joinButton_clicked()
 
     // show the current widget
     window->show();
+
+
+
+}
+
+void MainMenu::OnGameConnected()
+{
+    // connect Gameover
+     connect(window->scene, SIGNAL(GameOver(int)),this, SLOT(OnGameOver(int)));
 }
 
 void MainMenu::on_singleplayerButton_clicked()
@@ -73,11 +92,10 @@ void MainMenu::on_singleplayerButton_clicked()
     // create a playable window
     window = new MainWindow(this, false, true, "");
 
-    // connect Gameover
-    connect(window->scene, SIGNAL(GameOver(int)),this, SLOT(OnGameOver(int)));
-
+    connect(window->scene, SIGNAL(GameOver(int)), this, SLOT(OnGameOver(int)));
     // let the widget begin at 0,0 with the correct height and width
     window->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
+
     ui->stackedWidget->setGeometry(0,0, MAP_WIDTH, MAP_HEIGHT);
 
     // add the current widget to the index 1
@@ -101,12 +119,22 @@ void MainMenu::OnGameOver(int score)
    // go back to menu
    ui->stackedWidget->removeWidget(window);
    disconnect(window->scene, SIGNAL(GameOver(int)),this, SLOT(OnGameOver(int)));
-
    window->close();
 
    ui->stackedWidget->setCurrentIndex(0);
    ui->label->show();
    ui->label_2->show();
    ui->label_2->setText("Your score is " + QString::number(score));
+
+   hFile->WriteHighscore(ui->lineEdit->text(), score);
+   ui->plainTextEdit->clear();
+   std::vector<Highscore> scores =  hFile->GetScores();
+   for(int i = 0; i < scores.size(); i++)
+   {
+       Highscore sc = scores[i];
+       ui->plainTextEdit->appendPlainText(QString::fromStdString(sc.user)+" "+ QString::number(sc.score));
+
+   }
+
    //window->deleteLater();
 }

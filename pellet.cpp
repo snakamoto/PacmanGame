@@ -6,9 +6,17 @@ Pellet::Pellet()
     sprite->setRect(0,0,WIDTH/4,WIDTH/4); //Size of sprite
     sprite->setTransformOriginPoint(WIDTH/8,WIDTH/8); //To rotate about the origin
 
-    const QColor transparent(255,255,0,255);
+    const QColor transparent(255,150,0,0);
     QPen transPen(transparent);
     sprite->setPen(transPen); //Remove border from rect
+
+    QPixmap pix("images/pellet.png");
+    QBrush brush(pix);
+    sprite->setBrush(brush);
+    sprite->setRect(0,0,WIDTH,WIDTH); //Size of sprite
+    sprite->setTransformOriginPoint(WIDTH/2,WIDTH/2); //To rotate about the origin
+
+
 
     //sprite->setPen(QPen(Qt::transparent)); //Remove border from rect
 }

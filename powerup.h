@@ -25,6 +25,10 @@ public:
     QGraphicsRectItem *sprite;
     void SetPosition(int x, int y);
 
+    void SetType2(int t);
+     int GetType2();
+    int type2;
+
 private:
     int id;
     int x;

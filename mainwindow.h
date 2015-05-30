@@ -22,9 +22,13 @@ public:
     ~MainWindow();
     PacGraphicsScene *scene;
     void CreateNewScene();
+
+signals:
+    void ConnectedGame();
+
 private slots:
       void OnUpdateTimer();
-      void onClientConnect(); //client connected to server (we)
+      void onClientConnect(); // client connected to server (we)
       void onConnected(); // client (we) connected to server
 
 private:

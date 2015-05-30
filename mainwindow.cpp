@@ -22,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent, bool isHost, bool isSinglePlayer, QStrin
     else
     {
         qDebug() << "Connecting to: " + connectTo;
-
         peerSocket = new QTcpSocket(this);
         peerSocket->connectToHost(QHostAddress(connectTo), 8888);
         connect(peerSocket,SIGNAL(connected()), this, SLOT(onConnected()));
@@ -34,7 +33,6 @@ MainWindow::~MainWindow()
    delete ui;
    delete scene;
    delete view;
-   //delete updateTimer;
 }
 
 void MainWindow::createGame()
@@ -45,7 +43,7 @@ void MainWindow::createGame()
     scene = new PacGraphicsScene(0,0,TILES_X * WIDTH,TILES_Y * WIDTH,view);
     view->setScene(scene);
     qDebug() << "Setting size";
-    this->setGeometry(400,400,1024,768);
+    this->setGeometry(0,0,1024,768);
     view->setGeometry(0,0,this->width()-280,this->height());
     view->show();
 
@@ -54,10 +52,8 @@ void MainWindow::createGame()
    elapsedTimer.start();
 }
 
-
 void MainWindow::OnUpdateTimer()
 {
-
     qint64 nSec;
 
     nSec = elapsedTimer.nsecsElapsed();
@@ -71,7 +67,6 @@ void MainWindow::OnUpdateTimer()
 
 void MainWindow::onClientConnect()
 {
-
     bool conAvailable = server->waitForNewConnection(100);
     peerSocket  = server->nextPendingConnection();
     peerConnection = new Connection(peerSocket);
@@ -79,6 +74,8 @@ void MainWindow::onClientConnect()
     createGame();
     scene->SetConnection(peerConnection);
     scene->SetPlayerAsHost();
+
+    emit ConnectedGame();
 }
 
 void MainWindow::onConnected()
@@ -89,6 +86,8 @@ void MainWindow::onConnected()
     createGame();
     scene->SetConnection(peerConnection);
     scene->SetPlayerAsClient();
+
+     emit ConnectedGame();
 }
 
 void MainWindow::CreateNewScene()

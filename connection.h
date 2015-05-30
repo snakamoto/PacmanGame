@@ -21,6 +21,9 @@ class Connection : public QObject
 public:
     Connection();
     Connection(QTcpSocket *s);
+    // Packet loader
+    // m_number:type;data:@:
+    // sending of network data structures
     void Send(PacmanStruct h);
     void Send(PowerUpStruct p);
     void Send(PelletStruct p);
@@ -28,6 +31,7 @@ public:
     void Send(PathStruct path);
     bool IsConnected();
 signals:
+    // emitted when the relevant data is received
     void OnSyncPacmanReceived(PacmanStruct s);
     void OnPowerUpReceived(PowerUpStruct p);
     void OnPelletSyncReceived(PelletStruct p);
@@ -43,13 +47,7 @@ private:
 private slots:
     void on_readyRead();
 
-    //Packet loader
-    //m_number:type;data:@:
-    //eg tower
-    //9:0:type:owner:damage:x:y:@:
 
-    //types
-    //0 - new tower
 
 };
 

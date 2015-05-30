@@ -19,6 +19,7 @@ class HighScoreFile
 public:
     HighScoreFile(QString fileName);
 
+
     void WriteHighscore(std::string user, int score);
     void WriteHighscore(Highscore score);
     void WriteHighscore(QString user, int score);

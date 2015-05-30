@@ -8,7 +8,7 @@ const int TILES_X = 23;
 //Amount of vertical tiles
 const int TILES_Y = 22;
 //Size per tile
-const int WIDTH=32;
+const int WIDTH = 32;
 
 const int W = TILES_X;
 const int H = TILES_Y;

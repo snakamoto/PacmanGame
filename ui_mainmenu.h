@@ -15,7 +15,9 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QScrollBar>
@@ -39,6 +41,8 @@ public:
     QPushButton *joinButton;
     QLabel *label;
     QLabel *label_2;
+    QLineEdit *lineEdit;
+    QPlainTextEdit *plainTextEdit;
     QWidget *play_page;
     QWidget *gameover_page;
     QLabel *label_gameover;
@@ -275,6 +279,13 @@ public:
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(271, 81, 361, 24));
         label_2->setFont(font);
+        lineEdit = new QLineEdit(page);
+        lineEdit->setObjectName(QStringLiteral("lineEdit"));
+        lineEdit->setGeometry(QRect(30, 40, 171, 20));
+        plainTextEdit = new QPlainTextEdit(page);
+        plainTextEdit->setObjectName(QStringLiteral("plainTextEdit"));
+        plainTextEdit->setGeometry(QRect(270, 120, 361, 371));
+        plainTextEdit->setReadOnly(true);
         stackedWidget->addWidget(page);
         play_page = new QWidget();
         play_page->setObjectName(QStringLiteral("play_page"));
@@ -323,6 +334,7 @@ public:
         joinButton->setText(QApplication::translate("MainMenu", "Join", 0));
         label->setText(QApplication::translate("MainMenu", "Game Over", 0));
         label_2->setText(QApplication::translate("MainMenu", "Score", 0));
+        lineEdit->setText(QApplication::translate("MainMenu", "player 1", 0));
         label_gameover->setText(QApplication::translate("MainMenu", "Game Over", 0));
     } // retranslateUi
 

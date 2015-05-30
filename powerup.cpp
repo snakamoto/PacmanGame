@@ -12,6 +12,17 @@ PowerUp::PowerUp()
 
 }
 
+void PowerUp::SetType2(int t)
+{
+    this->type2 = t;
+
+}
+ int PowerUp::GetType2()
+{
+    return type2;
+}
+
+
 PowerUp::~PowerUp()
 {
 

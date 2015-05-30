@@ -19,42 +19,29 @@ public:
 
     QGraphicsRectItem *sprite;//Teh image of teh creep
     void SetPosition(int x, int y);
-
     void Set_Orientation(int orient);
-
     const int Get_Orientation();
-
     const QRectF GetBoundingBox();
-
     const MonsterStruct GetMonsterStruct();
-
     const int GetScore();
     void IncrementScorePellet(int amount);
-
     const int GetId();
     void SetId(int id_);
-
     const int GetState();
     void SetState(int s);
-
     const int GetStateTimer();
     void DecrementStateTimer();
-    int state;
     void SetStateTimer(int st);
 
     const float GetSpeed();
-    void SetSpeed(int s);
-
-    void UpdatePathing(float seconds);
-
-    void UpdatePath(vector<TileNode> node_path);
-
-    void UpdatePath(Path p);
-
-    void Update(float elapsed_seconds);
-
     bool IsPathDone();
+    int state;
 
+    void SetSpeed(int s);
+    void UpdatePathing(float seconds);
+    void UpdatePath(vector<TileNode> node_path);
+    void UpdatePath(Path p);
+    void Update(float elapsed_seconds);
     void Reset();
 
 private:

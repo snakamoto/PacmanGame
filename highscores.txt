@@ -1,0 +1,63 @@
+player 1,2213996
+player 1,2213748
+player 1,2202328
+player 1,1133308
+player 1,1100504
+Ruan,1022844
+Ruan,1011616
+Ruan,301500
+player 1,232852
+player 1,201148
+player 1,112096
+player 1,111508
+player 1,111448
+player 1,110740
+player 1,101592
+player 1,100656
+player 1,100644
+Ruan,100348
+Ruan,100220
+player 1,100172
+player 1,100172
+player 1,21876
+player 1,10736
+player 1,10604
+player 1,10380
+player 1,10160
+player 1,10112
+player 1,10112
+player 1,10112
+player 1,10112
+player 1,10104
+player 1,6176
+player 1,4476
+player 1,4452
+player 1,2300
+player 1,1448
+player 1,1112
+player 1,1084
+Ruan,800
+player 1,720
+Ruan,636
+player 1,596
+player 1,548
+player 1,540
+player 1,540
+Test Player,452
+Ruan,404
+pewpew,356
+player 1,348
+player 1,344
+player 1,304
+player 1,296
+player 1,296
+player 1,264
+player 1,264
+player 1,260
+player 1,252
+player 1,236
+Ruan,172
+player 1,156
+player 1,56
+player 1,56
+player 1,52
