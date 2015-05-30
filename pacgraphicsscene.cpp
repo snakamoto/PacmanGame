@@ -36,11 +36,14 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
     local_pac->SetId(1);
     pacmen.push_back(local_pac);
 
-    remote_pac = new Pacman();
-    remote_pac->SetPosition(3 * WIDTH,1*WIDTH);
-    remote_pac->Set_Orientation(-1);
-    remote_pac->SetId(2);
-    pacmen.push_back(remote_pac);
+    if(IsConnected())
+    {
+        remote_pac = new Pacman();
+        remote_pac->SetPosition(3 * WIDTH,1*WIDTH);
+        remote_pac->Set_Orientation(-1);
+        remote_pac->SetId(2);
+        pacmen.push_back(remote_pac);
+    }
 
 
     for(int i = 0; i < pacmen.size(); i++)
@@ -443,6 +446,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                 continue;
             if(paccy->GetBoundingBox().intersects(pellet->GetBoundingBox()))
             {
+                SendMonsterSync();
                 paccy->IncrementScorePellet(pellet->GetType());
                 pellet->SetEaten(true);
                 this->removeItem(pellet->sprite);
@@ -458,6 +462,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         for(int j = 0; j < powerups.size(); j++)
         {
             PowerUp *powerup = powerups[j];
+
             if(powerup->GetEaten()==true)
                 continue;
             if(paccy->GetBoundingBox().intersects(powerup->GetBoundingBox()))
@@ -515,6 +520,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                     }
                 }
                 SendPacmanSync();
+                SendMonsterSync();
                 powerup->SetEaten(true);
                 this->removeItem(powerup->sprite);
                 if(paccy->GetId() == local_pac->GetId())
@@ -750,6 +756,20 @@ void PacGraphicsScene::SendMonsterSync(Monster *m)
 
     if(IsHost())
         peerConnection->Send(ms);
+}
+
+void PacGraphicsScene::SendMonsterSync()
+{
+    if(!IsConnected())
+        return;
+    for(int i = 0; i < monstersArray.size(); i++)
+    {
+        Monster *m = monstersArray[i];
+        MonsterStruct ms = m->GetMonsterStruct();
+
+        if(IsHost())
+            peerConnection->Send(ms);
+    }
 }
 
 void PacGraphicsScene::on_sync_pellet_received(PelletStruct p)

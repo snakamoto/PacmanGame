@@ -90,6 +90,7 @@ private:
     void SendPelletSync(Pellet *p);
     void SendPowerUpSync(PowerUp *p);
     void SendMonsterSync(Monster *m);
+    void SendMonsterSync();
 
 
 signals:
