@@ -10,7 +10,6 @@
 #include "QKeyEvent"
 #include "connection.h"
 #include "playersyncstruct.h"
-#include "removeenemystruct.h"
 #include "tiledmap.h"
 #include "pellet.h"
 #include "powerup.h"

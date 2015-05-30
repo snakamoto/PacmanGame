@@ -199,6 +199,7 @@ void PacGraphicsScene::ChooseRandomDestination(Monster *t)
 
     if(IsHost() && IsConnected())
     {
+        qDebug() << "Sending Path";
         PathStruct p;
         p.start_x = t->sprite->x()/WIDTH;
         p.start_y = t->sprite->y()/WIDTH;
@@ -278,7 +279,6 @@ void PacGraphicsScene::Update(float elapsed_seconds)
             }
             else
             {
-
                     ChooseRandomDestination(t);
             }
             SendMonsterSync(t);
@@ -576,11 +576,13 @@ void PacGraphicsScene::SetConnection(Connection *peerConn)
 {
     peerConnection = peerConn;
 
+    qDebug() << "Hooking path and other networking events";
+    connect(peerConnection, SIGNAL(OnPathSyncReceived(PathStruct)), this, SLOT(on_sync_path_received(PathStruct)));
     connect(peerConnection,SIGNAL(OnSyncPacmanReceived(PacmanStruct)),this,SLOT(on_sync_pacman_received(PacmanStruct)));
     connect(peerConnection, SIGNAL(OnPelletSyncReceived(PelletStruct)), this, SLOT(on_sync_pellet_received(PelletStruct)));
     connect(peerConnection, SIGNAL(OnPowerUpReceived(PowerUpStruct)), this, SLOT(on_sync_powerup_received(PowerUpStruct)));
     connect(peerConnection, SIGNAL(OnMonsterSyncReceived(MonsterStruct)), this, SLOT(on_sync_monster_received(MonsterStruct)));
-    connect(peerConnection, SIGNAL(OnPathSyncReceived(PathStruct)), this, SLOT(on_sync_path_received(PathStruct)));
+
 }
 
 void PacGraphicsScene::SetPlayerAsHost()

@@ -36,7 +36,7 @@ void Connection::Send(MonsterStruct p)
     sock->write(data);
     sock->flush();
 
-    qDebug() << data;
+    //qDebug() << data;
 }
 
 void Connection::Send(PacmanStruct p)
@@ -51,7 +51,7 @@ void Connection::Send(PacmanStruct p)
     sock->write(data);
     sock->flush();
 
-    qDebug() << data;
+    //qDebug() << data;
 }
 
 
@@ -60,7 +60,7 @@ void Connection::Send(PathStruct p)
     sock->waitForConnected();
 
     int packet_type = PACKETTYPES::SyncPath;
-    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type)
+    QByteArray data = (QString::number(magic_num) + ":" + QString::number(packet_type) + ":"
             + QString::number(p.start_x) + ":" + QString::number(p.start_y) + ":"
             + QString::number(p.end_x) + ":" + QString::number(p.end_y) + ":"
             + QString::number(p.mon_id) +
@@ -101,7 +101,7 @@ void Connection::Send(PelletStruct p)
 
 void Connection::on_readyRead()
 {
-    qDebug() << "ONREAD";
+    //qDebug() << "ONREAD";
 
     QByteArray buffer;
     qint64 n = sock->bytesAvailable();
@@ -121,6 +121,7 @@ void Connection::on_readyRead()
         }
 
         int packet_type = IntFromQByteArr(elements[1+i]);
+
 
         //owner,orientation,x,y
         if(packet_type == PACKETTYPES::SyncPacman)
@@ -193,13 +194,13 @@ void Connection::on_readyRead()
             p.end_x = IntFromQByteArr(elements[4+i]);
             p.end_y = FloatFromQByteArr(elements[5+i]);
             p.mon_id = FloatFromQByteArr(elements[6+i]);
-#ifdef ASSERT > 2
+//#ifdef ASSERT > 2
             qDebug() << "Sync PowerUp (" + QString::number(p.start_x) + ","
                         + QString::number(p.start_y) + ","
                         + QString::number(p.end_x) + ","
                         + QString::number(p.end_x) + ","
                         + QString::number(p.end_y) + ")";
-#endif
+//#endif
             emit OnPathSyncReceived(p);
             i+=7;
         }

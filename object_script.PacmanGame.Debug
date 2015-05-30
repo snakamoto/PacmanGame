@@ -5,7 +5,6 @@ INPUT(
 ./debug\connection.o
 ./debug\highscorefile.o
 ./debug\Path.o
-./debug\removeenemystruct.o
 ./debug\tiledmap.o
 ./debug\tile_node.o
 ./debug\clickablelabel.o

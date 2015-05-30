@@ -37,7 +37,6 @@ HEADERS  += mainwindow.h \
     highscorefile.h \
     Path.h \
     playersyncstruct.h \
-    removeenemystruct.h \
     tiledmap.h \
     tile_node.h \
     pacmanstruct.h \

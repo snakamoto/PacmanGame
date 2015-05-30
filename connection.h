@@ -8,14 +8,13 @@
 
 #include <QList>
 #include "playersyncstruct.h"
-#include "removeenemystruct.h"
 #include "powerupstruct.h"
 #include "pacmanstruct.h"
 #include "pellet.h"
 #include "monstersstruct.h"
 #include "pathstruct.h";
 
-enum PACKETTYPES{SyncPath=1, NewEnemy=2, PlayerSync=3, RemoveEnemy=4, SyncPacman=5, SyncPowerUp=6, SyncPellet=7, SyncMonster=8};
+enum PACKETTYPES{SyncPacman=5, SyncPowerUp=6, SyncPellet=7, SyncMonster=8, SyncPath=9};
 class Connection : public QObject
 {
     Q_OBJECT
