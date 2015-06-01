@@ -4,11 +4,17 @@ PowerUp::PowerUp()
 {
     sprite = new QGraphicsRectItem();
     sprite->setRect(0,0,WIDTH/2,WIDTH/2); //Size of sprite
-    sprite->setTransformOriginPoint(WIDTH/8,WIDTH/8); //To rotate about the origin
+    sprite->setTransformOriginPoint(WIDTH/4,WIDTH/4); //To rotate about the origin
 
-    const QColor transparent(255,0,0,255);
+    const QColor transparent(255,0,0,0);
     QPen transPen(transparent);
     sprite->setPen(transPen); //Remove border from rect
+
+    QPixmap pix("images/powerup.png");
+    pix = pix.scaledToWidth( WIDTH/2 );
+    QBrush brush(pix);
+    sprite->setBrush(brush);
+
 
 }
 

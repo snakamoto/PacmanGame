@@ -110,15 +110,15 @@ PacGraphicsScene::PacGraphicsScene(int x, int y, int w, int h, QGraphicsView *vi
 
     local_player_score = new QGraphicsTextItem();
     local_player_score->setPlainText("Score: 0");
-    QColor color(255,0,0,255);
+    QColor color(0,0,0,255);
     local_player_score->setDefaultTextColor(color);
-    local_player_score->setPos(0,0);
+    local_player_score->setPos(64,0);
     this->addItem(local_player_score);
 
     local_player_powerup= new QGraphicsTextItem();
     local_player_powerup->setPlainText("Powerup: None");
     local_player_powerup->setDefaultTextColor(color);
-    local_player_powerup->setPos(0,16);
+    local_player_powerup->setPos(64,16);
     this->addItem(local_player_powerup);
 }
 
@@ -302,7 +302,7 @@ void PacGraphicsScene::Update(float elapsed_seconds)
         {
             if (paccy->GetSpeed() == 100)
             {
-            paccy->SetSpeed(200);
+            paccy->SetSpeed(150);
             }
         }
 
@@ -485,8 +485,8 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                     else
                     if (myTempValue==4)
                     {
-                        paccy->SetState(4);
-                        local_player_powerup->setPlainText("Powerup: Invulnerability" );
+                        paccy->SetState(3);
+                        local_player_powerup->setPlainText("Powerup: Kill Monsters" );
                     }
                     paccy->SetStateTimer(10000);
 
@@ -498,14 +498,14 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                     // immediate powerups
                     if (myTempValue==5)
                     {
-                        paccy->IncrementScorePellet(10000);
-                        local_player_powerup->setPlainText("Powerup: +10000" );
+                        paccy->IncrementScorePellet(5000);
+                        local_player_powerup->setPlainText("Powerup: +5000" );
                     }
                     else
                     if (myTempValue==6)
                     {
-                        paccy->IncrementScorePellet(100000);
-                        local_player_powerup->setPlainText("Powerup: +100000" );
+                        paccy->IncrementScorePellet(5000);
+                        local_player_powerup->setPlainText("Powerup: +5000" );
                     }
                     else
                     if (myTempValue==7)
@@ -517,8 +517,8 @@ void PacGraphicsScene::Update(float elapsed_seconds)
                             ChooseRandomDestination(t);
                         }
 
-                        paccy->IncrementScorePellet(1000000);
-                        local_player_powerup->setPlainText("Powerup: +100000" );
+                        paccy->IncrementScorePellet(1000);
+                        local_player_powerup->setPlainText("Powerup: +10000" );
                         local_player_powerup->setPlainText("Powerup: Monsters Killed" );
                     }
                 }

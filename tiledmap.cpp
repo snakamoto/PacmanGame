@@ -121,11 +121,14 @@ vector<Tileset*> TiledMap::LoadTilesets()
 
         }
     }
+    qDebug() << "Done Loading tileset";
     return sets;
+
 }
 
 int* TiledMap::LoadTiles()
 {
+
       int* tiles = 0;
       tiles = new int[TILES_Y*TILES_X];
 
@@ -134,7 +137,6 @@ int* TiledMap::LoadTiles()
           {
               tiles[y*W+x] = 0;
           }
-
 
       QFile file(filename);
       file.open(QIODevice::ReadOnly);

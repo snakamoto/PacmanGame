@@ -11,6 +11,7 @@ Pellet::Pellet()
     sprite->setPen(transPen); //Remove border from rect
 
     QPixmap pix("images/pellet.png");
+    pix = pix.scaledToWidth( WIDTH/4 );
     QBrush brush(pix);
     sprite->setBrush(brush);
     sprite->setRect(0,0,WIDTH,WIDTH); //Size of sprite
@@ -65,8 +66,17 @@ void Pellet::SetPosition(int x, int y)
 
 void Pellet::SetType(int t)
 {
-    this->type = (60-4*(t/2));
-    sprite->setRect(0,0,WIDTH-type/2 + WIDTH/16,WIDTH-type/2 + WIDTH/16); //Size of sprite
+    this->type = 32;
+
+    int w = WIDTH-type/2 + WIDTH/16;
+    int h = WIDTH-type/2 + WIDTH/16;
+
+    QPixmap pix("images/pellet.png");
+    pix = pix.scaledToWidth( w );
+    QBrush brush(pix);
+    sprite->setBrush(brush);
+
+    sprite->setRect(0,0,w,h); //Size of sprite
 }
 
 void Pellet::SetEaten(bool e)

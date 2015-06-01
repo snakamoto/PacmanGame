@@ -61,208 +61,32 @@ public:
         stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
         stackedWidget->setGeometry(QRect(0, 0, 791, 601));
         stackedWidget->setFocusPolicy(Qt::StrongFocus);
-        stackedWidget->setStyleSheet(QLatin1String("\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #f5f9ff,\n"
-"                stop :   0.5 #c7dfff, stop :   0.55 #afd2ff, stop :   1.0 #c0dbff);\n"
-"        color: #006aff;\n"
-"        font: bold large \"Arial\";\n"
-"        height: 30px;"));
+        stackedWidget->setStyleSheet(QStringLiteral(""));
         stackedWidget->setFrameShadow(QFrame::Raised);
         stackedWidget->setLineWidth(0);
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
         quitButton = new QPushButton(page);
         quitButton->setObjectName(QStringLiteral("quitButton"));
-        quitButton->setGeometry(QRect(30, 260, 171, 39));
-        quitButton->setStyleSheet(QLatin1String("QPushButton:hover{\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #ffd9aa,\n"
-"                stop :   0.5 #ffbb6e, stop :   0.55 #feae42, stop :   1.0 #fedb74);\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"        border: 1px solid #6593cf;\n"
-"        border-radius: 2px;\n"
-"        padding: 5px 15px 2px 5px;\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #f5f9ff,\n"
-"                stop :   0.5 #c7dfff, stop :   0.55 #afd2ff, stop :   1.0 #c0dbff);\n"
-"        color: #006aff;\n"
-"        font: bold large \"Arial\";\n"
-"        height: 30px;\n"
-"}\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"QPushButton:pressed {\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #c0dbff,\n"
-"        stop :   0.5 #cfd26f, stop :   0.55 #c7df6f, stop :   1.0 #f5f9ff);\n"
-"        padding-top: 2px;\n"
-"        padding-left: 3px;\n"
-"\n"
-"}\n"
-"\n"
-"\n"
-"QPushButton:on {\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, "
-                        "stop :   0.0 #5AA72D,\n"
-"        stop :   0.5 #B3E296, stop :   0.55 #B3E296, stop :   1.0 #f5f9ff);\n"
-"        padding-top: 2px;\n"
-"        padding-left: 3px;\n"
-"}\n"
-"\n"
-"QPushButton:disabled {\n"
-"        background: transparent #e5e9ee;\n"
-"        padding-top: 2px;        \n"
-"        padding-left: 3px;\n"
-"        color: black;\n"
-"}"));
+        quitButton->setGeometry(QRect(600, 550, 171, 39));
+        quitButton->setStyleSheet(QStringLiteral(""));
         joinText = new QTextEdit(page);
         joinText->setObjectName(QStringLiteral("joinText"));
-        joinText->setGeometry(QRect(60, 220, 111, 30));
+        joinText->setGeometry(QRect(270, 530, 111, 30));
         joinText->setMaximumSize(QSize(111, 30));
-        joinText->setStyleSheet(QLatin1String(" border: 1px solid #6593cf;\n"
-"        border-radius: 2px;\n"
-"        padding: 5px 15px 2px 5px;\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #f5f9ff,\n"
-"                stop :   0.5 #c7dfff, stop :   0.55 #afd2ff, stop :   1.0 #c0dbff);\n"
-"        color: #006aff;\n"
-"        font: bold large \"Arial\";\n"
-"        height: 30px;"));
+        joinText->setStyleSheet(QStringLiteral(""));
         singleplayerButton = new QPushButton(page);
         singleplayerButton->setObjectName(QStringLiteral("singleplayerButton"));
-        singleplayerButton->setGeometry(QRect(30, 70, 171, 39));
-        singleplayerButton->setStyleSheet(QLatin1String("QPushButton:hover{\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #ffd9aa,\n"
-"                stop :   0.5 #ffbb6e, stop :   0.55 #feae42, stop :   1.0 #fedb74);\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"        border: 1px solid #6593cf;\n"
-"        border-radius: 2px;\n"
-"        padding: 5px 15px 2px 5px;\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #f5f9ff,\n"
-"                stop :   0.5 #c7dfff, stop :   0.55 #afd2ff, stop :   1.0 #c0dbff);\n"
-"        color: #006aff;\n"
-"        font: bold large \"Arial\";\n"
-"        height: 30px;\n"
-"}\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"QPushButton:pressed {\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #c0dbff,\n"
-"        stop :   0.5 #cfd26f, stop :   0.55 #c7df6f, stop :   1.0 #f5f9ff);\n"
-"        padding-top: 2px;\n"
-"        padding-left: 3px;\n"
-"\n"
-"}\n"
-"\n"
-"\n"
-"QPushButton:on {\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, "
-                        "stop :   0.0 #5AA72D,\n"
-"        stop :   0.5 #B3E296, stop :   0.55 #B3E296, stop :   1.0 #f5f9ff);\n"
-"        padding-top: 2px;\n"
-"        padding-left: 3px;\n"
-"}\n"
-"\n"
-"QPushButton:disabled {\n"
-"        background: transparent #e5e9ee;\n"
-"        padding-top: 2px;        \n"
-"        padding-left: 3px;\n"
-"        color: black;\n"
-"}"));
+        singleplayerButton->setGeometry(QRect(30, 130, 171, 39));
+        singleplayerButton->setStyleSheet(QStringLiteral(""));
         hostButton = new QPushButton(page);
         hostButton->setObjectName(QStringLiteral("hostButton"));
-        hostButton->setGeometry(QRect(30, 120, 171, 39));
-        hostButton->setStyleSheet(QLatin1String("QPushButton:hover{\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #ffd9aa,\n"
-"                stop :   0.5 #ffbb6e, stop :   0.55 #feae42, stop :   1.0 #fedb74);\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"        border: 1px solid #6593cf;\n"
-"        border-radius: 2px;\n"
-"        padding: 5px 15px 2px 5px;\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #f5f9ff,\n"
-"                stop :   0.5 #c7dfff, stop :   0.55 #afd2ff, stop :   1.0 #c0dbff);\n"
-"        color: #006aff;\n"
-"        font: bold large \"Arial\";\n"
-"        height: 30px;\n"
-"}\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"QPushButton:pressed {\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #c0dbff,\n"
-"        stop :   0.5 #cfd26f, stop :   0.55 #c7df6f, stop :   1.0 #f5f9ff);\n"
-"        padding-top: 2px;\n"
-"        padding-left: 3px;\n"
-"\n"
-"}\n"
-"\n"
-"\n"
-"QPushButton:on {\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, "
-                        "stop :   0.0 #5AA72D,\n"
-"        stop :   0.5 #B3E296, stop :   0.55 #B3E296, stop :   1.0 #f5f9ff);\n"
-"        padding-top: 2px;\n"
-"        padding-left: 3px;\n"
-"}\n"
-"\n"
-"QPushButton:disabled {\n"
-"        background: transparent #e5e9ee;\n"
-"        padding-top: 2px;        \n"
-"        padding-left: 3px;\n"
-"        color: black;\n"
-"}"));
+        hostButton->setGeometry(QRect(450, 490, 171, 39));
+        hostButton->setStyleSheet(QStringLiteral(""));
         joinButton = new QPushButton(page);
         joinButton->setObjectName(QStringLiteral("joinButton"));
-        joinButton->setGeometry(QRect(30, 170, 171, 39));
-        joinButton->setStyleSheet(QLatin1String("QPushButton:hover{\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #ffd9aa,\n"
-"                stop :   0.5 #ffbb6e, stop :   0.55 #feae42, stop :   1.0 #fedb74);\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"        border: 1px solid #6593cf;\n"
-"        border-radius: 2px;\n"
-"        padding: 5px 15px 2px 5px;\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #f5f9ff,\n"
-"                stop :   0.5 #c7dfff, stop :   0.55 #afd2ff, stop :   1.0 #c0dbff);\n"
-"        color: #006aff;\n"
-"        font: bold large \"Arial\";\n"
-"        height: 30px;\n"
-"}\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"QPushButton:pressed {\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, stop :   0.0 #c0dbff,\n"
-"        stop :   0.5 #cfd26f, stop :   0.55 #c7df6f, stop :   1.0 #f5f9ff);\n"
-"        padding-top: 2px;\n"
-"        padding-left: 3px;\n"
-"\n"
-"}\n"
-"\n"
-"\n"
-"QPushButton:on {\n"
-"        background: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 :   1, "
-                        "stop :   0.0 #5AA72D,\n"
-"        stop :   0.5 #B3E296, stop :   0.55 #B3E296, stop :   1.0 #f5f9ff);\n"
-"        padding-top: 2px;\n"
-"        padding-left: 3px;\n"
-"}\n"
-"\n"
-"QPushButton:disabled {\n"
-"        background: transparent #e5e9ee;\n"
-"        padding-top: 2px;        \n"
-"        padding-left: 3px;\n"
-"        color: black;\n"
-"}"));
+        joinButton->setGeometry(QRect(270, 490, 171, 39));
+        joinButton->setStyleSheet(QStringLiteral(""));
         label = new QLabel(page);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(271, 51, 361, 24));
@@ -281,7 +105,7 @@ public:
         label_2->setFont(font);
         lineEdit = new QLineEdit(page);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
-        lineEdit->setGeometry(QRect(30, 40, 171, 20));
+        lineEdit->setGeometry(QRect(30, 110, 171, 20));
         plainTextEdit = new QPlainTextEdit(page);
         plainTextEdit->setObjectName(QStringLiteral("plainTextEdit"));
         plainTextEdit->setGeometry(QRect(270, 120, 361, 371));
@@ -327,14 +151,14 @@ public:
         joinText->setHtml(QApplication::translate("MainMenu", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Arial'; font-size:8.25pt; font-weight:600; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400;\">127.0.0.1</span></p></body></html>", 0));
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">127.0.0.1</span></p></body></html>", 0));
         singleplayerButton->setText(QApplication::translate("MainMenu", "Play", 0));
         hostButton->setText(QApplication::translate("MainMenu", "Host", 0));
         joinButton->setText(QApplication::translate("MainMenu", "Join", 0));
         label->setText(QApplication::translate("MainMenu", "Game Over", 0));
         label_2->setText(QApplication::translate("MainMenu", "Score", 0));
-        lineEdit->setText(QApplication::translate("MainMenu", "player 1", 0));
+        lineEdit->setText(QApplication::translate("MainMenu", "John", 0));
         label_gameover->setText(QApplication::translate("MainMenu", "Game Over", 0));
     } // retranslateUi
 
