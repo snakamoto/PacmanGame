@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="22" height="21" tilewidth="32" tileheight="32" nextobjectid="108">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="22" height="21" tilewidth="32" tileheight="32" nextobjectid="112">
  <tileset firstgid="1" name="GSCTileset32x32" tilewidth="32" tileheight="32">
   <image source="../images/GSCTileset32x32.png" trans="00c6c5" width="704" height="320"/>
  </tileset>
@@ -530,6 +530,10 @@
   <object id="104" x="32" y="224" width="96" height="32"/>
   <object id="105" x="544" y="224" width="96" height="32"/>
   <object id="106" x="96" y="352" width="32" height="32"/>
+  <object id="108" x="416" y="320" width="32" height="32"/>
+  <object id="109" x="32" y="224" width="96" height="32"/>
+  <object id="110" x="544" y="352" width="96" height="32"/>
+  <object id="111" x="288" y="576" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Loop1" visible="0">
   <object id="77" x="0" y="288" width="32" height="32"/>
